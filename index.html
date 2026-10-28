@@ -54,7 +54,7 @@ body.boss{background:#170d0c}
 @keyframes rpop{40%{transform:scale(1.18)}}
 .board{padding:4px 0;display:flex;flex-direction:column;gap:7px;align-items:center}
 .pill{font-size:11px;letter-spacing:.06em;color:var(--mu);min-height:16px;text-align:center}
-.pill.ok{color:var(--mo)}.pill.er{color:var(--ca)}.pill.nv{color:var(--mx)}
+.pill.ok{color:var(--mo)}.pill.er{color:var(--ca)}.pill.nv{color:var(--ca)}
 .tray{display:grid;grid-template-columns:repeat(8,var(--tw));gap:4px;padding:6px;border:1px solid var(--ln);border-radius:4px}
 .slot{width:var(--tw);height:var(--th);border:1px dashed var(--ln);border-radius:3px}.slot.f{border:0}
 .slot.drop-target{border:1px solid var(--mx);background:color-mix(in srgb,var(--mx) 13%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mx) 20%,transparent)}
@@ -301,6 +301,7 @@ EXTRA_DIC.forEach(add);
 // Palavras comuns que não podem depender da conexão para serem aceitas.
 ["maio","maios","litro","litros"].forEach(add);
 const DIC_ONLINE_CACHE=new Map();
+const DIC_ONLINE_SILENT_FAILED=new Set();
 const DicionarioOnline=Object.freeze({
   estado(palavra){
     const chave=normalizarPalavra(palavra);
@@ -313,7 +314,7 @@ const DicionarioOnline=Object.freeze({
     if(DIC_ONLINE_CACHE.has(chave))return DIC_ONLINE_CACHE.get(chave);
     if(!/^[a-z]{3,8}$/.test(chave))return false;
     const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),6500);
+    const timer=setTimeout(()=>controller.abort(),7000);
     const base="https://pt.wiktionary.org/w/api.php";
     const requisitar=async params=>{
       const url=base+"?"+params.toString();
@@ -321,16 +322,26 @@ const DicionarioOnline=Object.freeze({
       if(!res.ok)throw new Error("Falha ao consultar o dicionário");
       return res.json();
     };
+    const temSecaoPortuguesa=async titulo=>{
+      const params=new URLSearchParams({action:"parse",format:"json",formatversion:"2",origin:"*",redirects:"1",page:titulo,prop:"wikitext"});
+      const dados=await requisitar(params);
+      const bruto=dados?.parse?.wikitext;
+      const texto=typeof bruto==="string"?bruto:(bruto?.["*"]||"");
+      // O Wikcionário reúne idiomas diferentes na mesma página. Só vale uma entrada
+      // que tenha seção própria de Português; encontrar apenas o título não basta.
+      return /^(={1,2})\s*(?:\{\{\s*-?pt-?\s*\}\}|Portugu[eê]s)\s*\1\s*$/im.test(texto);
+    };
     try{
-      // Busca também variantes com acento: a comparação normalizada mantém a regra do jogo.
-      const params=new URLSearchParams({action:"query",format:"json",formatversion:"2",origin:"*",list:"search",srsearch:chave,srnamespace:"0",srlimit:"30"});
-      const data=await requisitar(params);
-      let encontrada=(data?.query?.search||[]).some(item=>normalizarPalavra(item.title)===chave);
-      // Busca exata complementar, útil para títulos que não apareceram na lista de pesquisa.
-      if(!encontrada){
-        const exatos=new URLSearchParams({action:"query",format:"json",formatversion:"2",origin:"*",redirects:"1",prop:"info",titles:chave});
-        const d2=await requisitar(exatos);
-        encontrada=(d2?.query?.pages||[]).some(p=>!p.missing&&Number(p.pageid)>0&&normalizarPalavra(p.title)===chave);
+      const busca=new URLSearchParams({action:"query",format:"json",formatversion:"2",origin:"*",list:"search",srsearch:chave,srnamespace:"0",srlimit:"20"});
+      const dados=await requisitar(busca);
+      const titulos=(dados?.query?.search||[])
+        .filter(item=>normalizarPalavra(item.title)===chave)
+        .map(item=>item.title);
+      // Se a busca não entregar o título, tenta a grafia sem acento diretamente.
+      if(!titulos.length)titulos.push(chave);
+      let encontrada=false;
+      for(const titulo of [...new Set(titulos)]){
+        if(await temSecaoPortuguesa(titulo)){encontrada=true;break;}
       }
       DIC_ONLINE_CACHE.set(chave,encontrada);
       if(encontrada){
@@ -339,7 +350,7 @@ const DicionarioOnline=Object.freeze({
       }
       return encontrada;
     }catch(e){
-      // Erro de rede não transforma uma palavra em inválida nem consome a jogada.
+      // Falha de rede não é prova de que a palavra não existe.
       return null;
     }finally{clearTimeout(timer)}
   }
@@ -348,6 +359,26 @@ const DicionarioLocal=Object.freeze({
   consultar(palavra){const chave=normalizarPalavra(palavra);return {palavra:chave,encontrada:DIC.has(chave)}},
   tem(palavra){return this.consultar(palavra).encontrada}
 });
+let validacaoSilenciosaChave="",validacaoSilenciosaToken=0;
+function validarPalavraEmSilencio(){
+  if(!R||G.mode!=="play"||R.lock||R.dv){validacaoSilenciosaToken++;validacaoSilenciosaChave="";return}
+  const ts=R.st,chave=normalizarPalavra(wd(ts));
+  if(ts.length<3||!trayConsecutive()||legal(ts)){
+    validacaoSilenciosaToken++;validacaoSilenciosaChave="";return;
+  }
+  if(DIC.has(chave)||DIC_ONLINE_CACHE.has(chave)||DIC_ONLINE_SILENT_FAILED.has(chave))return;
+  if(validacaoSilenciosaChave===chave)return;
+  const token=++validacaoSilenciosaToken;validacaoSilenciosaChave=chave;
+  DicionarioOnline.consultar(chave).then(encontrada=>{
+    if(token!==validacaoSilenciosaToken)return;
+    validacaoSilenciosaChave="";
+    if(encontrada===null)DIC_ONLINE_SILENT_FAILED.add(chave);
+    if(!R||G.mode!=="play"||R.lock||R.dv||normalizarPalavra(wd(R.st))!==chave||R.st.length<3||!trayConsecutive())return;
+    ren();
+  }).catch(()=>{
+    if(token===validacaoSilenciosaToken){validacaoSilenciosaChave="";DIC_ONLINE_SILENT_FAILED.add(chave)}
+  });
+}
 const DICARR=[...DIC],POOLW=BASE.filter(w=>w.length>=4&&w.length<=6);
 const VAL={};"AEIOSURNT".split("").forEach(l=>VAL[l]=1);"DLMCP".split("").forEach(l=>VAL[l]=2);"BGFVH".split("").forEach(l=>VAL[l]=3);"KWY".split("").forEach(l=>VAL[l]=4);"JQX".split("").forEach(l=>VAL[l]=5);VAL.Z=6;
 const VOG="AEIOU",RARAS="JQXZKWY",RMAX=5;
@@ -597,18 +628,18 @@ async function jogar(){
   if(err){R.msg=err;sErr();vb([30,40,30]);ren();return}
   const chave=normalizarPalavra(wd(ts));
   if(!DIC.has(chave)&&!DIC_ONLINE_CACHE.has(chave)){
-    R.lock=true;R.fast=false;R.msg="Consultando dicionário online…";ren();
+    R.lock=true;R.fast=false;R.msg="";ren();
     const online=await DicionarioOnline.consultar(chave);
     if(!R||G.mode!=="play")return;
     if(online===null){
-      R.lock=false;R.fast=false;R.msg="Não consegui acessar o dicionário online. Confira a conexão; sua jogada não foi consumida.";sErr();ren();return;
+      R.lock=false;R.fast=false;R.msg="";ren();return;
     }
     if(online)DIC.add(chave);
     R.msg="";
   }
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
-  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"PALAVRA INEXISTENTE · 0 PONTOS · JOGADA CONSUMIDA",pop:"",real:x.real};ren();await dz(380);
+  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"Palavra não encontrada",pop:"",real:x.real};ren();await dz(380);
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
@@ -706,6 +737,7 @@ function vTitle(){
   <p style="font-size:10px;color:var(--mu)">${S.runs?`Recorde: fase ${S.best}/8 · ${S.wins} vitória(s)`+(S.bw?`<br>Melhor palavra: ${S.bw} (${fmt(S.bs)})`:""):"Sua primeira partida começa agora."}</p></div>`;
 }
 function vPlay(){
+  validarPalavraEmSilencio();
   const a=R.an,st=R.st,b=R.boss,w=wd(st),realWord=DicionarioLocal.tem(w),onlineState=DicionarioOnline.estado(w),consecutive=trayConsecutive(),hit=consecutive&&w.length>=3&&realWord&&w.includes(R.sw.toUpperCase());
   const pv=!a&&st.length>=3&&consecutive&&!legal(st)&&onlineState!==null?evalWord(st,true):null;
   const c=a?a.c:pv?pv.c:0,m=a?a.m:pv?pv.m:0,pop=a?a.pop:"";
@@ -714,7 +746,7 @@ function vPlay(){
   else if(!st.length)pill="Toque nas letras abaixo ou arraste para um quadrado";
   else if(st.length<3)pill="Mínimo de 3 letras";
   else if(!consecutive){pill="Mantenha as letras em casas consecutivas";pc="er"}
-  else{const er=legal(st);if(er){pill=er;pc="er"}else if(!realWord&&onlineState===null){pill="Será conferida no dicionário online ao jogar"}else if(!realWord){pill="Palavra não encontrada · 0 pontos · consome uma jogada";pc="nv"}else{pill="Palavra válida"+(hit?" · trecho encaixado: prêmio extra!":"");pc="ok"}}
+  else{const er=legal(st);if(er){pill=er;pc="er"}else if(!realWord&&onlineState===false){pill="Palavra não encontrada";pc="nv"}else if(!realWord){pill="";pc=""}else{pill="Palavra válida";pc="ok"}}
   const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
   return `<div class="hdr"><div class="ed"><small>FASE</small>${G.n+1}<i>${G.endless?"":"/8"}</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
