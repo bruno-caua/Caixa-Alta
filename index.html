@@ -9,15 +9,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Chivo+Mono:wght@400..700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#111113;--tx:#e8e3d6;--mu:#7b766b;--ln:#2a2a2e;--pp:#ece6d8;--pk:#16140f;--ps:#a39b88;--gs:#8d8d8d;--gg:#ffffff88;--fc:#ff5a3d;--ti:#ffffff;--ca:#ff5a3d;--mx:#ffb21f;--mo:#62c98a;--ex:#b794f6;--ink:var(--ti);--caos:var(--ca);--gold:var(--mx);--mint:var(--mo);--paper:var(--tx);
---tw:calc((min(100vw,480px) - 58px)/8);--th:calc(var(--tw)*1.3);color-scheme:dark;font-synthesis:none}
+--tw:calc((min(100vw,480px) - 60px)/8);--th:calc(var(--tw)*1.3);color-scheme:dark;font-synthesis:none}
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
 html,body{height:100%;margin:0;overflow:hidden}
 body{background:var(--bg);color:var(--tx);font:13px/1.4 'Chivo Mono','Chivo Mono',ui-monospace,monospace;-webkit-user-select:none;user-select:none;overscroll-behavior:none;touch-action:manipulation;-webkit-text-size-adjust:100%}
 body.boss{background:#170d0c}
 #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
 #fl{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 40%,transparent 35%,var(--fc) 140%)}
 #fl.on{animation:flash .4s ease-out}@keyframes flash{0%{opacity:.55}100%{opacity:0}}
-#app{position:relative;z-index:5;width:min(480px,100%);height:100%;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden}
+#app{position:relative;z-index:5;width:min(480px,100%);height:100%;min-height:0;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
 @supports(height:100dvh){#app{height:100dvh}}
 #app.sk{animation:sk .38s}
 @keyframes sk{0%,100%{translate:0 0}20%{translate:calc(var(--sh)*-1) calc(var(--sh)*.5)}40%{translate:var(--sh) calc(var(--sh)*-.6)}60%{translate:calc(var(--sh)*-.6) 0}80%{translate:calc(var(--sh)*.4) calc(var(--sh)*.3)}}
@@ -77,6 +78,9 @@ body.boss{background:#170d0c}
 @keyframes deal{from{opacity:0;translate:45vw 30vh;rotate:30deg;scale:.6}}
 .handw{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:calc(var(--th) + 12px)}
 .hand{display:flex;flex-wrap:wrap;gap:9px 4px;justify-content:center}
+.hand .tl{touch-action:none}
+.hand-placeholder{flex:0 0 auto;border:1px dashed var(--mx);border-radius:4px;background:color-mix(in srgb,var(--mx) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mx) 20%,transparent)}
+.hand .tl.dragging-hand-tile{position:fixed!important;z-index:1000!important;pointer-events:none!important;opacity:.98;transform:scale(1.1) rotate(-3deg)!important;transition:none!important;filter:brightness(1.06);box-shadow:0 8px 24px #0008,0 0 0 2px var(--mx)}
 .deckn{text-align:center;font-size:9px;letter-spacing:.2em;color:var(--mu)}
 .btns{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:6px}
 .btn{height:46px;border:1px solid var(--ln);border-radius:3px;background:none;color:var(--tx);font:600 10px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.16em;cursor:pointer}
@@ -177,6 +181,84 @@ body.boss{background:#170d0c}
 .dg{background:var(--ti)}.dr{background:var(--ca)}.dx{background:var(--mx)}
 @keyframes dealc{from{opacity:0;translate:0 50px;scale:.6;rotate:24deg}}
 .dvf{max-width:380px;margin:30px auto 0;text-align:center;font-size:10px;line-height:1.5;color:var(--mu)}
+
+/* Loja: hierarquia curta, divisórias discretas e ações fáceis de identificar */
+.shop{width:100%;gap:0;text-align:left;padding:2px 0 18px}
+.shop .hdr2{padding:2px 0 11px;border-bottom:1px solid var(--ln);align-items:center}
+.shop .hdr2 h2{font-size:27px}
+.shop .hdr2 .st{font-size:19px;padding:0 0 0 8px;min-width:82px;text-align:right}
+.shop .hdr2 .st small{font-size:8px;margin-bottom:3px}
+.shop-rewards{width:100%;display:flex;flex-direction:column;gap:6px;padding:9px 0 11px;border-bottom:1px solid var(--ln)}
+.shop-kicker{font:600 8px 'Chivo Mono',monospace;letter-spacing:.22em;color:var(--mu)}
+.shop .pay{justify-content:flex-start;gap:5px 13px;line-height:1.3}
+.shop .pay span{border:0;border-radius:0;padding:0;font-size:10px;color:var(--mu)}
+.shop .pay span b{font-weight:700;color:var(--mo);margin-left:2px}
+.shop-next{width:100%;display:flex;flex-direction:column;gap:7px;padding:11px 0;border-bottom:1px solid var(--ln)}
+.shop-next-main{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11px}
+.shop-next-main>span{color:var(--mu);font-size:9px;letter-spacing:.12em}
+.shop-next-main>span b{font-size:14px;color:var(--tx);letter-spacing:0}
+.shop-target{font-size:10px;font-weight:600;color:var(--tx);white-space:nowrap}
+.shop-boss{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap;font-size:10px;line-height:1.35}
+.shop-boss>span:first-child{font-size:8px;color:var(--ca);letter-spacing:.14em;font-weight:700}
+.shop-boss b{font-size:11px;color:var(--tx)}
+.shop-boss span:last-child{color:var(--mu)}
+.shop-section{width:100%;display:flex;flex-direction:column;gap:8px;padding:12px 0;border-bottom:1px solid var(--ln)}
+.shop-section-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;width:100%}
+.shop-section-head b{font:600 9px 'Chivo Mono',monospace;letter-spacing:.18em;color:var(--tx)}
+.shop-section-head small{font-size:9px;color:var(--mu);text-align:right}
+.shop .leg{justify-content:flex-start;gap:10px;letter-spacing:.08em}
+.shop .leg span{font-size:7.5px}
+.shop .leg span::before{width:5px;height:5px;margin-right:4px}
+.shop .cards{gap:6px}
+.shop .cd{min-height:116px;padding:8px 5px 7px;gap:5px}
+.shop .cd em{font-size:7px;letter-spacing:.13em}
+.shop .cd b{font-size:12px}
+.shop .cd small{font-size:9px;line-height:1.3}
+.shop .cd .pr{font-size:11px}
+.shop-refresh{align-self:flex-end;display:flex;align-items:center;gap:8px;border:1px solid var(--ln);border-radius:3px;background:none;color:var(--mu);padding:7px 9px;font:600 9px 'Chivo Mono',monospace;letter-spacing:.04em}
+.shop-refresh b{color:var(--tx)}
+.shop-refresh:disabled{opacity:.35}
+.shop .svc{gap:6px}
+.shop .sv{padding:8px 7px;font-size:10px}
+.shop .sv small{font-size:9px;line-height:1.3}
+.shop-owned{padding-bottom:11px}
+.shop-owned .rel{margin-top:1px}
+.shop-owned .rs{height:38px}
+.shop .sell{border-radius:3px;padding:8px;font-size:10px;line-height:1.4}
+.shop .sell span{min-width:0}
+.shop .sell button{white-space:nowrap;padding:7px 8px;font-size:9px}
+.shop .shop-msg{margin:0;font-size:10px;line-height:1.4;color:var(--mx)}
+.shop-continue{width:100%;padding-top:12px}
+.shop .big{width:100%;padding:13px 12px}
+.shop button{touch-action:manipulation}
+@media(max-width:360px){
+ .shop .hdr2 h2{font-size:24px}
+ .shop .cd{min-height:124px;padding-inline:4px}
+ .shop .cd em{font-size:6.5px}
+ .shop .cd small{font-size:8.5px}
+ .shop .leg{gap:7px}
+ .shop .leg span{font-size:7px}
+ .shop .sell{align-items:flex-start;flex-direction:column}
+ .shop .sell button{align-self:flex-end}
+}
+@media(max-width:390px){
+ .hdr{gap:8px}
+ .ed{font-size:30px}
+ .gt{font-size:9px;letter-spacing:.12em}
+ .stats .st{font-size:15px}
+ .btns{gap:4px}
+ .btn{font-size:9px;letter-spacing:.06em;padding-inline:2px}
+ .eq{gap:10px}
+}
+@media(max-height:700px) and (max-width:600px){
+ #app{gap:6px;padding-top:max(6px,env(safe-area-inset-top));padding-bottom:max(6px,env(safe-area-inset-bottom))}
+ .key{padding-bottom:3px}
+ .key b{margin-bottom:5px}
+ .board{gap:5px;padding:2px 0}
+ .handw{flex:0 0 auto}
+ .pt b{font-size:27px}
+ .btn{height:42px}
+}
 </style>
 </head>
 <body>
@@ -327,13 +409,19 @@ const sStamp=()=>{tone(110,0,.2,.3,"sine");nz(0,.12,.25,900);tone(1760,.05,.25,.
 const sRel=i=>{tone(900+i*60,0,.1,.12);tone(1350+i*60,.09,.14,.12)};
 
 /* ---------- fundo vivo e partículas ---------- */
-const bg=$("#bg"),bc=bg.getContext("2d"),fx=$("#fx"),fc=fx.getContext("2d");
-let W=0,H=0,DPR=1,P=[],lastT=0;
-function size(){DPR=Math.min(2,window.devicePixelRatio||1);W=window.innerWidth;H=window.innerHeight;[bg,fx].forEach(c=>{c.width=W*DPR;c.height=H*DPR})}
-window.addEventListener("resize",size);size();
+const bg=$("#bg"),bc=bg.getContext("2d",{alpha:true,desynchronized:true}),fx=$("#fx"),fc=fx.getContext("2d",{alpha:true,desynchronized:true});
+let W=0,H=0,DPR=1,P=[],lastT=0,frameHandle=null;
+function size(){
+  const nextDPR=Math.min(2,window.devicePixelRatio||1),nextW=window.innerWidth,nextH=window.innerHeight;
+  if(nextDPR===DPR&&nextW===W&&nextH===H)return;
+  DPR=nextDPR;W=nextW;H=nextH;
+  [bg,fx].forEach(c=>{const w=Math.round(W*DPR),h=Math.round(H*DPR);if(c.width!==w)c.width=w;if(c.height!==h)c.height=h});
+}
+window.addEventListener("resize",size,{passive:true});size();
 const GL=[];for(let i=0;i<34;i++)GL.push({x:Math.random(),y:Math.random(),s:16+Math.random()*38,v:.02+Math.random()*.06,ch:"ABCDEFGHIJLMNOPQRSTUVXZ"[i%23],a:.04+Math.random()*.07,w:Math.random()*6});
 function burst(x,y,col,n,sp,ch){for(let i=0;i<n;i++){const a=Math.random()*6.283,s=(.4+Math.random())*sp;P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,l:1,d:.018+Math.random()*.02,r:3+Math.random()*4,c:col,g:.14,ch:ch&&Math.random()<.35?ch:null})}}
 function loop(t){
+  frameHandle=null;
   const dt=Math.min(40,t-lastT)/16.7;lastT=t;
   bc.setTransform(DPR,0,0,DPR,0,0);bc.clearRect(0,0,W,H);
   bc.fillStyle=document.body.classList.contains("boss")?"#ff4f7b":ink();bc.textAlign="center";bc.textBaseline="middle";
@@ -342,8 +430,13 @@ function loop(t){
   fc.setTransform(DPR,0,0,DPR,0,0);fc.clearRect(0,0,W,H);fc.textAlign="center";fc.textBaseline="middle";
   for(let i=P.length-1;i>=0;i--){const p=P[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.l-=p.d*dt;if(p.l<=0){P.splice(i,1);continue}
     fc.globalAlpha=Math.max(0,p.l);fc.fillStyle=p.c;if(p.ch){fc.font="900 "+(p.r*4)+"px 'Alfa Slab One',Georgia,serif";fc.fillText(p.ch,p.x,p.y)}else fc.fillRect(p.x-p.r/2,p.y-p.r/2,p.r,p.r)}
-  fc.globalAlpha=1;requestAnimationFrame(loop)}
-requestAnimationFrame(loop);
+  fc.globalAlpha=1;if(!document.hidden)frameHandle=requestAnimationFrame(loop)}
+function startFrames(){if(!document.hidden&&frameHandle===null){lastT=0;frameHandle=requestAnimationFrame(loop)}}
+function stopFrames(){if(frameHandle!==null){cancelAnimationFrame(frameHandle);frameHandle=null}lastT=0}
+document.addEventListener("visibilitychange",()=>document.hidden?stopFrames():startFrames());
+window.addEventListener("pagehide",stopFrames);
+window.addEventListener("pageshow",startFrames);
+startFrames();
 function ctr(q){const e=document.querySelector(q);if(!e)return{x:W/2,y:H/2};const r=e.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function fl(txt,x,y,col,big,cls){const e=document.createElement("div");e.className="ft"+(big?" x":"")+(cls?" "+cls:"");e.textContent=txt;e.style.cssText="left:"+x+"px;top:"+y+"px;color:"+col;document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
 function shake(k){const a=$("#app");a.style.setProperty("--sh",k+"px");a.classList.remove("sk");void a.offsetWidth;a.classList.add("sk")}
@@ -354,6 +447,7 @@ function banner(t,s,cls){const e=document.createElement("div");e.className="bn "
 function evalWord(ts,dry){
   const w=wd(ts),real=DicionarioLocal.tem(w),n=ts.length;
   const x={w,real,ts,dry,c:10,m:real?Math.max(1,n-1):Math.max(1,Math.floor((n-1)/2)),$:0,jog:0,gild:0,rnd:dry?.5:Math.random(),lb:[],steps:[]};
+  if(!real){x.c=0;x.m=1;x.steps.push({k:"base",c:0,m:1,lb:[]});return x}
   x.steps.push({k:"base",c:x.c,m:x.m,lb:[]});
   ts.forEach((t,i)=>{
     ac(x,VAL[t.l]*3+5*t.g);if(t.r)am(x,3*t.r);if(t.k)xm(x,Math.pow(1.25,t.k));
@@ -364,7 +458,7 @@ function evalWord(ts,dry){
   return x;
 }
 function legal(ts){
-  const w=wd(ts),b=R.boss,real=DicionarioLocal.tem(w);
+  const w=wd(ts),b=R.boss;
   if(w.length<3)return"Mínimo de 3 letras";
   if(b){
     if(b.id==="ce"&&ts.some(t=>t.l===b.ban))return"O Censor proíbe a letra "+b.ban;
@@ -372,7 +466,6 @@ function legal(ts){
     if(b.id==="ga"&&new Set(w).size<w.length)return"O Gago proíbe letras repetidas";
     if(b.id==="le"&&w.length<5)return"O Professor quer 5+ letras";
   }
-  if(!real)return"“"+w.toLowerCase()+"” não parece uma palavra";
   return null;
 }
 function forma(w,pool){const u=new Set(),ts=[];for(const ch of w.toUpperCase()){const t=pool.find(t=>t.l===ch&&!u.has(t));if(!t)return null;u.add(t);ts.push(t)}return ts}
@@ -419,7 +512,7 @@ async function jogar(){
   if(err){R.msg=err;sErr();vb([30,40,30]);ren();return}
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
-  R.an={c:10,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:"Palavra jogada",pop:""};ren();await dz(380);
+  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"PALAVRA INEXISTENTE · 0 PONTOS · JOGADA CONSUMIDA",pop:"",real:x.real};ren();await dz(380);
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
@@ -481,7 +574,7 @@ function relRow(shop){
   for(let i=0;i<RMAX;i++){const r=G.rel[i];h+=r?`<button class="rs on k${r.k}${R&&R.an&&R.an.rel===i&&G.mode==="play"?" fl":""}${shop&&G.sel===i?" sel":""}" data-r="${i}"><small>${r.n}</small></button>`:'<span class="rs"></span>'}
   return h+"</div>";
 }
-const muteB=()=>`<span class="tgs"><button class="mute" data-a="theme">${S.theme?"ESCURO":"CLARO"}</button><button class="mute" data-a="mute">${S.mute?"MUDO":"SOM"}</button></span>`;
+const muteB=()=>`<span class=</button></span>`;
 function vTitle(){
   const row=(s,o)=>`<div class="lrow">${[...s].map((ch,i)=>`<span class="tl${(o+i)%4===1?" gd":(o+i)%7===3?" rb":""}" style="--i:${o+i}">${ch}</span>`).join("")}</div>`;
   return `<div class="hdr" style="justify-content:flex-end">${muteB()}</div><div class="ov"><div class="logo">${row("CAIXA",0)}${row("ALTA",5)}</div><div class="sub">FORME PALAVRAS. BATA A META.</div>
@@ -492,15 +585,15 @@ function vTitle(){
   <p style="font-size:10px;color:var(--mu)">${S.runs?`Recorde: fase ${S.best}/8 · ${S.wins} vitória(s)`+(S.bw?`<br>Melhor palavra: ${S.bw} (${fmt(S.bs)})`:""):"Sua primeira partida começa agora."}</p></div>`;
 }
 function vPlay(){
-  const a=R.an,st=R.st,b=R.boss,w=wd(st),hit=w.length>=3&&w.includes(R.sw.toUpperCase());
+  const a=R.an,st=R.st,b=R.boss,w=wd(st),realWord=DicionarioLocal.tem(w),hit=w.length>=3&&realWord&&w.includes(R.sw.toUpperCase());
   const pv=!a&&st.length>=3&&!legal(st)?evalWord(st,true):null;
   const c=a?a.c:pv?pv.c:0,m=a?a.m:pv?pv.m:0,pop=a?a.pop:"";
   let pill,pc="";
-  if(a){pill=a.msg;pc="ok"}
+  if(a){pill=a.msg;pc=a.real?"ok":"nv"}
   else if(!st.length)pill="Toque nas letras abaixo";
   else if(st.length<3)pill="Mínimo de 3 letras";
-  else{const er=legal(st);if(er){pill=er;pc="er"}else{pill=(DicionarioLocal.tem(w)?"Palavra no dicionário · Palavra válida":"“"+w.toLowerCase()+"” não parece uma palavra")+(hit?" · trecho encaixado: prêmio extra!":"");pc="ok"}}
-  const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">≈ ${fmt(pv.c*pv.m)}</div>`:'<div class="tot"></div>';
+  else{const er=legal(st);if(er){pill=er;pc="er"}else if(!realWord){pill="Palavra inexistente · 0 pontos · consome uma jogada";pc="nv"}else{pill="Palavra válida"+(hit?" · trecho encaixado: prêmio extra!":"");pc="ok"}}
+  const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
   return `<div class="hdr"><div class="ed"><small>FASE</small>${G.n+1}<i>${G.endless?"":"/8"}</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
   <div class="stats"><div class="st"><small>JOGADAS</small>${R.jog}</div><div class="st"><small>TROCAS</small>${R.desc}</div><div class="st g"><small>MOEDAS</small>$${G.$}</div></div>
@@ -511,24 +604,34 @@ function vPlay(){
    <div class="tray">${Array.from({length:8},(_,i)=>st[i]?`<div class="slot f">${tH(st[i],"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(st[i].l)?" rr":""):"")+(!a&&i===st.length-1?" lnd":""))}</div>`:'<div class="slot"></div>').join("")}</div>
    <div class="eq"><div class="pt"><small>PONTOS</small><b class="${pop.includes("c")?"pop":""}">${fmt(c)}</b></div><span class="xx">×</span><div class="pt m" style="--hot:${Math.min(1,(m-1)/30)}"><small>BÔNUS</small><b class="${pop.includes("m")?"pop":""}">${fm(m)}</b></div></div>
    ${tot}<div class="msg">${a?"":R.msg}</div></div>
-  <div class="handw"><div class="hand">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${R.deck.length} LETRAS NO BARALHO</div></div>
+  <div class="handw"><div class="hand">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${"Eu te amo, Bia" } </div></div>
   <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}" data-a="play">JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}`;
 }
 function vShop(){
   const p=G.pay,nb=G.nb,sel=G.rel[G.sel];
-  const pay=[["Fase vencida",p.bs],["Jogadas sobrando",p.jg],["Cofrinho",p.cx],["Juros",p.int],["Chefe derrotado",p.b]].filter(q=>q[1]>0).map(q=>`<span>${q[0]} +$${q[1]}</span>`).join("");
-  return `<div class="ov"><div class="hdr2"><h2>Loja</h2><div class="st g"><small>MOEDAS</small>$${G.$}</div></div>
-  <div class="pay">${pay}</div><p style="font-size:11px">Gaste moedas em poderes e melhorias de letras. As que sobrarem rendem juros (até +$5).</p>
-  <div class="next${nb?" bs":""}">Próxima: <b>fase ${G.n+1}</b> · meta ${fmt(metaOf(G.n))}${nb?`<br><b>${nb.n}</b> — ${nb.d}`:""}</div>
-  ${leg()}
-  <div class="lbl">PODERES À VENDA · ficam ativos em toda palavra</div>
-  <div class="cards">${[0,1,2].map(i=>{const r=G.off[i];return r?`<button class="cd k${r.k} r${r.r}" data-o="${i}" ${G.$<r.c||G.rel.length>=RMAX?"disabled":""}><em>${KL[r.k]} · ${["COMUM","RARO","ÉPICO"][r.r]}</em><b>${r.n}</b><small>${r.d}</small><span class="pr">$${r.c}</span></button>`:'<div class="cd empty"></div>'}).join("")}</div>
-  <div class="lbl">MELHORE SUAS LETRAS · sorteia uma do baralho</div>
-  <div class="svc"><button class="sv kc" data-a="sg" ${G.$<3?"disabled":""}>Brilhante<small>+5 pontos · $3</small></button><button class="sv km" data-a="sr" ${G.$<4?"disabled":""}>Vermelha<small>+3 bônus · $4</small></button><button class="sv kx" data-a="sk" ${G.$<5?"disabled":""}>Dourada<small>×1,25 bônus · $5</small></button><button class="sv" data-a="rr" ${G.$<2+G.rr?"disabled":""}>Trocar vitrine<small>novos poderes · $${2+G.rr}</small></button></div>
-  ${G.msg?`<p style="color:var(--mx)">${G.msg}</p>`:""}
-  <div class="lbl">SEUS PODERES (máx. 5) · toque para ver ou vender</div>${relRow(true)}
-  ${sel?`<div class="sell"><span><b>${sel.n}</b>: ${sel.d}</span><button data-a="sell">VENDER $${Math.floor(sel.c/2)}</button></div>`:""}
-  <button class="big" data-a="next">COMEÇAR FASE ${G.n+1}</button></div>`;
+  const pay=[['Fase',p.bs],['Jogadas',p.jg],['Cofrinho',p.cx],['Juros',p.int],['Chefe',p.b]].filter(q=>q[1]>0).map(q=>`<span>${q[0]} <b>+$${q[1]}</b></span>`).join('');
+  return `<div class="ov shop">
+  <div class="hdr2"><h2>Loja</h2><div class="st g"><small>MOEDAS</small>$${G.$}</div></div>
+  ${pay?`<div class="shop-rewards"><small class="shop-kicker">GANHOS DA FASE</small><div class="pay">${pay}</div></div>`:''}
+  <div class="shop-next"><div class="shop-next-main"><span>PRÓXIMA FASE <b>${G.n+1}</b></span><b class="shop-target">META ${fmt(metaOf(G.n))}</b></div>${nb?`<div class="shop-boss"><span>CHEFE</span><b>${nb.n}</b><span>${nb.d}</span></div>`:''}</div>
+  <section class="shop-section">
+    <div class="shop-section-head"><b>PODERES</b><small>Toque para comprar</small></div>
+    ${leg()}
+    <div class="cards">${[0,1,2].map(i=>{const r=G.off[i];return r?`<button class="cd k${r.k} r${r.r}" data-o="${i}" ${G.$<r.c||G.rel.length>=RMAX?'disabled':''}><em>${KL[r.k]} · ${['COMUM','RARO','ÉPICO'][r.r]}</em><b>${r.n}</b><small>${r.d}</small><span class="pr">$${r.c}</span></button>`:'<div class="cd empty"></div>'}).join('')}</div>
+    <button class="shop-refresh" data-a="rr" ${G.$<2+G.rr?'disabled':''}>TROCAR VITRINE <b>$${2+G.rr}</b></button>
+  </section>
+  <section class="shop-section">
+    <div class="shop-section-head"><b>MELHORIAS DE LETRAS</b><small>Letra aleatória</small></div>
+    <div class="svc"><button class="sv kc" data-a="sg" ${G.$<3?'disabled':''}>Brilhante<small>+5 pontos · $3</small></button><button class="sv km" data-a="sr" ${G.$<4?'disabled':''}>Vermelha<small>+3 bônus · $4</small></button><button class="sv kx" data-a="sk" ${G.$<5?'disabled':''}>Dourada<small>×1,25 bônus · $5</small></button></div>
+  </section>
+  <section class="shop-section shop-owned">
+    <div class="shop-section-head"><b>SEUS PODERES</b><small>${G.rel.length}/${RMAX} · toque para vender</small></div>
+    ${relRow(true)}
+    ${sel?`<div class="sell"><span><b>${sel.n}</b> — ${sel.d}</span><button data-a="sell">VENDER $${Math.floor(sel.c/2)}</button></div>`:''}
+  </section>
+  ${G.msg?`<p class="shop-msg">${G.msg}</p>`:''}
+  <div class="shop-continue"><button class="big" data-a="next">COMEÇAR FASE ${G.n+1}</button></div>
+  </div>`;
 }
 function vOver(){
   const s=G.stat,ed=G.n+(G.win?1:0);
@@ -559,8 +662,80 @@ function ren(){
   if(R)R.fresh.clear();
 }
 
+/* ---------- arrastar e reordenar letras na própria mão ---------- */
+let handDrag=null,suppressHandClick=false,suppressHandClickTimer=null;
+function handDropTarget(d,x,y){
+  const els=[...d.hand.querySelectorAll(':scope > [data-h]')].filter(el=>el!==d.el);
+  if(!els.length){d.hand.appendChild(d.placeholder);return}
+  const rows=[];
+  for(const el of els){
+    const r=el.getBoundingClientRect();
+    let row=rows.find(q=>Math.abs(q.top-r.top)<Math.max(8,r.height*.35));
+    if(!row){row={top:r.top,bottom:r.bottom,els:[]};rows.push(row)}
+    row.top=Math.min(row.top,r.top);row.bottom=Math.max(row.bottom,r.bottom);row.els.push({el,r});
+  }
+  rows.sort((a,b)=>a.top-b.top);
+  let row=rows[0],dist=Infinity;
+  for(const q of rows){const dd=y<q.top?q.top-y:y>q.bottom?y-q.bottom:0;if(dd<dist){dist=dd;row=q}}
+  row.els.sort((a,b)=>a.r.left-b.r.left);
+  const first=row.els[0],last=row.els[row.els.length-1];
+  if(x<first.r.left+first.r.width/2)d.hand.insertBefore(d.placeholder,first.el);
+  else{
+    const next=row.els.find(q=>x<q.r.left+q.r.width/2);
+    if(next)d.hand.insertBefore(d.placeholder,next.el);
+    else last.el.after(d.placeholder);
+  }
+}
+function beginHandDrag(d,e){
+  const r=d.el.getBoundingClientRect();
+  d.moved=true;
+  d.placeholder=document.createElement('div');
+  d.placeholder.className='hand-placeholder';
+  d.placeholder.dataset.dragPlaceholder='';
+  d.placeholder.style.width=r.width+'px';
+  d.placeholder.style.height=r.height+'px';
+  d.el.before(d.placeholder);
+  d.el.classList.add('dragging-hand-tile');
+  Object.assign(d.el.style,{left:(e.clientX-d.offsetX)+'px',top:(e.clientY-d.offsetY)+'px',width:r.width+'px',height:r.height+'px',margin:'0'});
+  try{d.el.setPointerCapture(e.pointerId)}catch(_){ }
+}
+function moveHandDrag(e){
+  const d=handDrag;if(!d||e.pointerId!==d.pointerId)return;
+  const dx=e.clientX-d.startX,dy=e.clientY-d.startY;
+  if(!d.moved){if(Math.hypot(dx,dy)<7)return;beginHandDrag(d,e)}
+  e.preventDefault();
+  d.el.style.left=(e.clientX-d.offsetX)+'px';
+  d.el.style.top=(e.clientY-d.offsetY)+'px';
+  handDropTarget(d,e.clientX,e.clientY);
+}
+function finishHandDrag(e,cancelled=false){
+  const d=handDrag;if(!d||(e&&e.pointerId!==d.pointerId))return;
+  handDrag=null;
+  if(d.moved&&!cancelled){
+    const byId=new Map(R.hand.map(t=>[String(t.id),t]));
+    const ids=[...d.hand.children].filter(el=>el===d.placeholder||(el.matches('[data-h]')&&el!==d.el)).map(el=>el===d.placeholder?String(d.id):String(el.dataset.id));
+    const reordered=ids.map(id=>byId.get(id)).filter(Boolean);
+    if(reordered.length===R.hand.length){R.hand=reordered;R.hand.forEach((t,i)=>t.o=i)}
+    suppressHandClick=true;
+    clearTimeout(suppressHandClickTimer);
+    suppressHandClickTimer=setTimeout(()=>{suppressHandClick=false},180);
+    ren();
+  }else if(d.moved){ren()}
+  else if(d.el.isConnected){d.el.classList.remove('dragging-hand-tile');d.el.style.position='';d.el.style.left='';d.el.style.top='';d.el.style.width='';d.el.style.height='';d.el.style.margin='';d.el.style.zIndex='';d.el.style.pointerEvents='';}
+}
+document.addEventListener('pointerdown',e=>{
+  const el=e.target.closest('.hand [data-h]');
+  if(!el||!e.isPrimary||(e.button!==undefined&&e.button!==0)||G.mode!=='play'||!R||R.lock||R.dv)return;
+  const hand=el.closest('.hand'),r=el.getBoundingClientRect();
+  handDrag={el,hand,id:el.dataset.id,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-r.left,offsetY:e.clientY-r.top,moved:false,placeholder:null};
+},true);
+document.addEventListener('pointermove',moveHandDrag,{passive:false});
+document.addEventListener('pointerup',e=>finishHandDrag(e,false),true);
+document.addEventListener('pointercancel',e=>finishHandDrag(e,true),true);
+
 /* ---------- entrada ---------- */
 document.addEventListener("click",e=>{
+  if(suppressHandClick){e.preventDefault();e.stopPropagation();suppressHandClick=false;clearTimeout(suppressHandClickTimer);return}
   const t=e.target.closest("[data-h],[data-s],[data-a],[data-dk],[data-o],[data-r]");if(!t)return;au();
   const D=t.dataset;
   if(D.a==="theme"){S.theme=S.theme?0:1;save();applyTheme();sTec();ren();return}
