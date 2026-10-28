@@ -57,6 +57,9 @@ body.boss{background:#170d0c}
 .pill.ok{color:var(--mo)}.pill.er{color:var(--ca)}.pill.nv{color:var(--mx)}
 .tray{display:grid;grid-template-columns:repeat(8,var(--tw));gap:4px;padding:6px;border:1px solid var(--ln);border-radius:4px}
 .slot{width:var(--tw);height:var(--th);border:1px dashed var(--ln);border-radius:3px}.slot.f{border:0}
+.slot.drop-target{border:1px solid var(--mx);background:color-mix(in srgb,var(--mx) 13%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mx) 20%,transparent)}
+.slot.drag-source{border:1px dashed var(--mx);background:color-mix(in srgb,var(--mx) 7%,transparent)}
+.tray .tl.dragging-tray-tile{position:fixed!important;z-index:1000!important;pointer-events:none!important;opacity:.98;transform:scale(1.1) rotate(-3deg)!important;transition:none!important;filter:brightness(1.06);box-shadow:0 8px 24px #0008,0 0 0 2px var(--mx)}
 .eq{display:flex;gap:14px;align-items:baseline;justify-content:center}
 .pt{text-align:center;min-width:92px;color:var(--ti)}.pt.m{color:var(--ca)}
 .pt small{display:block;font:500 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.3em;color:var(--mu)}
@@ -78,7 +81,7 @@ body.boss{background:#170d0c}
 @keyframes deal{from{opacity:0;translate:45vw 30vh;rotate:30deg;scale:.6}}
 .handw{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:calc(var(--th) + 12px)}
 .hand{display:flex;flex-wrap:wrap;gap:9px 4px;justify-content:center}
-.hand .tl{touch-action:none}
+.hand .tl,.tray .tl{touch-action:none}
 .hand-placeholder{flex:0 0 auto;border:1px dashed var(--mx);border-radius:4px;background:color-mix(in srgb,var(--mx) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mx) 20%,transparent)}
 .hand .tl.dragging-hand-tile{position:fixed!important;z-index:1000!important;pointer-events:none!important;opacity:.98;transform:scale(1.1) rotate(-3deg)!important;transition:none!important;filter:brightness(1.06);box-shadow:0 8px 24px #0008,0 0 0 2px var(--mx)}
 .deckn{text-align:center;font-size:9px;letter-spacing:.2em;color:var(--mu)}
@@ -496,33 +499,55 @@ function rodada(){
   let sw;do{sw=pick(POOLW)}while(!okW(sw));
   if(bo&&bo.id==="ce")bo.ban=pick("AEOSRNI".split("").filter(l=>!sw.toUpperCase().includes(l)));
   const av=bo&&bo.id==="av"?1:0;
-  R={n,meta:metaOf(n),sc:0,jog:Math.max(1,4+cnt("jog")+G.jogB-av),desc:Math.max(0,3+cnt("desc")+G.descB-av),sw,pw:pick(POW),boss:bo,hs:8+cnt("hand"),hand:[],st:[],deck:emb([...G.col]),msg:"",an:null,lock:false,fast:false,fresh:new Set(),oc:1};
+  R={n,meta:metaOf(n),sc:0,jog:Math.max(1,4+cnt("jog")+G.jogB-av),desc:Math.max(0,3+cnt("desc")+G.descB-av),sw,pw:pick(POW),boss:bo,hs:8+cnt("hand"),hand:[],st:[],stPos:[],deck:emb([...G.col]),msg:"",an:null,lock:false,fast:false,fresh:new Set(),oc:1};
   for(const ch of sw.toUpperCase()){const i=R.deck.findIndex(t=>t.l===ch);const t=i>=0?R.deck.splice(i,1)[0]:mkTile(ch);R.hand.push(t)}
   R.hand.forEach(t=>{t.o=Math.random();R.fresh.add(t.id)});
   puxa();G.mode="play";ren();
   banner("FASE "+(n+1),bo?"CHEFE · "+bo.n+" · "+bossTxt(bo):"Faça "+fmt(R.meta)+" pontos",bo?"boss":"");
 }
 function puxa(){while(R.hand.length+R.st.length<R.hs&&R.deck.length){const t=R.deck.pop();t.o=1+R.oc++;R.hand.push(t);R.fresh.add(t.id)}R.hand.sort((a,b)=>a.o-b.o)}
-function stage(i){if(R.lock||R.st.length>=8||!R.hand[i])return;R.st.push(R.hand.splice(i,1)[0]);R.msg="";sTec();vb(6);ren()}
-function unstage(i){if(R.lock||!R.st[i])return;R.hand.push(R.st.splice(i,1)[0]);R.hand.sort((a,b)=>a.o-b.o);sTec();ren()}
-function limpar(){if(R.lock)return;R.hand.push(...R.st);R.st=[];R.hand.sort((a,b)=>a.o-b.o);sTec();ren()}
+function sortStByPos(){
+  const pairs=R.st.map((t,i)=>({t,pos:Number.isInteger(R.stPos[i])?R.stPos[i]:i})).sort((a,b)=>a.pos-b.pos);
+  R.st=pairs.map(q=>q.t);R.stPos=pairs.map(q=>q.pos);
+}
+function trayConsecutive(){
+  if(!R||!R.st.length||R.stPos.length!==R.st.length)return false;
+  const p=[...R.stPos].sort((a,b)=>a-b);
+  return p.every((v,i)=>i===0||v===p[i-1]+1);
+}
+function nextTraySlot(){
+  const used=new Set(R.stPos||[]);if(used.size>=8)return -1;if(!used.size)return 0;
+  const p=[...used].sort((a,b)=>a-b),lo=p[0],hi=p[p.length-1];
+  for(let i=lo+1;i<hi;i++)if(!used.has(i))return i;
+  if(hi<7&&!used.has(hi+1))return hi+1;
+  if(lo>0&&!used.has(lo-1))return lo-1;
+  for(let i=0;i<8;i++)if(!used.has(i))return i;
+  return -1;
+}
+function stage(i){
+  if(R.lock||R.st.length>=8||!R.hand[i])return;
+  const pos=nextTraySlot();if(pos<0)return;
+  R.st.push(R.hand.splice(i,1)[0]);R.stPos.push(pos);sortStByPos();R.msg="";sTec();vb(6);ren();
+}
+function unstage(i){if(R.lock||!R.st[i])return;R.hand.push(R.st.splice(i,1)[0]);R.stPos.splice(i,1);R.hand.sort((a,b)=>a.o-b.o);sortStByPos();sTec();ren()}
+function limpar(){if(R.lock)return;R.hand.push(...R.st);R.st=[];R.stPos=[];R.hand.sort((a,b)=>a.o-b.o);sTec();ren()}
 function descartar(){
   if(R.lock)return;
   if(!R.st.length){R.msg="Toque nas letras que quer trocar";sErr();ren();return}
   if(R.desc<1){R.msg="Sem trocas restantes";sErr();ren();return}
-  R.desc--;R.st=[];puxa();R.msg="Letras trocadas";sOk();ren();
+  R.desc--;R.st=[];R.stPos=[];puxa();R.msg="Letras trocadas";sOk();ren();
   if(!R.hand.length&&!R.deck.length)fim(false);
 }
 function dica(){
   if(R.lock)return;const pool=R.hand.concat(R.st);let b=null;
   for(const w of DICARR){if(w.length>pool.length)continue;const ts=forma(w,pool);if(!ts||legal(ts))continue;const x=evalWord(ts,true),s=x.c*x.m;if(!b||s>b.s)b={s,ts}}
   if(!b){R.msg="Nenhuma palavra possível: troque letras";sErr();ren();return}
-  R.hand=pool.filter(t=>!b.ts.includes(t));R.st=b.ts;R.msg="Sugestão: "+wd(b.ts)+" (≈"+fmt(b.s)+")";sOk();R.hand.sort((a,b)=>a.o-b.o);ren();
+  R.hand=pool.filter(t=>!b.ts.includes(t));R.st=b.ts;R.stPos=b.ts.map((_,i)=>i);R.msg="Sugestão: "+wd(b.ts)+" (≈"+fmt(b.s)+")";sOk();R.hand.sort((a,b)=>a.o-b.o);ren();
 }
 const dz=ms=>d0(R&&R.fast?Math.min(ms,45):ms);
 async function jogar(){
   if(R.lock)return;
-  const ts=[...R.st],err=legal(ts);
+  const ts=[...R.st],err=R.st.length>=3&&!trayConsecutive()?"Mantenha as letras em casas consecutivas":legal(ts);
   if(err){R.msg=err;sErr();vb([30,40,30]);ren();return}
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
@@ -548,7 +573,7 @@ async function jogar(){
   if(t>G.stat.bs){G.stat.bs=t;G.stat.bw=x.w}
   if(t>S.bs){if(S.bs>0)fl("NOVO RECORDE",W/2,H*.22,"var(--ex)",true,"big");S.bs=t;S.bw=x.w;save()}
   G.$+=x.$;R.jog+=x.jog;if(x.gild)ts.forEach(q=>q.g++);
-  R.st=[];puxa();R.an=null;R.lock=false;R.msg="";
+  R.st=[];R.stPos=[];puxa();R.an=null;R.lock=false;R.msg="";
   if(R.sc>=R.meta)return vence();
   if(R.jog<1||(R.hand.length+R.st.length<3&&!R.deck.length))return fim(false);
   ren();
@@ -599,13 +624,14 @@ function vTitle(){
   <p style="font-size:10px;color:var(--mu)">${S.runs?`Recorde: fase ${S.best}/8 · ${S.wins} vitória(s)`+(S.bw?`<br>Melhor palavra: ${S.bw} (${fmt(S.bs)})`:""):"Sua primeira partida começa agora."}</p></div>`;
 }
 function vPlay(){
-  const a=R.an,st=R.st,b=R.boss,w=wd(st),realWord=DicionarioLocal.tem(w),hit=w.length>=3&&realWord&&w.includes(R.sw.toUpperCase());
-  const pv=!a&&st.length>=3&&!legal(st)?evalWord(st,true):null;
+  const a=R.an,st=R.st,b=R.boss,w=wd(st),realWord=DicionarioLocal.tem(w),consecutive=trayConsecutive(),hit=consecutive&&w.length>=3&&realWord&&w.includes(R.sw.toUpperCase());
+  const pv=!a&&st.length>=3&&consecutive&&!legal(st)?evalWord(st,true):null;
   const c=a?a.c:pv?pv.c:0,m=a?a.m:pv?pv.m:0,pop=a?a.pop:"";
   let pill,pc="";
   if(a){pill=a.msg;pc=a.real?"ok":"nv"}
-  else if(!st.length)pill="Toque nas letras abaixo";
+  else if(!st.length)pill="Toque nas letras abaixo ou arraste para um quadrado";
   else if(st.length<3)pill="Mínimo de 3 letras";
+  else if(!consecutive){pill="Mantenha as letras em casas consecutivas";pc="er"}
   else{const er=legal(st);if(er){pill=er;pc="er"}else if(!realWord){pill="Palavra inexistente · 0 pontos · consome uma jogada";pc="nv"}else{pill="Palavra válida"+(hit?" · trecho encaixado: prêmio extra!":"");pc="ok"}}
   const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
@@ -615,11 +641,11 @@ function vPlay(){
   ${b?`<div class="bossb">CHEFE · ${b.n} — ${bossTxt(b)}</div>`:""}
   ${relRow(false)}
   <div class="board"><div class="pill ${pc}">${pill}</div>
-   <div class="tray">${Array.from({length:8},(_,i)=>st[i]?`<div class="slot f">${tH(st[i],"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(st[i].l)?" rr":""):"")+(!a&&i===st.length-1?" lnd":""))}</div>`:'<div class="slot"></div>').join("")}</div>
+   <div class="tray">${Array.from({length:8},(_,slot)=>{const i=R.stPos.indexOf(slot),t=i>=0?st[i]:null;return t?`<div class="slot f" data-slot="${slot}">${tH(t,"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(t.l)?" rr":""):"")+(!a&&i===st.length-1?" lnd":""))}</div>`:`<div class="slot" data-slot="${slot}"></div>`}).join("")}</div>
    <div class="eq"><div class="pt"><small>PONTOS</small><b class="${pop.includes("c")?"pop":""}">${fmt(c)}</b></div><span class="xx">×</span><div class="pt m" style="--hot:${Math.min(1,(m-1)/30)}"><small>BÔNUS</small><b class="${pop.includes("m")?"pop":""}">${fm(m)}</b></div></div>
    ${tot}<div class="msg">${a?"":R.msg}</div></div>
   <div class="handw"><div class="hand">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${"Eu te amo, Bia" } </div></div>
-  <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}" data-a="play">JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}`;
+  <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}" data-a="play" ${!a&&(st.length<3||!consecutive)?"disabled":""}>JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}`;
 }
 function vShop(){
   const p=G.pay,nb=G.nb,sel=G.rel[G.sel];
@@ -676,7 +702,7 @@ function ren(){
   if(R)R.fresh.clear();
 }
 
-/* ---------- arrastar e reordenar letras na própria mão ---------- */
+/* ---------- arrastar cartas: reorganizar a mão e posicionar letras na palavra ---------- */
 let handDrag=null,suppressHandClick=false,suppressHandClickTimer=null;
 function handDropTarget(d,x,y){
   const els=[...d.hand.querySelectorAll(':scope > [data-h]')].filter(el=>el!==d.el);
@@ -700,48 +726,106 @@ function handDropTarget(d,x,y){
     else last.el.after(d.placeholder);
   }
 }
+function traySlotAt(x,y){
+  const tray=document.querySelector('.tray');if(!tray)return null;
+  const tr=tray.getBoundingClientRect();if(x<tr.left||x>tr.right||y<tr.top||y>tr.bottom)return null;
+  const slots=[...tray.querySelectorAll(':scope > .slot')];if(!slots.length)return null;
+  const inside=slots.find(el=>{const r=el.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom});
+  if(inside)return inside;
+  let best=null,dist=Infinity;
+  for(const el of slots){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,d=Math.hypot(x-cx,y-cy);if(d<dist){dist=d;best=el}}
+  return best;
+}
+function setTrayHover(d,target){
+  document.querySelectorAll('.tray .slot.drop-target').forEach(el=>{if(el!==target)el.classList.remove('drop-target')});
+  if(target)target.classList.add('drop-target');
+  d.trayTarget=target?Number(target.dataset.slot):null;
+}
+function clearDragMarks(){document.querySelectorAll('.tray .slot.drop-target,.tray .slot.drag-source').forEach(el=>el.classList.remove('drop-target','drag-source'))}
 function beginHandDrag(d,e){
-  const r=d.el.getBoundingClientRect();
-  d.moved=true;
-  d.placeholder=document.createElement('div');
-  d.placeholder.className='hand-placeholder';
-  d.placeholder.dataset.dragPlaceholder='';
-  d.placeholder.style.width=r.width+'px';
-  d.placeholder.style.height=r.height+'px';
-  d.el.before(d.placeholder);
+  const r=d.el.getBoundingClientRect();d.moved=true;
+  d.placeholder=document.createElement('div');d.placeholder.className='hand-placeholder';d.placeholder.dataset.dragPlaceholder='';
+  d.placeholder.style.width=r.width+'px';d.placeholder.style.height=r.height+'px';d.el.before(d.placeholder);
   d.el.classList.add('dragging-hand-tile');
+  Object.assign(d.el.style,{left:(e.clientX-d.offsetX)+'px',top:(e.clientY-d.offsetY)+'px',width:r.width+'px',height:r.height+'px',margin:'0'});
+  try{d.el.setPointerCapture(e.pointerId)}catch(_){ }
+}
+function beginTrayDrag(d,e){
+  const r=d.el.getBoundingClientRect();d.moved=true;d.sourceSlot=d.el.closest('.slot');
+  if(d.sourceSlot)d.sourceSlot.classList.add('drag-source');
+  d.el.classList.add('dragging-tray-tile');
   Object.assign(d.el.style,{left:(e.clientX-d.offsetX)+'px',top:(e.clientY-d.offsetY)+'px',width:r.width+'px',height:r.height+'px',margin:'0'});
   try{d.el.setPointerCapture(e.pointerId)}catch(_){ }
 }
 function moveHandDrag(e){
   const d=handDrag;if(!d||e.pointerId!==d.pointerId)return;
   const dx=e.clientX-d.startX,dy=e.clientY-d.startY;
-  if(!d.moved){if(Math.hypot(dx,dy)<7)return;beginHandDrag(d,e)}
+  if(!d.moved){if(Math.hypot(dx,dy)<7)return;if(d.mode==='tray')beginTrayDrag(d,e);else beginHandDrag(d,e)}
   e.preventDefault();
-  d.el.style.left=(e.clientX-d.offsetX)+'px';
-  d.el.style.top=(e.clientY-d.offsetY)+'px';
-  handDropTarget(d,e.clientX,e.clientY);
+  d.el.style.left=(e.clientX-d.offsetX)+'px';d.el.style.top=(e.clientY-d.offsetY)+'px';
+  const target=traySlotAt(e.clientX,e.clientY);setTrayHover(d,target);
+  if(d.mode==='hand'&&!target)handDropTarget(d,e.clientX,e.clientY);
+}
+function sortHand(){R.hand.sort((a,b)=>a.o-b.o)}
+function nearestFreeTraySlot(excludeSet,near){
+  let best=-1,dist=Infinity;
+  for(let i=0;i<8;i++)if(!excludeSet.has(i)){const d=Math.abs(i-near);if(d<dist){dist=d;best=i}}
+  return best;
+}
+function placeHandTileInTray(id,slot){
+  const hi=R.hand.findIndex(t=>String(t.id)===String(id));if(hi<0||R.st.length>=8)return false;
+  const tile=R.hand.splice(hi,1)[0];
+  const occupied=R.stPos.indexOf(slot);
+  if(occupied>=0){
+    const used=new Set(R.stPos),free=nearestFreeTraySlot(used,slot);
+    if(free<0){R.hand.push(tile);sortHand();return false}
+    R.stPos[occupied]=free;
+  }
+  R.st.push(tile);R.stPos.push(slot);sortStByPos();R.msg="";sortHand();sTec();vb(6);return true;
+}
+function moveTrayTileToSlot(index,slot){
+  if(!R.st[index]||!Number.isInteger(slot)||slot<0||slot>7)return false;
+  const from=R.stPos[index];if(from===slot)return false;
+  const other=R.stPos.indexOf(slot);
+  if(other>=0)R.stPos[other]=from;
+  R.stPos[index]=slot;sortStByPos();R.msg="";sTec();vb(6);return true;
 }
 function finishHandDrag(e,cancelled=false){
   const d=handDrag;if(!d||(e&&e.pointerId!==d.pointerId))return;
-  handDrag=null;
-  if(d.moved&&!cancelled){
+  const target=!cancelled&&e?traySlotAt(e.clientX,e.clientY):null;
+  const targetSlot=target?Number(target.dataset.slot):null;
+  handDrag=null;clearDragMarks();
+  if(d.mode==='tray'){
+    if(d.moved){
+      if(!cancelled){
+        if(targetSlot!==null)moveTrayTileToSlot(d.index,targetSlot);
+        suppressHandClick=true;clearTimeout(suppressHandClickTimer);suppressHandClickTimer=setTimeout(()=>{suppressHandClick=false},180);
+      }
+      ren();
+    }
+    return;
+  }
+  if(d.moved&&!cancelled&&targetSlot!==null){
+    placeHandTileInTray(d.id,targetSlot);
+    suppressHandClick=true;clearTimeout(suppressHandClickTimer);suppressHandClickTimer=setTimeout(()=>{suppressHandClick=false},180);
+    ren();
+  }else if(d.moved&&!cancelled){
     const byId=new Map(R.hand.map(t=>[String(t.id),t]));
     const ids=[...d.hand.children].filter(el=>el===d.placeholder||(el.matches('[data-h]')&&el!==d.el)).map(el=>el===d.placeholder?String(d.id):String(el.dataset.id));
     const reordered=ids.map(id=>byId.get(id)).filter(Boolean);
     if(reordered.length===R.hand.length){R.hand=reordered;R.hand.forEach((t,i)=>t.o=i)}
-    suppressHandClick=true;
-    clearTimeout(suppressHandClickTimer);
-    suppressHandClickTimer=setTimeout(()=>{suppressHandClick=false},180);
+    suppressHandClick=true;clearTimeout(suppressHandClickTimer);suppressHandClickTimer=setTimeout(()=>{suppressHandClick=false},180);
     ren();
   }else if(d.moved){ren()}
-  else if(d.el.isConnected){d.el.classList.remove('dragging-hand-tile');d.el.style.position='';d.el.style.left='';d.el.style.top='';d.el.style.width='';d.el.style.height='';d.el.style.margin='';d.el.style.zIndex='';d.el.style.pointerEvents='';}
+  else if(d.el.isConnected){d.el.classList.remove('dragging-hand-tile');d.el.style.position='';d.el.style.left='';d.el.style.top='';d.el.style.width='';d.el.style.height='';d.el.style.margin='';d.el.style.zIndex='';d.el.style.pointerEvents=''}
 }
 document.addEventListener('pointerdown',e=>{
-  const el=e.target.closest('.hand [data-h]');
-  if(!el||!e.isPrimary||(e.button!==undefined&&e.button!==0)||G.mode!=='play'||!R||R.lock||R.dv)return;
-  const hand=el.closest('.hand'),r=el.getBoundingClientRect();
-  handDrag={el,hand,id:el.dataset.id,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-r.left,offsetY:e.clientY-r.top,moved:false,placeholder:null};
+  if(!e.isPrimary||(e.button!==undefined&&e.button!==0)||G.mode!=='play'||!R||R.lock||R.dv)return;
+  const handEl=e.target.closest('.hand [data-h]');
+  const trayEl=e.target.closest('.tray [data-s]');
+  const el=handEl||trayEl;if(!el)return;
+  const hand=handEl?el.closest('.hand'):null,r=el.getBoundingClientRect();
+  handDrag={mode:handEl?'hand':'tray',el,hand,id:el.dataset.id,index:trayEl?Number(el.dataset.s):-1,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-r.left,offsetY:e.clientY-r.top,moved:false,placeholder:null,trayTarget:null};
 },true);
 document.addEventListener('pointermove',moveHandDrag,{passive:false});
 document.addEventListener('pointerup',e=>finishHandDrag(e,false),true);
