@@ -15,7 +15,7 @@ button{touch-action:manipulation}
 html,body{height:100%;margin:0;overflow:hidden}
 body{background:var(--bg);color:var(--tx);font:13px/1.4 'Chivo Mono','Chivo Mono',ui-monospace,monospace;-webkit-user-select:none;user-select:none;overscroll-behavior:none;touch-action:manipulation;-webkit-text-size-adjust:100%}
 body.boss{background:#170d0c}
-#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+#bg,#fx{display:block;position:fixed;inset:0;width:100%;height:100%;pointer-events:none}#bg{z-index:0}#fx{z-index:40}
 #fl{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 40%,transparent 35%,var(--fc) 140%)}
 #fl.on{animation:flash .4s ease-out}@keyframes flash{0%{opacity:.55}100%{opacity:0}}
 #app{position:relative;z-index:5;width:min(480px,100%);height:100%;min-height:0;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
@@ -255,7 +255,9 @@ body.boss{background:#170d0c}
  .key{padding-bottom:3px}
  .key b{margin-bottom:5px}
  .board{gap:5px;padding:2px 0}
- .handw{flex:0 0 auto}
+ /* Mantém a mão flexível também em telas baixas, para os controles
+    continuarem alinhados ao fim da área útil como nos outros celulares. */
+ .handw{flex:1}
  .pt b{font-size:27px}
  .btn{height:42px}
 }
@@ -409,15 +411,27 @@ const sStamp=()=>{tone(110,0,.2,.3,"sine");nz(0,.12,.25,900);tone(1760,.05,.25,.
 const sRel=i=>{tone(900+i*60,0,.1,.12);tone(1350+i*60,.09,.14,.12)};
 
 /* ---------- fundo vivo e partículas ---------- */
-const bg=$("#bg"),bc=bg.getContext("2d",{alpha:true,desynchronized:true}),fx=$("#fx"),fc=fx.getContext("2d",{alpha:true,desynchronized:true});
+/* Contexto 2D sincronizado: evita artefatos de pintura em navegadores móveis. */
+const bg=$("#bg"),bc=bg.getContext("2d",{alpha:true}),fx=$("#fx"),fc=fx.getContext("2d",{alpha:true});
 let W=0,H=0,DPR=1,P=[],lastT=0,frameHandle=null;
 function size(){
-  const nextDPR=Math.min(2,window.devicePixelRatio||1),nextW=window.innerWidth,nextH=window.innerHeight;
-  if(nextDPR===DPR&&nextW===W&&nextH===H)return;
+  /* Mede a área real do canvas em vez de depender só do innerHeight,
+     que pode variar com as barras do navegador em celulares. */
+  const rect=bg.getBoundingClientRect();
+  const nextDPR=Math.min(2,window.devicePixelRatio||1);
+  const nextW=Math.max(1,Math.round(rect.width||document.documentElement.clientWidth||window.innerWidth));
+  const nextH=Math.max(1,Math.round(rect.height||document.documentElement.clientHeight||window.innerHeight));
+  if(nextDPR===DPR&&nextW===W&&nextH===H&&bg.width===Math.round(W*DPR)&&bg.height===Math.round(H*DPR)&&fx.width===Math.round(W*DPR)&&fx.height===Math.round(H*DPR))return;
   DPR=nextDPR;W=nextW;H=nextH;
-  [bg,fx].forEach(c=>{const w=Math.round(W*DPR),h=Math.round(H*DPR);if(c.width!==w)c.width=w;if(c.height!==h)c.height=h});
+  [bg,fx].forEach(c=>{
+    const w=Math.max(1,Math.round(W*DPR)),h=Math.max(1,Math.round(H*DPR));
+    if(c.width!==w)c.width=w;
+    if(c.height!==h)c.height=h;
+  });
 }
-window.addEventListener("resize",size,{passive:true});size();
+window.addEventListener("resize",size,{passive:true});
+window.addEventListener("orientationchange",()=>requestAnimationFrame(size),{passive:true});
+size();
 const GL=[];for(let i=0;i<34;i++)GL.push({x:Math.random(),y:Math.random(),s:16+Math.random()*38,v:.02+Math.random()*.06,ch:"ABCDEFGHIJLMNOPQRSTUVXZ"[i%23],a:.04+Math.random()*.07,w:Math.random()*6});
 function burst(x,y,col,n,sp,ch){for(let i=0;i<n;i++){const a=Math.random()*6.283,s=(.4+Math.random())*sp;P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,l:1,d:.018+Math.random()*.02,r:3+Math.random()*4,c:col,g:.14,ch:ch&&Math.random()<.35?ch:null})}}
 function loop(t){
@@ -435,7 +449,7 @@ function startFrames(){if(!document.hidden&&frameHandle===null){lastT=0;frameHan
 function stopFrames(){if(frameHandle!==null){cancelAnimationFrame(frameHandle);frameHandle=null}lastT=0}
 document.addEventListener("visibilitychange",()=>document.hidden?stopFrames():startFrames());
 window.addEventListener("pagehide",stopFrames);
-window.addEventListener("pageshow",startFrames);
+window.addEventListener("pageshow",()=>{size();startFrames()});
 startFrames();
 function ctr(q){const e=document.querySelector(q);if(!e)return{x:W/2,y:H/2};const r=e.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function fl(txt,x,y,col,big,cls){const e=document.createElement("div");e.className="ft"+(big?" x":"")+(cls?" "+cls:"");e.textContent=txt;e.style.cssText="left:"+x+"px;top:"+y+"px;color:"+col;document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
