@@ -1093,7 +1093,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.29-coop-fx";
+const BUILD="2026.10.29-coop-fx2";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1106,6 +1106,45 @@ function coopLoadPeerJS(){
     document.head.appendChild(sc);
   });
   return coopPeerScriptPromise;
+}
+const COOP_NAT_MSG="Não foi possível abrir a conexão entre as duas redes. É comum em dados móveis (a operadora bloqueia a conexão direta). Soluções: (1) um celular liga o ponto de acesso Wi-Fi e o outro se conecta nele; ou (2) configure um servidor TURN em SERVIDOR TURN no menu do Coop.";
+async function coopIceServers(){
+  const list=[
+    {urls:["stun:stun.l.google.com:19302","stun:stun1.l.google.com:19302","stun:stun.cloudflare.com:3478"]},
+    {urls:"turn:eh.peerjs.com:3478",username:"peerjs",credential:"peerjsp"}
+  ];
+  let custom="";try{custom=(localStorage.getItem("cxIce")||"").trim()}catch(_){}
+  if(custom){
+    try{
+      let extra;
+      if(/^https:\/\//i.test(custom)){
+        const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),5000);
+        try{const r=await fetch(custom,{signal:ctl.signal,cache:"no-store"});extra=r.ok?await r.json():null}finally{clearTimeout(tm)}
+      }else extra=JSON.parse(custom);
+      if(extra&&!Array.isArray(extra))extra=[extra];
+      if(Array.isArray(extra))list.push(...extra.filter(sv=>sv&&sv.urls));
+    }catch(_){COOP.modalNote="Não consegui ler o servidor TURN salvo; usando só os servidores gratuitos."}
+  }
+  return list;
+}
+function coopConfigureTurn(){
+  let cur="";try{cur=localStorage.getItem("cxIce")||""}catch(_){}
+  const v=window.prompt("Para conectar celulares em redes diferentes, cole a URL de credenciais TURN (ex.: https://SEUAPP.metered.live/api/v1/turn/credentials?apiKey=SUA_CHAVE). Deixe vazio para remover.",cur);
+  if(v===null)return;
+  const t=v.trim();
+  try{if(t)localStorage.setItem("cxIce",t);else localStorage.removeItem("cxIce")}catch(_){}
+  COOP.modalNote=t?"Servidor TURN salvo neste aparelho.":"Servidor TURN removido.";coopRenderModal();
+}
+function coopWatchIce(conn){
+  let tries=0;
+  const hook=()=>{
+    const pc=conn.peerConnection;
+    if(!pc){if(++tries<24)setTimeout(hook,250);return}
+    pc.addEventListener("iceconnectionstatechange",()=>{
+      if(COOP.conn===conn&&pc.iceConnectionState==="failed"&&!COOP.connected)coopShowError(COOP_NAT_MSG);
+    });
+  };
+  hook();
 }
 function coopRandomCode(){
   const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let out="";
@@ -1171,7 +1210,7 @@ function coopRenderModal(){
   const close=`<button class="mute" type="button" data-coop-ui="close" aria-label="Fechar">FECHAR</button>`;
   let content="";
   if(COOP.modalView==="menu"){
-    content=`<div class="coop-panel-top"><span>TESTE EXPERIMENTAL</span>${close}</div><h2>Coop online</h2><p>Jogue na mesma mesa virtual com outra pessoa. O baralho escolhido nesta tela será usado pelos dois jogadores.</p><div class="coop-actions"><button class="coop-action primary" data-coop-ui="create">CRIAR SALA</button><button class="coop-action" data-coop-ui="join-view">ENTRAR EM SALA</button></div><p class="coop-note">A conexão usa PeerJS/WebRTC. Os dois dispositivos precisam estar online.</p>`;
+    content=`<div class="coop-panel-top"><span>TESTE EXPERIMENTAL</span>${close}</div><h2>Coop online</h2><p>Jogue na mesma mesa virtual com outra pessoa. O baralho escolhido nesta tela será usado pelos dois jogadores.</p><div class="coop-actions"><button class="coop-action primary" data-coop-ui="create">CRIAR SALA</button><button class="coop-action" data-coop-ui="join-view">ENTRAR EM SALA</button><button class="coop-action span-all" data-coop-ui="turn">SERVIDOR TURN (REDES DIFERENTES)</button></div><p class="coop-note">${coopEscape(COOP.modalNote||"A conexão usa PeerJS/WebRTC. Os dois dispositivos precisam estar online. Em dados móveis pode ser preciso um servidor TURN.")}</p>`;
   }else if(COOP.modalView==="join"){
     content=`<div class="coop-panel-top"><span>ENTRAR EM UMA SALA</span>${close}</div><h2>Digite o código</h2><p>Peça ao jogador que criou a sala o código exibido na tela dele.</p><input class="coop-field" id="coop-room-input" data-coop-input="code" maxlength="7" autocomplete="off" autocapitalize="characters" placeholder="ABCDEF" aria-label="Código da sala"><div class="coop-actions"><button class="coop-action primary span-all" data-coop-ui="join">CONECTAR</button><button class="coop-action span-all" data-coop-ui="back">VOLTAR</button></div><p class="coop-note">${coopEscape(COOP.modalNote)}</p>`;
   }else if(COOP.modalView==="waiting"){
@@ -1182,7 +1221,7 @@ function coopRenderModal(){
   }else if(COOP.modalView==="lost"){
     content=`<div class="coop-panel-top"><span>CONEXÃO COOP</span>${close}</div><h2>Conexão perdida</h2><p>A partida local não será reiniciada automaticamente. Tente reconectar para sincronizar o estado atual do anfitrião.</p><div class="coop-actions"><button class="coop-action primary" data-coop-ui="retry">TENTAR RECONEXÃO</button><button class="coop-action warn" data-coop-ui="leave">SAIR DO COOP</button></div><p class="coop-note">${coopEscape(COOP.modalNote)}</p>`;
   }else if(COOP.modalView==="error"){
-    content=`<div class="coop-panel-top"><span>COOP EXPERIMENTAL</span>${close}</div><h2>Não conectou</h2><p>${coopEscape(COOP.modalNote||"A conexão não pôde ser estabelecida.")}</p><div class="coop-actions">${COOP.role==="host"?'<button class="coop-action primary" data-coop-ui="retry-create">CRIAR OUTRO CÓDIGO</button>':'<button class="coop-action primary" data-coop-ui="retry">TENTAR NOVAMENTE</button>'}<button class="coop-action warn" data-coop-ui="leave">SAIR</button></div><p class="coop-note">Use uma página HTTPS quando testar em dispositivos diferentes.</p>`;
+    content=`<div class="coop-panel-top"><span>COOP EXPERIMENTAL</span>${close}</div><h2>Não conectou</h2><p>${coopEscape(COOP.modalNote||"A conexão não pôde ser estabelecida.")}</p><div class="coop-actions">${COOP.role==="host"?'<button class="coop-action primary" data-coop-ui="retry-create">CRIAR OUTRO CÓDIGO</button>':'<button class="coop-action primary" data-coop-ui="retry">TENTAR NOVAMENTE</button>'}<button class="coop-action" data-coop-ui="turn">SERVIDOR TURN</button><button class="coop-action warn" data-coop-ui="leave">SAIR</button></div><p class="coop-note">Use uma página HTTPS quando testar em dispositivos diferentes.</p>`;
   }else{
     content=`<div class="coop-panel-top"><span>COOP</span>${close}</div><h2>Conectando…</h2><p>${coopEscape(COOP.modalNote)}</p>`;
   }
@@ -1223,7 +1262,8 @@ async function coopCreateRoom(){
   COOP.role="host";COOP.deck=G.dk||0;COOP.roomCode=coopRandomCode();COOP.peerId="caixa-"+COOP.roomCode.toLowerCase();COOP.connected=false;COOP.status="connecting";COOP.modalView="waiting";COOP.modalNote="Carregando o serviço de conexão…";COOP.rev=0;COOP.lastRev=0;COOP.visualSeq=0;COOP.lastVisualSeq=0;COOP.hasStarted=false;COOP.dragLock=null;COOP.pendingSnapshot=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
   try{await coopLoadPeerJS()}catch(err){coopShowError(err.message);return}
   let peer;
-  try{peer=new window.Peer(COOP.peerId,{debug:1});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
+  const ice=await coopIceServers();
+  try{peer=new window.Peer(COOP.peerId,{debug:1,config:{iceServers:ice,iceCandidatePoolSize:2}});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
   peer.on("open",()=>{if(COOP.peer!==peer)return;coopSetStatus("waiting","Sala pronta. Envie o código para P2.");COOP.modalView="waiting";coopRenderModal()});
   peer.on("connection",conn=>{
     if(COOP.peer!==peer)return;
@@ -1243,12 +1283,13 @@ async function coopJoinRoom(){
   if(COOP.peer)coopCleanupTransport();
   COOP.role="guest";COOP.roomCode=code;COOP.peerId="";COOP.deck=0;COOP.connected=false;COOP.status="connecting";COOP.modalView="join";COOP.modalNote="Conectando à sala…";COOP.lastRev=0;COOP.lastVisualSeq=0;COOP.seenVisual=null;COOP.versionMismatch=false;COOP.pendingSnapshot=null;COOP.dragLock=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
   try{await coopLoadPeerJS()}catch(err){coopShowError(err.message);return}
-  let peer;try{peer=new window.Peer({debug:1});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
+  const ice=await coopIceServers();let peer;try{peer=new window.Peer({debug:1,config:{iceServers:ice,iceCandidatePoolSize:2}});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
   const connect=()=>{
     if(COOP.peer!==peer||peer.destroyed)return;
     let conn;try{conn=peer.connect("caixa-"+code.toLowerCase(),{reliable:true,serialization:"json"})}catch(err){coopShowError("Não foi possível iniciar a conexão: "+err.message);return}
     coopAttachConnection(conn,"guest");
     setTimeout(()=>{if(COOP.peer===peer&&!COOP.connected&&COOP.status==="connecting")coopSetNote("Aguardando resposta da sala… confira o código e a conexão dos dois aparelhos.")},6500);
+    setTimeout(()=>{if(COOP.peer===peer&&!COOP.connected&&COOP.status==="connecting")coopShowError(COOP_NAT_MSG)},20000);
   };
   peer.on("open",id=>{COOP.peerId=id;connect()});
   peer.on("error",err=>{if(COOP.peer!==peer)return;const msg=err&&err.type==="peer-unavailable"?"Sala inexistente ou anfitrião desconectado.":err&&err.type==="network"?"Falha na conexão com o serviço de sinalização.":"PeerJS: "+(err&&err.message||err&&err.type||"erro desconhecido");if(!COOP.connected)coopShowError(msg);else coopSetStatus("lost",msg)});
@@ -1256,6 +1297,7 @@ async function coopJoinRoom(){
 function coopAttachConnection(conn,side){
   if(side==="host"&&COOP.conn&&COOP.conn!==conn&&COOP.conn.open){try{conn.close()}catch(_){}return}
   COOP.conn=conn;
+  coopWatchIce(conn);
   conn.on("open",()=>{
     if(COOP.conn!==conn)return;
     COOP.connected=true;COOP.status=side==="guest"?"syncing":"connected";
@@ -1610,6 +1652,7 @@ function coopHandleUi(e){
   e.preventDefault();
   if(act==="close"){coopCloseModal();return}
   if(act==="show"){if(COOP.status==="lost")coopShowModal("lost");else if(COOP.role==="host"&&!COOP.connected)coopShowModal("waiting");else if(COOP.role==="guest"&&!COOP.connected)coopShowModal("lost");else coopOpen();return}
+  if(act==="turn"){coopConfigureTurn();return}
   if(act==="create"){coopCreateRoom();return}
   if(act==="join-view"){COOP.modalNote="";coopShowModal("join");return}
   if(act==="back"){COOP.modalNote="";coopShowModal("menu");return}
