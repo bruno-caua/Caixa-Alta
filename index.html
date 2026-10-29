@@ -57,12 +57,13 @@ body.boss{background:#170d0c}
   position:relative;display:flex;align-items:center;justify-content:center;gap:8px;
   width:max-content;max-width:100%;min-height:16px;height:16px;margin:0 auto;padding:0 2px;
   box-sizing:border-box;overflow:visible;white-space:nowrap;line-height:16px;
-  font:400 12px/16px 'Alfa Slab One',Georgia,serif;letter-spacing:.075em;text-transform:uppercase;
+  font:400 13px/16px 'Alfa Slab One',Georgia,serif;letter-spacing:.075em;text-transform:uppercase;
+  transform-origin:center center;
   color:var(--tier-base,var(--mx));
   background-image:linear-gradient(100deg,var(--tier-base) 0%,var(--tier-base) 34%,var(--tier-glint) 50%,var(--tier-base) 66%,var(--tier-base) 100%);
   background-size:240% 100%;background-position:100% 50%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   text-shadow:0 0 var(--glow-low,0px) color-mix(in srgb,var(--tier-glow,var(--mx)) 35%,transparent);
-  animation:wordTierReveal .42s cubic-bezier(.2,.85,.25,1) both,wordTierPulse var(--tier-speed,2.8s) ease-in-out infinite alternate;
+  animation:wordTierReveal .42s cubic-bezier(.2,.85,.25,1) both,wordTierPulse var(--tier-speed,2.8s) ease-in-out infinite alternate,wordTierSway var(--tier-sway-speed,2.8s) cubic-bezier(.45,0,.55,1) infinite alternate;
 }
 .pill.word-tier::before,.pill.word-tier::after{
   content:"";display:block;flex:0 1 12px;min-width:5px;max-width:12px;height:1px;
@@ -70,16 +71,17 @@ body.boss{background:#170d0c}
   opacity:var(--tier-line,.35);transform-origin:center;animation:wordTierLine var(--tier-speed,2.8s) ease-in-out infinite alternate;
 }
 .pill.word-tier::after{background:linear-gradient(90deg,var(--tier-glow,var(--mx)),transparent)}
-.pill.word-tier.tier-3{--tier-base:#b9b2a3;--tier-glint:#f6ead0;--tier-glow:#b9b2a3;--tier-speed:3.4s;--glow-low:0px;--glow-high:1px;--glow-wide:2px;--tier-line:.32}
-.pill.word-tier.tier-4{--tier-base:#d1c29a;--tier-glint:#fff3cf;--tier-glow:#c5a85d;--tier-speed:3.1s;--glow-low:0px;--glow-high:2px;--glow-wide:3px;--tier-line:.42}
-.pill.word-tier.tier-5{--tier-base:#e7bd62;--tier-glint:#fff0b5;--tier-glow:var(--mx);--tier-speed:2.8s;--glow-low:1px;--glow-high:3px;--glow-wide:4px;--tier-line:.52}
-.pill.word-tier.tier-6{--tier-base:#f2c85d;--tier-glint:#fff8d9;--tier-glow:var(--mx);--tier-speed:2.5s;--glow-low:1px;--glow-high:4px;--glow-wide:6px;--tier-line:.66}
-.pill.word-tier.tier-7{--tier-base:#ffe08a;--tier-glint:#ffffff;--tier-glow:#ffd66e;--tier-speed:2.2s;--glow-low:2px;--glow-high:5px;--glow-wide:8px;--tier-line:.8}
-.pill.word-tier.tier-8{--tier-base:#fff1bd;--tier-glint:#ffffff;--tier-glow:#ffcf59;--tier-speed:1.8s;--glow-low:2px;--glow-high:7px;--glow-wide:11px;--tier-line:1}
+.pill.word-tier.tier-3{--tier-base:#b9b2a3;--tier-glint:#f6ead0;--tier-glow:#b9b2a3;--tier-speed:3.4s;--tier-sway-speed:3.8s;--tier-sway-from:-.14deg;--tier-sway-to:.14deg;--glow-low:0px;--glow-high:1px;--glow-wide:2px;--tier-line:.32}
+.pill.word-tier.tier-4{--tier-base:#d1c29a;--tier-glint:#fff3cf;--tier-glow:#c5a85d;--tier-speed:3.1s;--tier-sway-speed:3.35s;--tier-sway-from:-.3deg;--tier-sway-to:.3deg;--glow-low:0px;--glow-high:2px;--glow-wide:3px;--tier-line:.42}
+.pill.word-tier.tier-5{--tier-base:#e7bd62;--tier-glint:#fff0b5;--tier-glow:var(--mx);--tier-speed:2.8s;--tier-sway-speed:2.95s;--tier-sway-from:-.52deg;--tier-sway-to:.52deg;--glow-low:1px;--glow-high:3px;--glow-wide:4px;--tier-line:.52}
+.pill.word-tier.tier-6{--tier-base:#f2c85d;--tier-glint:#fff8d9;--tier-glow:var(--mx);--tier-speed:2.5s;--tier-sway-speed:2.5s;--tier-sway-from:-.82deg;--tier-sway-to:.82deg;--glow-low:1px;--glow-high:4px;--glow-wide:6px;--tier-line:.66}
+.pill.word-tier.tier-7{--tier-base:#ffe08a;--tier-glint:#ffffff;--tier-glow:#ffd66e;--tier-speed:2.2s;--tier-sway-speed:2.05s;--tier-sway-from:-1.2deg;--tier-sway-to:1.2deg;--glow-low:2px;--glow-high:5px;--glow-wide:8px;--tier-line:.8}
+.pill.word-tier.tier-8{--tier-base:#fff1bd;--tier-glint:#ffffff;--tier-glow:#ffcf59;--tier-speed:1.8s;--tier-sway-speed:1.65s;--tier-sway-from:-1.7deg;--tier-sway-to:1.7deg;--glow-low:2px;--glow-high:7px;--glow-wide:11px;--tier-line:1}
 @keyframes wordTierReveal{0%{opacity:0;transform:translateY(3px);letter-spacing:.2em}65%{opacity:1;transform:translateY(0);letter-spacing:.06em}100%{opacity:1;transform:translateY(0);letter-spacing:.075em}}
 @keyframes wordTierPulse{from{background-position:100% 50%;text-shadow:0 0 var(--glow-low,0px) color-mix(in srgb,var(--tier-glow,var(--mx)) 35%,transparent)}to{background-position:0% 50%;text-shadow:0 0 var(--glow-high,1px) color-mix(in srgb,var(--tier-glow,var(--mx)) 82%,transparent),0 0 var(--glow-wide,2px) color-mix(in srgb,var(--tier-glow,var(--mx)) 38%,transparent)}}
 @keyframes wordTierLine{from{opacity:calc(var(--tier-line,.35)*.55);transform:scaleX(.65)}to{opacity:var(--tier-line,.35);transform:scaleX(1)}}
-@media(prefers-reduced-motion:reduce){.pill.word-tier,.pill.word-tier::before,.pill.word-tier::after{animation:none}.pill.word-tier{background-position:50% 50%;text-shadow:0 0 var(--glow-high,1px) color-mix(in srgb,var(--tier-glow,var(--mx)) 70%,transparent)}}
+@keyframes wordTierSway{from{rotate:var(--tier-sway-from,-.14deg)}to{rotate:var(--tier-sway-to,.14deg)}}
+@media(prefers-reduced-motion:reduce){.pill.word-tier,.pill.word-tier::before,.pill.word-tier::after{animation:none}.pill.word-tier{background-position:50% 50%;rotate:0deg;text-shadow:0 0 var(--glow-high,1px) color-mix(in srgb,var(--tier-glow,var(--mx)) 70%,transparent)}}
 .tray{display:grid;grid-template-columns:repeat(8,var(--tw));gap:4px;padding:6px;border:1px solid var(--ln);border-radius:4px}
 .slot{width:var(--tw);height:var(--th);border:1px dashed var(--ln);border-radius:3px}.slot.f{border:0}
 .slot.drop-target{border:1px solid var(--mx);background:color-mix(in srgb,var(--mx) 13%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mx) 20%,transparent)}
@@ -1314,7 +1316,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.29-coop-chat-layout-fix1";
+const BUILD="2026.10.29-word-tier-sway-coop1";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1754,6 +1756,7 @@ function coopPlayRemoteVisual(kind,data={}){
     case "banner":banner(String(data.t||""),String(data.s||""),data.cls==="boss"?"boss":"",Math.max(500,Math.min(5000,Number(data.duration)||2100)));break;
     case "stamp":coopDrawStampOverlay(Math.max(0,Number(data.t)||0),Math.max(0,Number(data.ratio)||0),String(data.w||""));break;
     case "score-countup":coopAnimateRemoteTotal(data);break;
+    case "word-tier":coopApplyRemoteWordTier(data);break;
     case "clear-transient":coopFlushTransient();break;
     case "tray-flip":{const tray=document.querySelector(".tray");if(tray){tray.classList.remove("flip");void tray.offsetWidth;tray.classList.add("flip");setTimeout(()=>tray.classList.remove("flip"),550)}break}
     case "discard":coopPlayDiscardVisual(data);break;
@@ -2215,6 +2218,31 @@ function wordTierForLength(length){
   if(n===7)return {name:"SEPTETO",level:7};
   return {name:"LENDÁRIO",level:8};
 }
+function coopShareWordTier(tier,word){
+  if(!COOP||COOP.role!=="host"||!COOP.connected||COOP.applyingSnapshot)return;
+  const key=tier?String(tier.level)+":"+String(word||"").toUpperCase():"";
+  if(!tier){COOP.lastWordTierKey="";return}
+  if(COOP.lastWordTierKey===key)return;
+  COOP.lastWordTierKey=key;
+  coopBroadcastVisual("word-tier",{name:String(tier.name),level:Number(tier.level)||3,word:String(word||"").toUpperCase().slice(0,24)});
+}
+function coopApplyRemoteWordTier(data,attempt=0){
+  if(COOP.role!=="guest"||!COOP.connected||!data||!data.name)return;
+  const expected=String(data.word||"").toUpperCase();
+  const current=R&&Array.isArray(R.st)?String(wd(R.st)||"").toUpperCase():"";
+  /* Espera pelo snapshot correspondente: evita mostrar uma classificação da palavra anterior. */
+  if(!R||R.an||!expected||current!==expected){
+    if(attempt<14)setTimeout(()=>coopApplyRemoteWordTier(data,attempt+1),30);
+    return;
+  }
+  const el=document.querySelector("#app .board .pill");
+  if(!el){if(attempt<14)setTimeout(()=>coopApplyRemoteWordTier(data,attempt+1),30);return}
+  const level=Math.max(3,Math.min(8,Math.round(Number(data.level)||3)));
+  el.textContent=String(data.name).slice(0,24);
+  el.classList.remove("er","nv","ok","word-tier","tier-3","tier-4","tier-5","tier-6","tier-7","tier-8");
+  el.classList.add("ok","word-tier","tier-"+level);
+  void el.offsetWidth;
+}
 function vPlay(){
   validarPalavraEmSilencio();
   const a=R.an,st=R.st,b=R.boss,w=wd(st),realWord=DicionarioLocal.tem(w),onlineState=DicionarioOnline.estado(w),consecutive=trayConsecutive(),hit=consecutive&&w.length>=3&&realWord&&w.includes(R.sw.toUpperCase());
@@ -2236,6 +2264,8 @@ function vPlay(){
     pill=tier.name;
     pc="ok word-tier tier-"+tier.level;
 }}
+  const tierMatch=pc.match(/(?:^|\s)tier-(\d+)/);
+  coopShareWordTier(tierMatch?{name:pill,level:Number(tierMatch[1])||3}:null,w);
   const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
   return `<div class="hdr"><div class="ed"><small>FASE</small>${G.n+1}<i>${G.endless?"":"/8"}</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
