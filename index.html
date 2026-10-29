@@ -897,12 +897,14 @@ function nextTraySlot(){
 function stage(i){
   if(R.lock||R.st.length>=8||!R.hand[i])return;
   const pos=nextTraySlot();if(pos<0)return;
+  R.lastScore=null;
   R.st.push(R.hand.splice(i,1)[0]);R.stPos.push(pos);sortStByPos();R.msg="";sTile(R.st.length-1);vb(6);ren();
 }
-function unstage(i){if(R.lock||!R.st[i])return;R.hand.push(R.st.splice(i,1)[0]);R.stPos.splice(i,1);R.hand.sort((a,b)=>a.o-b.o);sortStByPos();sUn();ren()}
-function limpar(){if(R.lock)return;R.hand.push(...R.st);R.st=[];R.stPos=[];R.hand.sort((a,b)=>a.o-b.o);sSweep();ren()}
+function unstage(i){if(R.lock||!R.st[i])return;R.lastScore=null;R.hand.push(R.st.splice(i,1)[0]);R.stPos.splice(i,1);R.hand.sort((a,b)=>a.o-b.o);sortStByPos();sUn();ren()}
+function limpar(){if(R.lock)return;R.lastScore=null;R.hand.push(...R.st);R.st=[];R.stPos=[];R.hand.sort((a,b)=>a.o-b.o);sSweep();ren()}
 function descartar(){
   if(R.lock)return;
+  R.lastScore=null;
   if(!R.st.length){R.msg="Toque nas letras que quer trocar";sErr();ren();return}
   if(R.desc<1){R.msg="Sem trocas restantes";sErr();ren();return}
   R.desc--;R.st=[];R.stPos=[];puxa();R.msg="Letras trocadas";sDisc();ren();
@@ -946,7 +948,10 @@ async function jogar(){
     await dz(s.k==="t"?190:500);
   }
   const t=Math.round(x.c*x.m),ratio=t/R.meta;
+  R.lastScore={value:t,word:x.w,at:Date.now()};
   R.an.out=t;R.an.pop="t";R.an.tile=-1;R.an.rel=-1;R.an.msg=ratio>=1?"META BATIDA DE UMA VEZ":ratio>.4?"JOGADA ENORME":R.an.msg;ren();
+  // Entrega imediatamente o placar terminal da palavra; não depende apenas do debounce do render.
+  coopSendSnapshot(true);
   sStamp();shake(Math.min(16,3+ratio*26));{const te=document.querySelector(".tot"),t0=performance.now();if(te)(function r(n){const q=Math.min(1,(n-t0)/(R.fast?1:750)),e=1-Math.pow(1-q,3);te.textContent="= "+fmt(t*e);if(q<1)requestAnimationFrame(r)})(t0)}vb(ratio>.3?[40,30,80]:20);
   stamp(t,ratio,x.w);
   await dz(1000);
@@ -966,9 +971,9 @@ async function jogar(){
   }
   G.$+=x.$;R.jog+=x.jog;if(x.gild)ts.forEach(q=>q.g++);
   R.st=[];R.stPos=[];puxa();R.an=null;R.lock=false;R.msg="";
-  if(R.sc>=R.meta)return vence();
-  if(R.jog<1||(R.hand.length+R.st.length<3&&!R.deck.length))return fim(false);
-  ren();
+  if(R.sc>=R.meta){const result=vence();coopSendSnapshot(true);return result}
+  if(R.jog<1||(R.hand.length+R.st.length<3&&!R.deck.length)){fim(false);coopSendSnapshot(true);return}
+  ren();coopSendSnapshot(true);
 }
 async function vence(){
   const int=Math.min(5,Math.floor(G.$/5)),p={bs:3,jg:R.jog,cx:2*cnt("cx"),int,b:R.boss?3:0};
@@ -980,7 +985,7 @@ async function vence(){
   document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
   if(G.n===7&&!G.endless){fim(true);return}
   // Atualiza a tela da fase atual e mostra as mensagens em sequência, ainda fora da loja.
-  ren();burst(W/2,H*.3,"#ffb21f",60,8);
+  ren();coopSendSnapshot(true);burst(W/2,H*.3,"#ffb21f",60,8);
   if(recordNotice){
     banner("NOVO RECORDE",recordNotice.word.toUpperCase()+" · "+fmt(recordNotice.score)+" pontos","",1250);
     await d0(1330);
@@ -989,7 +994,7 @@ async function vence(){
   banner("FASE VENCIDA","+$"+p.tot+" moedas","",1450);
   await d0(1530);
   document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
-  G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";oferta();ren();
+  G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";oferta();ren();coopSendSnapshot(true);
 }
 function oferta(){
   const pool=REL.filter(r=>!G.rel.includes(r)),out=[];
@@ -1036,7 +1041,7 @@ function reimprimir(){const c=2+G.rr;if(G.$<c)return deny("rr","Moedas insuficie
 function vender(){const r=G.rel[G.sel];if(!r)return;G.$+=Math.floor(r.c/2);G.rel.splice(G.sel,1);G.sel=-1;say("Vendido por $"+Math.floor(r.c/2));sCoin();ren()}
 function fim(v){
   G.mode="over";G.win=v;const ed=G.n+(v?1:0);if(ed>S.best)S.best=ed;if(v)S.wins++;save();
-  document.body.classList.remove("boss");if(v){sWin();burst(W/2,H*.35,"#ffb21f",90,9)}else sErr();ren();
+  document.body.classList.remove("boss");if(v){sWin();burst(W/2,H*.35,"#ffb21f",90,9)}else sErr();ren();coopSendSnapshot(true);
 }
 
 /* ================= COOP ONLINE EXPERIMENTAL =================
@@ -1248,6 +1253,9 @@ function coopMakeSnapshot(){
   const g={...G,rel:(G.rel||[]).map(r=>r&&r.id).filter(Boolean)};
   if(Array.isArray(G.off))g.off=G.off.map(r=>r&&r.id).filter(Boolean);
   const r=R?{...R,pw:R.pw&&R.pw.n,fresh:R.fresh?[...R.fresh]:[]}:null;
+  // A abertura do baralho e as pilhas expandidas são preferências locais de cada tela.
+  // Nunca envie R.dv/R.dx: o P1 não deve abrir o baralho do P2 nem o contrário.
+  if(r){delete r.dv;delete r.dx}
   return {type:"state",protocol:COOP_PROTOCOL,from:"host",rev:++COOP.rev,tid:TID,g,r};
 }
 function coopSendSnapshot(force=false){
@@ -1258,12 +1266,19 @@ function coopSendSnapshot(force=false){
 }
 function coopApplySnapshot(msg){
   if(!msg||!msg.g||msg.rev<=COOP.lastRev)return;
+  // Preserve apenas a visualização local do baralho durante snapshots do estado comum.
+  const localDeckOpen=G.mode==="play"&&!!(R&&R.dv);
+  const localDeckExpanded=localDeckOpen?{...(R.dx||{})}:{};
   COOP.applyingSnapshot=true;
   try{
     const g={...msg.g};g.rel=(msg.g.rel||[]).map(id=>REL.find(r=>r.id===id)).filter(Boolean);
     if(Array.isArray(msg.g.off))g.off=msg.g.off.map(id=>REL.find(r=>r.id===id)).filter(Boolean);
     G=g;
-    if(msg.r){const r={...msg.r};r.pw=POW.find(p=>p.n===msg.r.pw)||POW[0];r.fresh=new Set(msg.r.fresh||[]);R=r}else R=null;
+    if(msg.r){const r={...msg.r};r.pw=POW.find(p=>p.n===msg.r.pw)||POW[0];r.fresh=new Set(msg.r.fresh||[]);
+      r.dv=G.mode==="play"&&localDeckOpen?1:0;
+      r.dx=r.dv?localDeckExpanded:{};
+      R=r;
+    }else R=null;
     if(Number.isFinite(msg.tid))TID=msg.tid;
     COOP.lastRev=msg.rev;COOP.status="connected";COOP.connected=true;COOP.modalNote="";
     coopCloseModal();coopUpdateStatus();document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);
@@ -1520,7 +1535,7 @@ function vPlay(){
     pill="Palavra Válida";
     pc="ok"
 }}
-  const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
+  const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:COOP.connected&&R.lastScore&&!st.length?`<div class="tot">= ${fmt(R.lastScore.value)}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
   return `<div class="hdr"><div class="ed"><small>FASE</small>${G.n+1}<i>${G.endless?"":"/8"}</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
   <div class="stats"><div class="st"><small>JOGADAS</small>${R.jog}</div><div class="st"><small>TROCAS</small>${R.desc}</div><div class="st g"><small>MOEDAS</small>$${G.$}</div></div>
@@ -1588,9 +1603,9 @@ function vOver(){
 const dkAng=i=>((i*37)%9-4)*.7;
 const dkUp=t=>(t&&t.g?" ug":"")+(t&&t.r?" ur":"")+(t&&t.k?" uk":"");
 function dkDots(o){return `<span class="u">${o.g?'<em class="dg"></em>':""}${o.r?'<em class="dr"></em>':""}${o.k?'<em class="dx"></em>':""}</span>`}
-function dkStack(l,i,o){const st=Math.min(3,Math.ceil(o.n/2));return `<div class="cdk s${st}${o.n?"":" z"}${RARAS.includes(l)?" ra":""}${dkUp(dkTiles(l)[0])}" data-k="s${l}"${o.n>1?` data-l="${l}"`:""} style="--i:${i};--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i><span class="n">×${o.n}</span>${dkDots(o)}</div>`}
+function dkStack(l,i,o){const st=Math.min(3,Math.ceil(o.n/2));return `<div class="cdk s${st}${o.n?"":" z"}${RARAS.includes(l)?" ra":""}${dkUp(dkTiles(l)[0])}" data-k="s${l}"${o.n?` data-l="${l}"`:""} data-tip aria-label="Pilha da letra ${l}, ${o.n} cópias" style="--i:${i};--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i><span class="n">×${o.n}</span>${dkDots(o)}</div>`}
 function dkTiles(l){return R.deck.filter(t=>t.l===l).sort((a,b)=>(b.g+b.r+b.k)-(a.g+a.r+a.k)||a.id-b.id)}
-function dkCopies(l,i){return dkTiles(l).map(t=>`<div class="cdk cp${RARAS.includes(l)?" ra":""}${dkUp(t)}" data-k="t${t.id}" data-l="${l}" style="--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i>${dkDots(t)}</div>`).join("")}
+function dkCopies(l,i){return dkTiles(l).map(t=>`<div class="cdk cp${RARAS.includes(l)?" ra":""}${dkUp(t)}" data-k="t${t.id}" data-l="${l}" data-tip aria-label="Letra ${l}${t.g||t.r||t.k?", com melhorias":""}" style="--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i>${dkDots(t)}</div>`).join("")}
 function dkCnt(){const c={};G.col.forEach(t=>{c[t.l]=c[t.l]||{n:0,g:0,r:0,k:0}});R.deck.forEach(t=>{const o=c[t.l];o.n++;if(t.g)o.g++;if(t.r)o.r++;if(t.k)o.k++});return c}
 function dkToggle(l){
   const g=document.querySelector(".dvg");if(!g)return;
@@ -1814,7 +1829,23 @@ const tipEl=document.createElement("div");tipEl.id="tip";tipEl.setAttribute("rol
 let tipFor=null,tipTimer=0,pressTimer=0,tipHeld=false,tipBlock=0,pressX=0,pressY=0;
 function hideTip(){clearTimeout(tipTimer);tipEl.classList.remove("on");tipFor=null}
 function tipHtml(el){
-  const D=el.dataset;let n,k,rar=-1,ben,d,warn="";
+  const D=el.dataset;
+  if(G.mode==="play"&&R&&R.dv&&el.closest(".dvw")&&D.k){
+    const isStack=String(D.k).startsWith("s"),letter=isStack?String(D.k).slice(1):String(D.l||"");
+    const tile=isStack?dkTiles(letter)[0]:R.deck.find(t=>String(t.id)===String(D.k).slice(1));
+    if(!tile)return "";
+    const stackCount=isStack?R.deck.filter(t=>t.l===letter).length:1;
+    const mods=[];
+    if(tile.g)mods.push(`<div class="tb"><span class="tk" style="--c:#62656a">BRILHANTE · NÍVEL ${tile.g}</span><span>+${5*tile.g} pontos quando esta letra é jogada.</span></div>`);
+    if(tile.r)mods.push(`<div class="tb"><span class="tk" style="--c:#e0391d">VERMELHA · NÍVEL ${tile.r}</span><span>+${3*tile.r} bônus quando esta letra é jogada.</span></div>`);
+    if(tile.k)mods.push(`<div class="tb"><span class="tk" style="--c:#b36d00">DOURADA · NÍVEL ${tile.k}</span><span>Multiplica o bônus por ×${fm(Math.pow(1.25,tile.k))} quando esta letra é jogada.</span></div>`);
+    const rare=RARAS.includes(tile.l);
+    return `<div class="th"><b class="tn">LETRA “${coopEscape(tile.l)}”</b>${rare?'<span class="tr q2">RARA</span>':'<span class="tr q0">COMUM</span>'}</div>
+      <div class="ts"><small>${isStack?`PILHA · ${stackCount} CÓPIA(S) RESTANTE(S)`:'DESCRIÇÃO DA CARTA'}</small>
+      ${mods.length?mods.join('<div style="height:7px"></div>'):'<p>Esta carta ainda não tem melhorias aplicadas.</p>'}
+      ${isStack?'<div class="tw">Toque na pilha para abrir as cópias e segure uma carta para ver as melhorias dela.</div>':''}</div>`;
+  }
+  let n,k,rar=-1,ben,d,warn="";
   if(D.o!==undefined||D.r!==undefined){
     const buy=D.o!==undefined,r=buy?G.off[+D.o]:G.rel[+D.r];if(!r)return"";
     n=r.n;k=r.k;rar=r.r;ben=TIPK[r.k];d=r.d;
@@ -1826,8 +1857,12 @@ function tipHtml(el){
   <div class="ts"><small>BENEFÍCIO</small><div class="tb"><span class="tk" style="--c:${KCOL[k]}">${kg(k)}${KL[k]}</span><span>${ben}</span></div></div>
   <div class="ts"><small>DESCRIÇÃO</small><p>${d}</p></div>${warn?`<div class="tw">${warn}</div>`:""}`;
 }
+function isTipTarget(el){
+  if(!el||!el.isConnected||!el.matches("[data-tip]"))return false;
+  return G.mode==="shop"||(G.mode==="play"&&!!R&&!!R.dv&&!!el.closest(".dvw"));
+}
 function showTip(el){
-  if(G.mode!=="shop"||!el||!el.isConnected)return;
+  if(!isTipTarget(el))return;
   const h=tipHtml(el);if(!h){hideTip();return}
   tipEl.innerHTML=h;tipFor=el;
   const r=el.getBoundingClientRect(),vw=document.documentElement.clientWidth,vh=window.innerHeight,w=tipEl.offsetWidth,th=tipEl.offsetHeight,m=8,gap=10;
@@ -1840,18 +1875,18 @@ function showTip(el){
 }
 /* mouse: passar por cima mostra, sair esconde */
 document.addEventListener("pointerover",e=>{
-  if(e.pointerType!=="mouse"||G.mode!=="shop")return;
-  const el=e.target.closest("[data-tip]");if(!el||el===tipFor)return;
+  if(e.pointerType!=="mouse")return;
+  const el=e.target.closest("[data-tip]");if(!isTipTarget(el)||el===tipFor)return;
   clearTimeout(tipTimer);tipTimer=setTimeout(()=>showTip(el),80);
 });
 document.addEventListener("pointerout",e=>{
   if(e.pointerType!=="mouse")return;
-  const el=e.target.closest("[data-tip]");if(el&&!el.contains(e.relatedTarget))hideTip();
+  const el=e.target.closest("[data-tip]");if(el&&isTipTarget(el)&&!el.contains(e.relatedTarget))hideTip();
 });
-/* toque: segurar ~0,4 s mostra o balão enquanto o dedo estiver na carta; soltar esconde e não compra */
+/* toque: segurar ~0,4 s mostra detalhes tanto na loja quanto no baralho; soltar não compra nem expande */
 document.addEventListener("pointerdown",e=>{
-  if(G.mode!=="shop"||e.pointerType==="mouse")return;
-  const el=e.target.closest("[data-tip]");if(!el)return;
+  if(e.pointerType==="mouse")return;
+  const el=e.target.closest("[data-tip]");if(!isTipTarget(el))return;
   pressX=e.clientX;pressY=e.clientY;tipHeld=false;clearTimeout(pressTimer);
   pressTimer=setTimeout(()=>{pressTimer=0;tipHeld=true;showTip(el);vb(8)},380);
 },true);
@@ -1868,7 +1903,7 @@ document.addEventListener("pointercancel",()=>{clearTimeout(pressTimer);pressTim
 document.addEventListener("click",e=>{if(tipBlock&&performance.now()<tipBlock){tipBlock=0;e.preventDefault();e.stopImmediatePropagation()}},true);
 document.addEventListener("contextmenu",e=>{if(e.target.closest&&e.target.closest("[data-tip]"))e.preventDefault()});
 /* teclado: foco mostra o balão */
-document.addEventListener("focusin",e=>{const el=e.target.closest&&e.target.closest("[data-tip]");if(el&&G.mode==="shop"&&el.matches(":focus-visible"))showTip(el)});
+document.addEventListener("focusin",e=>{const el=e.target.closest&&e.target.closest("[data-tip]");if(isTipTarget(el)&&el.matches(":focus-visible"))showTip(el)});
 document.addEventListener("focusout",e=>{if(e.target.closest&&e.target.closest("[data-tip]"))hideTip()});
 document.addEventListener("scroll",hideTip,true);
 
@@ -1879,6 +1914,12 @@ document.addEventListener("click",e=>{
   const D=t.dataset;
   if(D.a==="theme"){S.theme=S.theme?0:1;save();applyTheme();sTec();ren();return}
   if(D.a==="mute"){S.mute=S.mute?0:1;save();sTec();ren();return}
+  // A interface do baralho é individual, embora as cartas e melhorias sejam compartilhadas.
+  if(COOP.connected&&COOP.role==="guest"&&G.mode==="play"&&R){
+    if(D.a==="deck"){R.dv=1;R.dx={};sDkOpen();ren();return}
+    if(D.a==="dvx"&&R.dv){R.dv=0;R.dx={};sDkClose();hideTip();ren();return}
+    if(R.dv&&D.l!==undefined){dkToggle(D.l);return}
+  }
   if(COOP.connected&&COOP.role==="guest"&&!COOP.remoteDispatch){e.preventDefault();e.stopPropagation();coopSendActionFromElement(t);return}
   if(COOP.connected&&COOP.dragLock&&COOP.dragLock.owner!==COOP.role){e.preventDefault();e.stopPropagation();COOP.modalNote="Aguarde o fim do arrasto do outro jogador.";coopUpdateStatus();return}
   if(G.mode==="title"){
