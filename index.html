@@ -747,7 +747,7 @@ function stamp(t,ratio,w){
 }
 let G={mode:"title",dk:0,rel:[],pendingRecord:null,lastRecordNotice:null},R=null,TID=0;
 /* O Coop fica isolado do save e das regras do modo solo. */
-let COOP={role:null,status:"off",peer:null,conn:null,roomCode:"",peerId:"",deck:0,modalView:"menu",modalNote:"",connected:false,rev:0,lastRev:0,syncTimer:0,pendingSnapshot:null,applyingSnapshot:false,remoteDispatch:false,dragLock:null,remotePreview:null,dragRejected:null,hasStarted:false,previewPending:null,previewLastAt:0,previewTimer:0,chatMessages:[],chatOpen:false,visualSeq:0,lastVisualSeq:0};
+let COOP={role:null,status:"off",peer:null,conn:null,roomCode:"",peerId:"",deck:0,modalView:"menu",modalNote:"",connected:false,rev:0,lastRev:0,syncTimer:0,pendingSnapshot:null,applyingSnapshot:false,remoteDispatch:false,suppressAudioRelay:false,dragLock:null,remotePreview:null,dragRejected:null,hasStarted:false,previewPending:null,previewLastAt:0,previewTimer:0,chatMessages:[],chatOpen:false,visualSeq:0,lastVisualSeq:0,audioPending:[],audioTimer:0,audioSeq:0,actionSeq:0,optimisticActions:[]};
 const mkTile=l=>({l,g:0,r:0,k:0,id:++TID,o:0});
 const cnt=p=>G.rel.filter(r=>r.p===p).length;
 const wd=ts=>ts.map(t=>t.l).join("");
@@ -765,9 +765,11 @@ function au(){try{if(navigator.audioSession)navigator.audioSession.type="playbac
     const nl=c.sampleRate*2,nb=c.createBuffer(1,nl,c.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nl;i++)nd[i]=Math.random()*2-1;c.nb=nb}
   if(ax.state!=="running")ax.resume();return ax}
 /* tom: f=frequência, t0=atraso, d=duração, v=volume, ty=onda, f2=desliza até f2, wet=1 põe um pouco de eco */
-function tone(f,t0,d,v,ty,f2,wet){if(S.mute)return;try{const c=au(),t=c.currentTime+t0,o=c.createOscillator(),g=c.createGain(),a=v||.14;o.type=ty||"triangle";o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(a,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.bus);if(wet)g.connect(c.rv);o.start(t);o.stop(t+d+.03)}catch(e){}}
+function tone(f,t0,d,v,ty,f2,wet,remote=false){
+  if(!remote)coopQueueSound({k:"t",f:Number(f)||440,t0:Number(t0)||0,d:Math.max(.005,Number(d)||.05),v:Number(v)||.14,ty:String(ty||"triangle"),f2:Number(f2)||0,wet:!!wet});
+  if(S.mute)return;try{const c=au(),t=c.currentTime+(Number(t0)||0),o=c.createOscillator(),g=c.createGain(),a=v||.14;o.type=ty||"triangle";o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(a,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.bus);if(wet)g.connect(c.rv);o.start(t);o.stop(t+d+.03)}catch(e){}}
 /* ruído filtrado (papel, carta, madeira): o={t:tipo do filtro,f2:varre até f2,q,wet} */
-function nz(t0,d,v,fr,o){if(S.mute)return;o=o||{};try{const c=au(),t=c.currentTime+t0,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=c.nb;f.type=o.t||"lowpass";f.frequency.setValueAtTime(fr,t);if(o.f2)f.frequency.exponentialRampToValueAtTime(o.f2,t+d);f.Q.value=o.q||.8;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+Math.min(.006,d/3));g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(c.bus);if(o.wet)g.connect(c.rv);s.start(t,Math.random()*1.5,d+.02)}catch(e){}}
+function nz(t0,d,v,fr,o,remote=false){o=o||{};if(!remote)coopQueueSound({k:"n",t0:Number(t0)||0,d:Math.max(.005,Number(d)||.05),v:Number(v)||.05,fr:Number(fr)||1600,o:{t:String(o.t||"lowpass"),f2:Number(o.f2)||0,q:Number(o.q)||.8,wet:!!o.wet}});if(S.mute)return;try{const c=au(),t=c.currentTime+(Number(t0)||0),s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=c.nb;f.type=o.t||"lowpass";f.frequency.setValueAtTime(fr,t);if(o.f2)f.frequency.exponentialRampToValueAtTime(o.f2,t+d);f.Q.value=o.q||.8;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+Math.min(.006,d/3));g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(c.bus);if(o.wet)g.connect(c.rv);s.start(t,Math.random()*1.5,d+.02)}catch(e){}}
 const note=i=>440*Math.pow(2,[0,2,4,7,9,12,14,16,19,21][Math.min(i,9)]/12);
 const jit=()=>1+(Math.random()-.5)*.06;
 /* cliques e letras */
@@ -1093,7 +1095,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.29-coop-fx2";
+const BUILD="2026.10.29-coop-fx3";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1245,6 +1247,7 @@ function coopShowError(message){COOP.status="error";COOP.modalNote=String(messag
 function coopOpen(){if(COOP.role){if(COOP.status==="lost")coopShowModal("lost");else if(COOP.role==="host"&&!COOP.connected)coopShowModal("waiting");else if(COOP.connected)coopShowModal("active");else if(COOP.role==="guest")coopShowModal("join");else coopShowModal("waiting");return}COOP.modalNote="";coopShowModal("menu")}
 function coopCleanupTransport(){
   clearTimeout(COOP.syncTimer);COOP.syncTimer=0;clearTimeout(COOP.previewTimer);COOP.previewTimer=0;COOP.previewPending=null;
+  clearTimeout(COOP.audioTimer);COOP.audioTimer=0;COOP.audioPending=[];COOP.optimisticActions=[];
   try{if(COOP.conn){COOP.conn.removeAllListeners?.();COOP.conn.close()}}catch(_){}
   try{if(COOP.peer){COOP.peer.removeAllListeners?.();COOP.peer.destroy()}}catch(_){}
   COOP.conn=null;COOP.peer=null;COOP.connected=false;COOP.dragLock=null;COOP.pendingSnapshot=null;
@@ -1337,6 +1340,30 @@ function coopSend(message){
   if(!COOP.connected||!COOP.conn||!COOP.conn.open)return false;
   try{COOP.conn.send({...message,from:COOP.role,protocol:COOP_PROTOCOL,build:BUILD});return true}catch(_){COOP.status="lost";coopUpdateStatus();return false}
 }
+/* Sons gerados pelo anfitrião são enviados em pequenos lotes para não disputar
+   a fila de mensagens com os movimentos das cartas. A preferência de mudo é local. */
+function coopQueueSound(event){
+  if(!COOP||COOP.role!=="host"||!COOP.connected||COOP.quiet||COOP.suppressAudioRelay)return;
+  if(!Array.isArray(COOP.audioPending))COOP.audioPending=[];
+  if(COOP.audioPending.length<240)COOP.audioPending.push(event);
+  if(!COOP.audioTimer)COOP.audioTimer=setTimeout(coopFlushSoundBatch,12);
+}
+function coopFlushSoundBatch(){
+  clearTimeout(COOP.audioTimer);COOP.audioTimer=0;
+  if(!COOP.connected||COOP.role!=="host"){COOP.audioPending=[];return}
+  const events=COOP.audioPending.splice(0,160);
+  if(events.length)coopSend({type:"soundBatch",seq:++COOP.audioSeq,events});
+  if(COOP.audioPending.length&&!COOP.audioTimer)COOP.audioTimer=setTimeout(coopFlushSoundBatch,12);
+}
+function coopPlayRemoteSoundBatch(events){
+  if(COOP.role!=="guest"||!COOP.connected||S.mute||!Array.isArray(events))return;
+  try{au()}catch(_){return}
+  for(const e of events.slice(0,160)){
+    if(!e||typeof e!=="object")continue;
+    if(e.k==="t")tone(Number(e.f)||440,Math.max(0,Math.min(2,Number(e.t0)||0)),Math.max(.005,Math.min(3,Number(e.d)||.05)),Math.max(0,Math.min(1,Number(e.v)||.05)),String(e.ty||"triangle"),Number(e.f2)||0,!!e.wet,true);
+    else if(e.k==="n"){const o=e.o&&typeof e.o==="object"?e.o:{};nz(Math.max(0,Math.min(2,Number(e.t0)||0)),Math.max(.005,Math.min(3,Number(e.d)||.05)),Math.max(0,Math.min(1,Number(e.v)||.05)),Math.max(20,Math.min(20000,Number(e.fr)||1600)),{t:["lowpass","highpass","bandpass","notch","peaking","lowshelf","highshelf","allpass"].includes(o.t)?o.t:"lowpass",f2:Number(o.f2)||0,q:Math.max(.0001,Math.min(30,Number(o.q)||.8)),wet:!!o.wet},true)}
+  }
+}
 function coopBroadcastVisual(visual,data={}){
   if(COOP.role!=="host"||!COOP.connected||COOP.applyingSnapshot||COOP.quiet)return false;
   /* Ancora o efeito num elemento da mesa: o P2 recalcula a posição no layout dele
@@ -1406,7 +1433,7 @@ function coopPlayRemoteVisual(kind,data={}){
 function coopMakeSnapshot(){
   const g={...G,rel:(G.rel||[]).map(r=>r&&r.id).filter(Boolean)};
   if(Array.isArray(G.off))g.off=G.off.map(r=>r&&r.id).filter(Boolean);
-  /* R.fresh e os efeitos da loja são zerados pelo ren() do P1 antes do envio (que é adiado ~35 ms).
+  /* R.fresh e os efeitos da loja são zerados pelo ren() do P1 antes do envio (que é levemente adiado).
      Aqui eles são acumulados e entregues junto com o estado, para o P2 também ver as cartas
      entrando na mão e as animações da loja. */
   const r=R?{...R,pw:R.pw&&R.pw.n,fresh:[...new Set([...(R.fresh||[]),...(COOP.freshAcc||[])])]}:null;
@@ -1419,7 +1446,8 @@ function coopMakeSnapshot(){
 function coopSendSnapshot(force=false){
   if(COOP.role!=="host"||!COOP.connected||!COOP.conn||!COOP.conn.open)return;
   clearTimeout(COOP.syncTimer);COOP.syncTimer=0;
-  if(!force){COOP.syncTimer=setTimeout(()=>coopSendSnapshot(true),35);return}
+  if(typeof handDrag!=="undefined"&&handDrag&&handDrag.moved)return
+  if(!force){COOP.syncTimer=setTimeout(()=>coopSendSnapshot(true),16);return}
   const snap=coopMakeSnapshot();try{COOP.conn.send(snap)}catch(_){COOP.status="lost";COOP.connected=false;coopUpdateStatus()}
 }
 function coopApplySnapshot(msg){
@@ -1439,6 +1467,10 @@ function coopApplySnapshot(msg){
       R=r;
     }else R=null;
     if(Number.isFinite(msg.tid))TID=msg.tid;
+    const pending=Array.isArray(COOP.optimisticActions)?COOP.optimisticActions:[];
+    const confirmed=new Set(pending.filter(a=>a.ackRev!==null&&a.ackRev!==undefined&&msg.rev>a.ackRev).map(a=>a.actionId));
+    COOP.optimisticActions=pending.filter(a=>!confirmed.has(a.actionId));
+    for(const action of COOP.optimisticActions)coopApplyOptimisticAction(action);
     COOP.lastRev=msg.rev;COOP.status="connected";COOP.connected=true;COOP.modalNote="";
     coopCloseModal();coopUpdateStatus();document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);
     ren();
@@ -1459,9 +1491,12 @@ function coopHandleHostMessage(msg){
   if(msg.type==="hello"){coopSendSnapshot(true);coopSend({type:"chatHistory",messages:(COOP.chatMessages||[]).slice(-40)});return}
   if(msg.type==="chat"){const received=coopAppendChatMessage(msg.message,"guest");if(received)coopSend({type:"chatRelay",message:received});return}
   if(msg.type==="action"){
-    if(COOP.dragLock){coopSend({type:"actionDenied",reason:"Aguarde o fim do arrasto atual."});return}
-    coopDispatchAction(msg);return;
+    if(COOP.dragLock){coopSend({type:"actionDenied",actionId:msg.actionId,reason:"Aguarde o fim do arrasto atual."});return}
+    const dispatched=coopDispatchAction(msg);
+    if(dispatched&&msg.optimistic&&Number.isFinite(Number(msg.actionId)))coopSend({type:"actionAck",actionId:Number(msg.actionId),rev:COOP.rev});
+    return;
   }
+  if(msg.type==="requestSnapshot"){coopSendSnapshot(true);return}
   if(msg.type==="dragStart"){
     if(G.mode!=="play"||!R||R.lock||R.dv){coopSend({type:"dragRejected",id:msg.id,reason:"A partida está ocupada; tente novamente."});return}
     if(COOP.dragLock||handDrag&&handDrag.moved){coopSend({type:"dragRejected",id:msg.id,reason:"Outro arrasto tem prioridade."});return}
@@ -1487,6 +1522,12 @@ function coopHandleGuestMessage(msg){
   if(msg.type==="chat"){coopAppendChatMessage(msg.message,"host");return}
   if(msg.type==="chatRelay"){coopAppendChatMessage(msg.message);return}
   if(msg.type==="chatHistory"){if(Array.isArray(msg.messages))msg.messages.slice(-40).forEach(m=>coopAppendChatMessage(m));return}
+  if(msg.type==="soundBatch"){coopPlayRemoteSoundBatch(msg.events||[]);return}
+  if(msg.type==="actionAck"){
+    const action=COOP.optimisticActions.find(a=>a.actionId===Number(msg.actionId));
+    if(action)action.ackRev=Number.isFinite(Number(msg.rev))?Number(msg.rev):COOP.rev;
+    return;
+  }
   if(msg.type==="visual"){
     const seq=Number(msg.visualSeq)||0;
     if(seq){
@@ -1499,10 +1540,16 @@ function coopHandleGuestMessage(msg){
     coopPlayRemoteVisual(msg.visual,msg.data||{});return;
   }
   if(msg.type==="state"){
-    if(handDrag){if(!COOP.pendingSnapshot||msg.rev>COOP.pendingSnapshot.rev)COOP.pendingSnapshot=msg;return}
+    if(handDrag||(COOP.dragLock&&COOP.dragLock.owner==="host"&&COOP.remotePreview)){
+      if(!COOP.pendingSnapshot||msg.rev>COOP.pendingSnapshot.rev)COOP.pendingSnapshot=msg;
+      return;
+    }
     coopApplySnapshot(msg);return;
   }
-  if(msg.type==="actionDenied"){COOP.modalNote=msg.reason||"Aguarde o outro jogador.";coopUpdateStatus();return}
+  if(msg.type==="actionDenied"){
+    if(Number.isFinite(Number(msg.actionId))){COOP.optimisticActions=COOP.optimisticActions.filter(a=>a.actionId!==Number(msg.actionId));coopSend({type:"requestSnapshot"})}
+    COOP.modalNote=msg.reason||"Aguarde o outro jogador.";coopUpdateStatus();return
+  }
   if(msg.type==="dragAccepted")return;
   if(msg.type==="dragRejected"){
     const rejected=handDrag&&String(handDrag.id)===String(msg.id);
@@ -1520,12 +1567,12 @@ function coopHandleGuestMessage(msg){
   }
   if(msg.type==="dragEnd"||msg.type==="dragCancel"){
     if(COOP.dragLock&&COOP.dragLock.owner==="host"&&String(COOP.dragLock.id)===String(msg.id))COOP.dragLock=null;
-    coopClearRemoteDrag(false);return;
+    coopClearRemoteDrag(false);coopQueuePendingSnapshot();return;
   }
 }
 function coopDispatchAction(msg){
-  if(G.mode!=="play"&&G.mode!=="shop"&&G.mode!=="over"&&G.mode!=="title")return;
-  if(COOP.dragLock){coopSend({type:"actionDenied",reason:"Uma carta está sendo arrastada. Tente novamente em seguida."});return}
+  if(G.mode!=="play"&&G.mode!=="shop"&&G.mode!=="over"&&G.mode!=="title")return false;
+  if(COOP.dragLock){coopSend({type:"actionDenied",actionId:msg.actionId,reason:"Uma carta está sendo arrastada. Tente novamente em seguida."});return false}
   let el=null;
   if(msg.kind==="hand")el=[...document.querySelectorAll(".hand [data-h][data-id]")].find(e=>String(e.dataset.id)===String(msg.id));
   else if(msg.kind==="tray")el=[...document.querySelectorAll(".tray [data-s][data-id]")].find(e=>String(e.dataset.id)===String(msg.id));
@@ -1534,8 +1581,11 @@ function coopDispatchAction(msg){
   else if(msg.kind==="o")el=document.querySelector(`[data-o="${Number(msg.value)}"]`);
   else if(msg.kind==="r")el=document.querySelector(`.rel [data-r="${Number(msg.value)}"]`);
   else if(msg.kind==="l")el=document.querySelector(`.dvw [data-l="${String(msg.value).replace(/["\\]/g,"")}"]`);
-  if(!el){coopSend({type:"actionDenied",reason:"A carta ou controle mudou. Tente novamente."});return}
-  COOP.remoteDispatch=true;try{el.click()}finally{COOP.remoteDispatch=false}
+  if(!el){coopSend({type:"actionDenied",actionId:msg.actionId,reason:"A carta ou controle mudou. Tente novamente."});return false}
+  const previousSuppress=COOP.suppressAudioRelay;
+  if(msg.optimistic)COOP.suppressAudioRelay=true;
+  COOP.remoteDispatch=true;try{el.click()}finally{COOP.remoteDispatch=false;COOP.suppressAudioRelay=previousSuppress}
+  return true;
 }
 function coopApplyDragCommit(msg){
   if(!R||R.lock)return;
@@ -1552,13 +1602,35 @@ function coopApplyDragCommit(msg){
     const i=R.st.findIndex(t=>String(t.id)===id);if(i>=0)unstage(i);
   }
 }
+function coopApplyOptimisticAction(action){
+  if(!action||!R||G.mode!=="play"||R.lock||R.dv)return;
+  const id=String(action.id);
+  if(action.kind==="hand"){
+    const i=R.hand.findIndex(t=>String(t.id)===id);if(i<0||R.st.length>=8)return;
+    const pos=nextTraySlot();if(pos<0)return;
+    R.lastScore=null;R.st.push(R.hand.splice(i,1)[0]);R.stPos.push(pos);sortStByPos();R.msg="";
+  }else if(action.kind==="tray"){
+    const i=R.st.findIndex(t=>String(t.id)===id);if(i<0)return;
+    R.lastScore=null;R.hand.push(R.st.splice(i,1)[0]);R.stPos.splice(i,1);R.hand.sort((a,b)=>a.o-b.o);sortStByPos();
+  }
+}
+function coopOptimisticCardAction(kind,id){
+  if(!R||G.mode!=="play"||R.lock||R.dv)return false;
+  const source=kind==="hand"?R.hand:R.st,index=source.findIndex(t=>String(t.id)===String(id));
+  if(index<0||kind==="hand"&&(R.st.length>=8||nextTraySlot()<0))return false;
+  const actionId=++COOP.actionSeq;
+  if(!coopSend({type:"action",kind,id:String(id),actionId,optimistic:true}))return false;
+  const action={actionId,kind,id:String(id),ackRev:null};COOP.optimisticActions.push(action);
+  if(kind==="hand")stage(index);else unstage(index);
+  return true;
+}
 function coopSendActionFromElement(el){
   if(!COOP.connected||COOP.role!=="guest"||!el)return false;
   if(COOP.dragLock&&COOP.dragLock.owner==="host"){COOP.modalNote="O outro jogador está arrastando uma carta.";coopUpdateStatus();return true}
   const d=el.dataset;
   if(d.a==="theme"||d.a==="mute")return false;
-  if(d.h!==undefined)return coopSend({type:"action",kind:"hand",id:String(d.id)});
-  if(d.s!==undefined)return coopSend({type:"action",kind:"tray",id:String(d.id)});
+  if(d.h!==undefined){if(coopOptimisticCardAction("hand",String(d.id)))return true;return coopSend({type:"action",kind:"hand",id:String(d.id)})}
+  if(d.s!==undefined){if(coopOptimisticCardAction("tray",String(d.id)))return true;return coopSend({type:"action",kind:"tray",id:String(d.id)})}
   if(d.dk!==undefined)return coopSend({type:"action",kind:"dk",value:Number(d.dk)});
   if(d.o!==undefined)return coopSend({type:"action",kind:"o",value:Number(d.o)});
   if(d.r!==undefined)return coopSend({type:"action",kind:"r",value:Number(d.r)});
@@ -1575,7 +1647,7 @@ function coopBeginLocalDrag(d){
     COOP.dragLock=null;coopClearRemoteDrag(false);
   }
   if(COOP.dragLock&&COOP.dragLock.owner===owner){if(String(COOP.dragLock.id)===id)return true;d.remoteRejected=true;return false}
-  COOP.dragLock={owner,id,mode:d.mode};coopSend({type:"dragStart",id,mode:d.mode});return true;
+  COOP.dragLock={owner,id,mode:d.mode};COOP.previewLastAt=0;clearTimeout(COOP.previewTimer);COOP.previewTimer=0;COOP.previewPending=null;coopSend({type:"dragStart",id,mode:d.mode});return true;
 }
 function coopPreviewPayload(d,e,target){
   const width=window.innerWidth||1,height=window.innerHeight||1;
@@ -1598,7 +1670,7 @@ function coopTransmitDragPreview(){
 function coopSendDragPreview(d,e,target){
   if(!COOP.connected||!COOP.dragLock||COOP.dragLock.owner!==COOP.role||String(COOP.dragLock.id)!==String(d.id))return;
   COOP.previewPending=coopPreviewPayload(d,e,target);
-  const elapsed=performance.now()-COOP.previewLastAt,wait=Math.max(0,34-elapsed);
+  const elapsed=performance.now()-COOP.previewLastAt,wait=Math.max(0,16-elapsed);
   if(wait===0)coopTransmitDragPreview();
   else if(!COOP.previewTimer)COOP.previewTimer=setTimeout(coopTransmitDragPreview,wait);
 }
@@ -1643,6 +1715,8 @@ function coopFinishLocalDrag(d,cancelled){
 function coopHandleUi(e){
   const t=e.target.closest("[data-coop-ui]");if(!t)return;
   const act=t.dataset.coopUi;
+  /* Desbloqueia o áudio durante o gesto explícito de entrar/criar a sala (iOS Safari). */
+  if(act==="join"||act==="create"){try{au()}catch(_){}}
   if(act==="open"){e.preventDefault();coopOpen();return}
   if(act==="chat"){e.preventDefault();coopToggleChat();return}
   if(act==="chat-close"){e.preventDefault();coopCloseChat();return}
