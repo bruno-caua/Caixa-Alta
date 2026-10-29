@@ -604,6 +604,42 @@ span.rs{cursor:default}
 .shp-up{flex-direction:column;gap:4px;padding:0}
 .shp-up .tx{align-items:center;text-align:center;max-width:100%}
 .shp-up .tx b{font-size:8.5px;letter-spacing:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Chat do Coop — acabamento minimalista restrito ao painel; o botão externo e a mesa permanecem iguais. */
+.cc-panel{
+  width:min(360px,calc(100vw - 20px));
+  max-height:min(680px,calc(var(--vvh,100dvh) - 24px - env(safe-area-inset-top)));
+  border:1px solid color-mix(in srgb,var(--tx) 11%,var(--ln));
+  border-radius:16px;
+  background:color-mix(in srgb,var(--bg) 97%,#fff 3%);
+  box-shadow:0 18px 52px #0007;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+.cc-top{gap:9px;padding:13px 12px 12px;border-bottom:1px solid color-mix(in srgb,var(--tx) 8%,var(--ln))}
+.cc-top b{font:650 16px/1.15 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.025em}
+.cc-code{padding:6px 9px;border:1px solid color-mix(in srgb,var(--tx) 10%,var(--ln));border-radius:999px;background:color-mix(in srgb,var(--tx) 4%,transparent);color:var(--mu);font:600 10px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.06em}
+.cc-ic{min-width:32px;height:32px;border-radius:9px}
+.cc-ic svg{width:15px;height:15px;stroke-width:1.8}
+.cc-warn{padding:8px 12px;border-bottom:1px solid color-mix(in srgb,var(--tx) 8%,var(--ln));font:500 11px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:0}
+.cc-warn button{border-radius:7px;padding:5px 8px;font:650 10px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.02em}
+.cc-log{flex:1;min-height:132px;max-height:min(420px,calc(var(--vvh,100dvh) - 224px));gap:5px;padding:14px 12px;scrollbar-color:color-mix(in srgb,var(--mu) 35%,transparent) transparent}
+.cc-empty{font:400 12px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:0;text-align:center;opacity:.78}
+.cc-meta{margin:9px 2px 2px;font:550 10px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.025em;color:var(--mu)}
+.cc-meta:first-child{margin-top:0}
+.cc-m{max-width:84%;padding:9px 12px;border:1px solid color-mix(in srgb,var(--tx) 6%,transparent);border-radius:13px 13px 13px 4px;background:color-mix(in srgb,var(--tx) 7%,var(--bg));color:var(--tx);box-shadow:none;font:400 14px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:0;overflow-wrap:anywhere;white-space:pre-wrap}
+.cc-m.own{border:1px solid color-mix(in srgb,var(--mx) 20%,transparent);border-right:0;border-radius:13px 13px 4px 13px;background:color-mix(in srgb,var(--mx) 13%,var(--bg));color:var(--tx);box-shadow:none}
+.cc-form{gap:8px;padding:10px 10px 11px;border-top:1px solid color-mix(in srgb,var(--tx) 8%,var(--ln));background:color-mix(in srgb,var(--bg) 97%,#fff 3%)}
+.cc-in{height:44px;padding:0 14px;border:1px solid color-mix(in srgb,var(--tx) 11%,var(--ln));border-radius:12px;background:color-mix(in srgb,var(--tx) 4%,transparent);color:var(--tx);font:400 16px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:0}
+.cc-in::placeholder{color:var(--mu);opacity:.8}
+.cc-in:focus{border-color:color-mix(in srgb,var(--mx) 65%,var(--ln));box-shadow:0 0 0 3px color-mix(in srgb,var(--mx) 12%,transparent)}
+.cc-send{width:44px;height:44px;border-radius:12px;background:var(--mx);color:#1a1200;box-shadow:0 2px 0 color-mix(in srgb,var(--mx) 62%,#000);transition:transform .12s,opacity .15s,filter .15s}
+.cc-send svg{width:18px;height:18px;stroke-width:1.9}
+.cc-send:active{transform:translateY(1px);box-shadow:0 1px 0 color-mix(in srgb,var(--mx) 62%,#000)}
+.cc-send:disabled{opacity:.4;filter:grayscale(.2)}
+@media(pointer:coarse){.cc-in{font-size:16px}}
+@media(max-height:500px){.cc-log{min-height:60px;max-height:calc(var(--vvh,100dvh) - 174px)}}
+@media(prefers-reduced-motion:reduce){.cc-panel,.cc-m,.cc-send{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -868,6 +904,13 @@ const banned=t=>R&&R.boss&&R.boss.id==="ce"&&R.boss.ban===t.l;
 
 /* ---------- áudio ---------- */
 let ax=null;
+function coopUnlockAudioFromGesture(){
+  if(S.mute)return;
+  try{const ctx=au();if(ctx.state!=="running"){const resumed=ctx.resume();if(resumed&&typeof resumed.catch==="function")resumed.catch(()=>{})}}catch(_){}
+}
+/* O gesto inicial do jogador autoriza o Web Audio em Chrome Android e Safari iOS. */
+document.addEventListener("pointerdown",coopUnlockAudioFromGesture,{capture:true,passive:true});
+document.addEventListener("keydown",coopUnlockAudioFromGesture,true);
 function au(){try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
   if(!ax){ax=new(window.AudioContext||window.webkitAudioContext)();const c=ax,cp=c.createDynamicsCompressor();
     cp.threshold.value=-14;cp.knee.value=18;cp.ratio.value=4;cp.attack.value=.004;cp.release.value=.18;
@@ -1243,7 +1286,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.29-coop-fx7-classic-upgrades";
+const BUILD="2026.10.29-coop-chat-minimal-audio2";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1313,11 +1356,20 @@ function coopNormalizeChatMessage(raw,forcedSender=null){
   return {id:String(raw.id||coopChatId()).slice(0,100),sender,text,at:Number.isFinite(at)&&at>0?at:Date.now()};
 }
 const CC_ICON={chat:'<svg viewBox="0 0 24 24"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-8l-4 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/></svg>',x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',out:'<svg viewBox="0 0 24 24"><path d="M10 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19H10M14 8l4 4-4 4M18 12H9.5"/></svg>',send:'<svg viewBox="0 0 24 24"><path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/></svg>'};
-/* Aviso sonoro: arpejo ascendente curto (sol-ré-sol) com um pouco de eco; só toca localmente, nunca vai para o parceiro. */
+/* Aviso de recebimento: reproduz no aparelho que recebeu a mensagem, inclusive no P2.
+   Se o AudioContext estiver suspenso pelo navegador, aguarda a retomada antes de tocar. */
 function coopChatPing(){
   if(S.mute)return;
-  tone(784,0,.2,.1,"sine",0,true,true);tone(1175,.09,.38,.09,"sine",0,true,true);tone(1568,.17,.45,.05,"triangle",0,true,true);
-  nz(0,.02,.03,6000,{t:"highpass"},true);vb([14,50,14]);
+  const play=()=>{
+    if(S.mute)return;
+    tone(784,0,.2,.1,"sine",0,true,true);tone(1175,.09,.38,.09,"sine",0,true,true);tone(1568,.17,.45,.05,"triangle",0,true,true);
+    nz(0,.02,.03,6000,{t:"highpass"},true);vb([14,50,14]);
+  };
+  try{
+    const ctx=au();
+    if(ctx.state==="running")play();
+    else {const resumed=ctx.resume();if(resumed&&typeof resumed.then==="function")resumed.then(play).catch(()=>{});else play()}
+  }catch(_){}
 }
 function coopHideToast(){const t=document.querySelector(".cc-toast:not(.out)");if(!t)return;t.classList.add("out");setTimeout(()=>t.remove(),200)}
 function coopChatNotify(msg){
@@ -1423,6 +1475,32 @@ function coopRenderModal(){
   const inp=modal.querySelector("#coop-room-input");if(inp){inp.value=COOP.modalNote&&/^[A-Z0-9-]{1,7}$/i.test(COOP.modalNote)?COOP.modalNote:"";inp.focus()}
 }
 function coopCloseModal(){const el=document.querySelector(".coop-modal");if(el)el.remove()}
+function coopPositionChatLauncher(){
+  const el=document.querySelector(".cc-launch");if(!el)return;
+  const clear=document.querySelector('#app .btn[data-a="clr"]');
+  if(clear){
+    const r=clear.getBoundingClientRect();
+    const vw=document.documentElement.clientWidth||window.innerWidth||1;
+    const vh=window.innerHeight||document.documentElement.clientHeight||1;
+    const visible=r.width>0&&r.height>0&&r.bottom>0&&r.top<vh&&r.right>0&&r.left<vw;
+    if(visible){
+      const x=Math.max(6,Math.min(vw-46,r.left+r.width/2-20));
+      let y=r.top-48;
+      if(y<8&&r.bottom+48<vh)y=r.bottom+8;
+      el.style.left=x+"px";el.style.top=Math.max(8,y)+"px";
+      el.style.right="auto";el.style.bottom="auto";
+      return;
+    }
+  }
+  /* Fora da tela principal, mantém o botão no canto inferior como antes. */
+  el.style.left="";el.style.top="";el.style.right="";el.style.bottom="";
+}
+window.addEventListener("resize",coopPositionChatLauncher,{passive:true});
+document.addEventListener("scroll",coopPositionChatLauncher,true);
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize",coopPositionChatLauncher,{passive:true});
+  window.visualViewport.addEventListener("scroll",coopPositionChatLauncher,{passive:true});
+}
 function coopUpdateStatus(bump){
   let el=document.querySelector(".cc-launch");
   if(!COOP.role){if(el)el.remove();coopHideToast();return}
@@ -1431,6 +1509,7 @@ function coopUpdateStatus(bump){
   el.innerHTML=CC_ICON.chat+(n?`<i>${n>9?"9+":n}</i>`:"")+(dot?`<u class="${dot}"></u>`:"");
   el.classList.toggle("un",n>0);el.classList.toggle("hide",!!COOP.chatOpen);
   if(bump===true){el.classList.remove("un");void el.offsetWidth;el.classList.add("un")}
+  coopPositionChatLauncher();
   coopSyncChat();
 }
 function coopSetStatus(status,note){COOP.status=status;if(note!==undefined)COOP.modalNote=String(note);coopUpdateStatus()}
@@ -1547,9 +1626,11 @@ function coopFlushSoundBatch(){
   if(events.length)coopSend({type:"soundBatch",seq:++COOP.audioSeq,events});
   if(COOP.audioPending.length&&!COOP.audioTimer)COOP.audioTimer=setTimeout(coopFlushSoundBatch,12);
 }
-function coopPlayRemoteSoundBatch(events){
+async function coopPlayRemoteSoundBatch(events){
   if(COOP.role!=="guest"||!COOP.connected||S.mute||!Array.isArray(events))return;
-  try{au()}catch(_){return}
+  let ctx;try{ctx=au();if(ctx.state!=="running")await ctx.resume()}catch(_){return}
+  /* No iOS/Safari, não agenda o lote enquanto o áudio ainda estiver suspenso. */
+  if(!ctx||ctx.state!=="running"||COOP.role!=="guest"||!COOP.connected||S.mute)return;
   for(const e of events.slice(0,160)){
     if(!e||typeof e!=="object")continue;
     if(e.k==="t")tone(Number(e.f)||440,Math.max(0,Math.min(2,Number(e.t0)||0)),Math.max(.005,Math.min(3,Number(e.d)||.05)),Math.max(0,Math.min(1,Number(e.v)||.05)),String(e.ty||"triangle"),Number(e.f2)||0,!!e.wet,true);
@@ -2207,6 +2288,8 @@ function ren(){hideTip();
   const gl=COOP.ghostLand;COOP.ghostLand=null;
   if(gl&&performance.now()-gl.at<700)old[gl.id]=gl.rect;
   A.innerHTML=view();
+  /* O ícone do chat acompanha o botão LIMPAR após cada redesenho da mesa. */
+  if(typeof coopPositionChatLauncher==="function")coopPositionChatLauncher();
   if(COOP.swapHiddenIds&&COOP.swapHiddenIds.size){
     A.querySelectorAll(".hand [data-id]").forEach(e=>{if(COOP.swapHiddenIds.has(String(e.dataset.id))){e.classList.remove("nw");e.classList.add("coop-swap-hidden")}});
   }
@@ -2569,6 +2652,10 @@ document.addEventListener("click",e=>{
   else if(D.a==="play")jogar();else if(D.a==="disc")descartar();else if(D.a==="deck"){R.dv=1;R.dx={};sDkOpen();ren()}else if(D.a==="dvx"){R.dv=0;sDkClose();ren()}else if(D.a==="clr")limpar();
 });
 document.addEventListener("keydown",e=>{
+  /* Não transformar a digitação do chat/formulários em comandos do jogo.
+     Em especial, Backspace precisa apagar o texto e Enter deve enviar a mensagem. */
+  const target=e.target;
+  if(target instanceof Element && (target.matches("input,textarea,select") || target.isContentEditable || target.closest(".cc-panel,.coop-modal")))return;
   if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(COOP.connected&&COOP.role==="guest"){
     if(G.mode==="title"){if(e.key==="Enter")coopSend({type:"action",kind:"a",value:"start"});return}
