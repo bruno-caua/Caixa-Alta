@@ -454,10 +454,10 @@ span.rs{cursor:default}
 @keyframes ccOut{to{opacity:0;transform:translateY(8px) scale(.97)}}
 @keyframes ccMsg{from{opacity:0;transform:translateY(5px)}}
 @keyframes ccToast{0%{opacity:0;transform:translateX(18px) rotate(2deg)}60%{transform:translateX(-3px)}100%{opacity:1;transform:none}}
-.cc-toast{position:fixed;z-index:1850;right:calc(max(10px,env(safe-area-inset-right)) + 48px);bottom:calc(max(8px,env(safe-area-inset-bottom)) + var(--vvb,0px));max-width:min(290px,calc(100vw - 80px));min-height:40px;padding:6px 11px 6px 10px;display:flex;flex-direction:column;justify-content:center;gap:1px;border:0;border-left:3px solid var(--mx);border-radius:4px;background:var(--pp);color:var(--pk);box-shadow:0 3px 0 var(--ps),0 10px 28px #0007;text-align:left;cursor:pointer;animation:ccToast .38s cubic-bezier(.2,.9,.3,1.1)}
+.cc-toast{position:fixed;z-index:1850;right:calc(max(10px,env(safe-area-inset-right)) + 48px);bottom:calc(max(8px,env(safe-area-inset-bottom)) + var(--vvb,0px));width:min(250px,calc(100vw - 84px));min-width:120px;max-width:min(290px,calc(100vw - 80px));min-height:40px;padding:8px 11px 8px 10px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;border:0;border-left:3px solid var(--mx);border-radius:12px;background:var(--pp);color:var(--pk);box-shadow:0 3px 0 var(--ps),0 10px 28px #0007;text-align:left;cursor:pointer;animation:ccToast .38s cubic-bezier(.2,.9,.3,1.1)}
 .cc-toast.out{animation:ccOut .2s forwards;pointer-events:none}
-.cc-toast small{font:700 8px/1.2 'Chivo Mono',monospace;letter-spacing:.2em;color:#7a6a45}
-.cc-toast span{font:600 12px/1.3 'Chivo Mono',monospace;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.cc-toast small{flex:none;font:700 9px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.03em;color:#7a6a45}
+.cc-toast span{flex:1;min-width:0;font:500 12px/1.3 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;overflow-wrap:anywhere}
 .cc-panel{position:fixed;z-index:1900;right:max(10px,env(safe-area-inset-right));bottom:calc(max(8px,env(safe-area-inset-bottom)) + var(--vvb,0px));width:min(340px,calc(100vw - 20px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--ln);border-radius:8px;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 20px 60px #000b;color:var(--tx);transform-origin:100% 100%;animation:ccIn .2s cubic-bezier(.2,.9,.3,1.1)}
 .cc-panel.out{animation:ccOut .15s forwards;pointer-events:none}
 .cc-top{display:flex;align-items:center;gap:8px;padding:9px 8px 8px 12px;border-bottom:1px solid var(--ln)}
@@ -540,7 +540,7 @@ span.rs{cursor:default}
   #app:has(.handw)>.rel .rs{--rh:96px}
   .coop-remote-ghost{font-size:32px}
 }
-@media(max-width:759px){body:has(.cc-launch) #app{padding-bottom:max(58px,calc(env(safe-area-inset-bottom) + 52px))}}
+@media(max-width:759px){body:has(.cc-launch) #app:not(:has(.handw)){padding-bottom:max(58px,calc(env(safe-area-inset-bottom) + 52px))}}
 @media(prefers-reduced-motion:reduce){.coop-help,.coop-modal{animation:none;transition:none}.coop-remote-ghost{transform:none}}
 
 /* COOP: títulos e avisos não podem escapar da largura do celular. */
@@ -1286,7 +1286,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.29-coop-chat-minimal-audio2";
+const BUILD="2026.10.29-coop-chat-layout-fix1";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1371,6 +1371,23 @@ function coopChatPing(){
     else {const resumed=ctx.resume();if(resumed&&typeof resumed.then==="function")resumed.then(play).catch(()=>{});else play()}
   }catch(_){}
 }
+/* Som tátil de envio/chegada no chat aberto: um pop curto com três notas ascendentes.
+   Os eventos são locais (remote=true), para não serem retransmitidos pela fila de áudio do Coop. */
+function coopChatMessageSound(){
+  if(S.mute)return;
+  const play=()=>{
+    if(S.mute)return;
+    tone(440,0,.11,.075,"triangle",640,false,true);
+    tone(659.25,.045,.14,.065,"sine",0,true,true);
+    tone(987.77,.095,.22,.045,"sine",0,true,true);
+    nz(0,.018,.018,3400,{t:"highpass",q:1.4},true);
+  };
+  try{
+    const ctx=au();
+    if(ctx.state==="running")play();
+    else {const resumed=ctx.resume();if(resumed&&typeof resumed.then==="function")resumed.then(()=>{if(ctx.state==="running")play()}).catch(()=>{});else play()}
+  }catch(_){}
+}
 function coopHideToast(){const t=document.querySelector(".cc-toast:not(.out)");if(!t)return;t.classList.add("out");setTimeout(()=>t.remove(),200)}
 function coopChatNotify(msg){
   COOP.chatUnread=(COOP.chatUnread||0)+1;coopChatPing();
@@ -1388,7 +1405,10 @@ function coopAppendChatMessage(raw,forcedSender=null,silent=false){
   const found=COOP.chatMessages.find(m=>m.id===msg.id);if(found)return found;
   COOP.chatMessages.push(msg);if(COOP.chatMessages.length>60)COOP.chatMessages.splice(0,COOP.chatMessages.length-60);
   if(COOP.chatOpen)coopRenderChatPanel(false);
-  if(!silent&&msg.sender!==COOP.role&&(!COOP.chatOpen||document.hidden))coopChatNotify(msg);
+  if(!silent&&msg.sender!==COOP.role){
+    if(!COOP.chatOpen||document.hidden)coopChatNotify(msg);
+    else coopChatMessageSound();
+  }
   return msg;
 }
 function coopSyncChat(){
@@ -1441,6 +1461,7 @@ function coopSendChat(){
   const text=String(input.value||"").trim().slice(0,240);if(!text)return;
   const message={id:coopChatId(),sender:COOP.role,text,at:Date.now()};
   if(coopSend({type:"chat",message})){
+    coopChatMessageSound();
     input.value="";const b=document.querySelector(".cc-send");if(b)b.disabled=true;
     coopAppendChatMessage(message,COOP.role);
     const lg=document.querySelector(".cc-log");if(lg)lg.scrollTop=lg.scrollHeight;
@@ -1477,11 +1498,13 @@ function coopRenderModal(){
 function coopCloseModal(){const el=document.querySelector(".coop-modal");if(el)el.remove()}
 function coopPositionChatLauncher(){
   const el=document.querySelector(".cc-launch");if(!el)return;
+  const toast=document.querySelector(".cc-toast:not(.out)");
   const clear=document.querySelector('#app .btn[data-a="clr"]');
+  const vw=document.documentElement.clientWidth||window.innerWidth||1;
+  const vh=window.innerHeight||document.documentElement.clientHeight||1;
+  let anchored=false;
   if(clear){
     const r=clear.getBoundingClientRect();
-    const vw=document.documentElement.clientWidth||window.innerWidth||1;
-    const vh=window.innerHeight||document.documentElement.clientHeight||1;
     const visible=r.width>0&&r.height>0&&r.bottom>0&&r.top<vh&&r.right>0&&r.left<vw;
     if(visible){
       const x=Math.max(6,Math.min(vw-46,r.left+r.width/2-20));
@@ -1489,11 +1512,27 @@ function coopPositionChatLauncher(){
       if(y<8&&r.bottom+48<vh)y=r.bottom+8;
       el.style.left=x+"px";el.style.top=Math.max(8,y)+"px";
       el.style.right="auto";el.style.bottom="auto";
-      return;
+      anchored=true;
     }
   }
-  /* Fora da tela principal, mantém o botão no canto inferior como antes. */
-  el.style.left="";el.style.top="";el.style.right="";el.style.bottom="";
+  if(!anchored){
+    /* Fora da tela principal, mantém o botão no canto inferior como antes. */
+    el.style.left="";el.style.top="";el.style.right="";el.style.bottom="";
+  }
+  /* O aviso da mensagem acompanha o ícone: nunca fica perdido no rodapé.
+     Para mensagens curtas (por exemplo, só um emoji), preserve uma largura legível. */
+  if(toast){
+    if(anchored){
+      const x=parseFloat(el.style.left)||6;
+      const y=parseFloat(el.style.top)||8;
+      const w=Math.max(110,Math.min(250,x-18));
+      toast.style.width=w+"px";toast.style.maxWidth=w+"px";
+      toast.style.left=Math.max(8,x-w-8)+"px";toast.style.right="auto";
+      toast.style.top=y+"px";toast.style.bottom="auto";
+    }else{
+      ["width","max-width","left","right","top","bottom"].forEach(k=>toast.style.removeProperty(k));
+    }
+  }
 }
 window.addEventListener("resize",coopPositionChatLauncher,{passive:true});
 document.addEventListener("scroll",coopPositionChatLauncher,true);
