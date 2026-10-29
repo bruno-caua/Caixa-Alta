@@ -707,7 +707,10 @@ try{Object.assign(S,JSON.parse(localStorage.getItem("pc2")||"{}"))}catch(e){}
 const save=()=>{try{localStorage.setItem("pc2",JSON.stringify(S))}catch(e){}};
 function ink(){return S.theme?"#16140f":"#ffffff"}
 function applyTheme(){document.documentElement.dataset.theme=S.theme?"l":"d";const m=document.querySelector('meta[name=theme-color]');if(m)m.content=S.theme?"#efebe2":"#111113"}
-function ring(x,y,c,d){const e=document.createElement("div");e.className="ring";e.style.cssText="left:"+x+"px;top:"+y+"px;--rc:"+c+";animation-delay:"+(d||0)+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),950)}
+function ring(x,y,c,d){
+  coopBroadcastVisual("ring",{x:x/(W||window.innerWidth||1),y:y/(H||window.innerHeight||1),c:String(c||"#ffffff"),d:Math.max(0,Math.min(1,Number(d)||0))});
+  const e=document.createElement("div");e.className="ring";e.style.cssText="left:"+x+"px;top:"+y+"px;--rc:"+c+";animation-delay:"+(d||0)+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),950)
+}
 const KC={c:"#ffffff",m:"#ff5a3d",x:"#b794f6",o:"#62c98a",u:"#7fd6ff"};
 const sRare=()=>[1200,1600,2000,2600].forEach((f,i)=>tone(f,i*.05,.2,.09,"sine",0,1));
 function fxT(L,p){
@@ -721,19 +724,29 @@ function fxR(s,p){
   burst(p.x,p.y,c,18,6);ring(p.x,p.y,c);
   if(kd==="x"||s.k==="pw")ring(p.x,p.y,c,.1);
   if(kd==="o")burst(p.x,p.y,"#62c98a",10,3,"$");
-  if(r&&r.id==="pa"){const t=document.querySelector(".tray");if(t)t.classList.add("flip")}
+  if(r&&r.id==="pa"){
+    coopBroadcastVisual("tray-flip",{});
+    const t=document.querySelector(".tray");if(t){t.classList.remove("flip");void t.offsetWidth;t.classList.add("flip");setTimeout(()=>t.classList.remove("flip"),550)}
+  }
+}
+function coopDrawStampOverlay(t,ratio,w){
+  const tier=ratio>=1?3:ratio>.4?2:1,e=document.createElement("div");
+  e.className="sc t"+tier;
+  const number=document.createElement("span");number.className="sn";number.textContent=fmt(t);
+  const word=document.createElement("span");word.className="sl";word.textContent=String(w||"");
+  e.append(number,word);document.body.appendChild(e);setTimeout(()=>e.remove(),1900);
 }
 function stamp(t,ratio,w){
-  const tier=ratio>=1?3:ratio>.4?2:1,c=tier>2?"#b794f6":"#ff5a3d",e=document.createElement("div");
-  e.className="sc t"+tier;e.innerHTML='<span class="sn">'+fmt(t)+'</span><span class="sl">'+w+'</span>';
-  document.body.appendChild(e);setTimeout(()=>e.remove(),1900);
+  coopBroadcastVisual("stamp",{t:Number(t)||0,ratio:Number(ratio)||0,w:String(w||"").slice(0,24)});
+  const tier=ratio>=1?3:ratio>.4?2:1,c=tier>2?"#b794f6":"#ff5a3d";
+  coopDrawStampOverlay(t,ratio,w);
   const cp=ctr(".tray");ring(cp.x,cp.y,c);if(tier>1)ring(cp.x,cp.y,"var(--ink)",.12);if(tier>2)ring(cp.x,cp.y,c,.24);
   burst(cp.x,cp.y,c,Math.min(70,18+ratio*80),7,w[0]);
   if(ratio>.25)flash(c);
 }
 let G={mode:"title",dk:0,rel:[],pendingRecord:null,lastRecordNotice:null},R=null,TID=0;
 /* O Coop fica isolado do save e das regras do modo solo. */
-let COOP={role:null,status:"off",peer:null,conn:null,roomCode:"",peerId:"",deck:0,modalView:"menu",modalNote:"",connected:false,rev:0,lastRev:0,syncTimer:0,pendingSnapshot:null,applyingSnapshot:false,remoteDispatch:false,dragLock:null,remotePreview:null,dragRejected:null,hasStarted:false,previewPending:null,previewLastAt:0,previewTimer:0,chatMessages:[],chatOpen:false};
+let COOP={role:null,status:"off",peer:null,conn:null,roomCode:"",peerId:"",deck:0,modalView:"menu",modalNote:"",connected:false,rev:0,lastRev:0,syncTimer:0,pendingSnapshot:null,applyingSnapshot:false,remoteDispatch:false,dragLock:null,remotePreview:null,dragRejected:null,hasStarted:false,previewPending:null,previewLastAt:0,previewTimer:0,chatMessages:[],chatOpen:false,visualSeq:0,lastVisualSeq:0};
 const mkTile=l=>({l,g:0,r:0,k:0,id:++TID,o:0});
 const cnt=p=>G.rel.filter(r=>r.p===p).length;
 const wd=ts=>ts.map(t=>t.l).join("");
@@ -806,7 +819,10 @@ window.addEventListener("resize",size,{passive:true});
 window.addEventListener("orientationchange",()=>requestAnimationFrame(size),{passive:true});
 size();
 const GL=[];for(let i=0;i<34;i++)GL.push({x:Math.random(),y:Math.random(),s:16+Math.random()*38,v:.02+Math.random()*.06,ch:"ABCDEFGHIJLMNOPQRSTUVXZ"[i%23],a:.04+Math.random()*.07,w:Math.random()*6});
-function burst(x,y,col,n,sp,ch){for(let i=0;i<n;i++){const a=Math.random()*6.283,s=(.4+Math.random())*sp;P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,l:1,d:.018+Math.random()*.02,r:3+Math.random()*4,c:col,g:.14,ch:ch&&Math.random()<.35?ch:null})}}
+function burst(x,y,col,n,sp,ch){
+  coopBroadcastVisual("burst",{x:x/(W||window.innerWidth||1),y:y/(H||window.innerHeight||1),c:String(col||"#ffffff"),n:Math.max(1,Math.min(90,Math.round(Number(n)||1))),sp:Math.max(.1,Math.min(12,Number(sp)||1)),ch:ch?String(ch).slice(0,2):""});
+  for(let i=0;i<n;i++){const a=Math.random()*6.283,s=(.4+Math.random())*sp;P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,l:1,d:.018+Math.random()*.02,r:3+Math.random()*4,c:col,g:.14,ch:ch&&Math.random()<.35?ch:null})}
+}
 function loop(t){
   frameHandle=null;
   const dt=Math.min(40,t-lastT)/16.7;lastT=t;
@@ -825,10 +841,29 @@ window.addEventListener("pagehide",stopFrames);
 window.addEventListener("pageshow",()=>{size();startFrames()});
 startFrames();
 function ctr(q){const e=document.querySelector(q);if(!e)return{x:W/2,y:H/2};const r=e.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
-function fl(txt,x,y,col,big,cls){const e=document.createElement("div");e.className="ft"+(big?" x":"")+(cls?" "+cls:"");e.textContent=txt;e.style.cssText="left:"+x+"px;top:"+y+"px;color:"+col;document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
-function shake(k){const a=$("#app");a.style.setProperty("--sh",k+"px");a.classList.remove("sk");void a.offsetWidth;a.classList.add("sk")}
-function flash(c){const f=$("#fl");f.style.setProperty("--fc",c||"#ff5a3d");f.classList.remove("on");void f.offsetWidth;f.classList.add("on")}
-function banner(t,s,cls,duration=2100){const e=document.createElement("div");e.className="bn "+(cls||"");e.innerHTML="<b>"+t+"</b><span>"+s+"</span>";e.style.animationDuration=duration+"ms";document.body.appendChild(e);setTimeout(()=>e.remove(),duration+80);return e}
+function fl(txt,x,y,col,big,cls){
+  coopBroadcastVisual("float",{text:String(txt??"").slice(0,100),x:x/(W||window.innerWidth||1),y:y/(H||window.innerHeight||1),c:String(col||"#ffffff"),big:!!big,cls:cls==="big"?"big":""});
+  const e=document.createElement("div");e.className="ft"+(big?" x":"")+(cls?" "+cls:"");e.textContent=txt;e.style.cssText="left:"+x+"px;top:"+y+"px;color:"+col;document.body.appendChild(e);setTimeout(()=>e.remove(),1500)
+}
+function shake(k){
+  coopBroadcastVisual("shake",{k:Math.max(0,Math.min(24,Number(k)||0))});
+  const a=$("#app");a.style.setProperty("--sh",k+"px");a.classList.remove("sk");void a.offsetWidth;a.classList.add("sk")
+}
+function flash(c){
+  coopBroadcastVisual("flash",{c:String(c||"#ff5a3d")});
+  const f=$("#fl");f.style.setProperty("--fc",c||"#ff5a3d");f.classList.remove("on");void f.offsetWidth;f.classList.add("on")
+}
+function banner(t,s,cls,duration=2100){
+  const safeClass=cls==="boss"?"boss":"";
+  coopBroadcastVisual("banner",{t:String(t??"").slice(0,80),s:String(s??"").slice(0,160),cls:safeClass,duration:Math.max(500,Math.min(5000,Number(duration)||2100))});
+  const e=document.createElement("div");e.className="bn "+safeClass;
+  const title=document.createElement("b"),sub=document.createElement("span");title.textContent=String(t??"");sub.textContent=String(s??"");e.append(title,sub);
+  e.style.animationDuration=duration+"ms";document.body.appendChild(e);setTimeout(()=>e.remove(),duration+80);return e
+}
+function coopClearTransientVisuals(){
+  coopBroadcastVisual("clear-transient",{});
+  document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
+}
 
 /* ---------- regras ---------- */
 function evalWord(ts,dry){
@@ -934,13 +969,13 @@ async function jogar(){
   }
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
-  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"Palavra não encontrada",pop:"",real:x.real};ren();await dz(380);
+  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(380);
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
     const A=R.an;A.pop=(A.c!==s.c?"c":"")+(A.m!==s.m?"m":"");A.c=s.c;A.m=s.m;A.tile=s.k==="t"?s.i:-1;A.rel=s.k==="r"?s.i:-1;
     if(s.k==="pw")A.msg="TRECHO ENCAIXADO · "+R.pw.d;
-    ren();
+    ren();coopSendSnapshot(true);
     const p=ctr(s.k==="t"?'[data-s="'+s.i+'"]':s.k==="r"?'.rel [data-r="'+s.i+'"]':".key");
     s.lb.forEach((l,j)=>fl(l.t,p.x+(j%2?20:-20),p.y-14-j*16,colK[l.k]||"#fff",l.k==="x"));
     if(s.k==="t"){sMar(s.i);burst(p.x,p.y,ink(),7,3,ts[s.i].l);vb(5);fxT(ts[s.i],p)}
@@ -952,7 +987,7 @@ async function jogar(){
   R.an.out=t;R.an.pop="t";R.an.tile=-1;R.an.rel=-1;R.an.msg=ratio>=1?"META BATIDA DE UMA VEZ":ratio>.4?"JOGADA ENORME":R.an.msg;ren();
   // Entrega imediatamente o placar terminal da palavra; não depende apenas do debounce do render.
   coopSendSnapshot(true);
-  sStamp();shake(Math.min(16,3+ratio*26));{const te=document.querySelector(".tot"),t0=performance.now();if(te)(function r(n){const q=Math.min(1,(n-t0)/(R.fast?1:750)),e=1-Math.pow(1-q,3);te.textContent="= "+fmt(t*e);if(q<1)requestAnimationFrame(r)})(t0)}vb(ratio>.3?[40,30,80]:20);
+  sStamp();shake(Math.min(16,3+ratio*26));coopBroadcastVisual("score-countup",{total:t,duration:R.fast?1:750});{const te=document.querySelector(".tot"),t0=performance.now();if(te)(function r(n){const q=Math.min(1,(n-t0)/(R.fast?1:750)),e=1-Math.pow(1-q,3);te.textContent="= "+fmt(t*e);if(q<1)requestAnimationFrame(r)})(t0)}vb(ratio>.3?[40,30,80]:20);
   stamp(t,ratio,x.w);
   await dz(1000);
   R.sc+=t;G.stat.words++;G.stat.neo+=ts.length;
@@ -982,18 +1017,18 @@ async function vence(){
   const recordNotice=G.pendingRecord||G.lastRecordNotice;
   G.pendingRecord=null;G.lastRecordNotice=null;
   // Nunca permita que mensagens flutuantes sobrevivam à troca para a loja.
-  document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
+  coopClearTransientVisuals();
   if(G.n===7&&!G.endless){fim(true);return}
   // Atualiza a tela da fase atual e mostra as mensagens em sequência, ainda fora da loja.
   ren();coopSendSnapshot(true);burst(W/2,H*.3,"#ffb21f",60,8);
   if(recordNotice){
     banner("NOVO RECORDE",recordNotice.word.toUpperCase()+" · "+fmt(recordNotice.score)+" pontos","",1250);
     await d0(1330);
-    document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
+    coopClearTransientVisuals();
   }
   banner("FASE VENCIDA","+$"+p.tot+" moedas","",1450);
   await d0(1530);
-  document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
+  coopClearTransientVisuals();
   G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";oferta();ren();coopSendSnapshot(true);
 }
 function oferta(){
@@ -1009,7 +1044,8 @@ function compra(i){
   if(G.$<r.c)return deny("o"+i,"Moedas insuficientes");
   G.$-=r.c;G.rel.push(r);G.off.splice(i,1);G.popRel=G.rel.length-1;say(r.n+" ativado!");sBuy();ren();
 }
-function upFx(k,t,from){
+function upFx(k,t,from,remote=false){
+  if(!remote)coopBroadcastVisual("upgrade",{k,tile:{l:t.l,g:t.g||0,r:t.r||0,k:t.k||0,id:t.id}});
   hideTip();document.querySelectorAll(".upov").forEach(e=>e.remove());
   const N={g:["BRILHANTE","+5 pontos","#ffffff"],r:["VERMELHA","+3 bônus","#ff5a3d"],k:["DOURADA","×1,25 bônus","#ffb21f"]}[k],L=t.l,
     face=c=>`<div class="uf ${c}${c==="f0"&&RARAS.includes(L)?" ra":""}"><i>${L}</i><b>${L}</b><i class="b">${L}</i></div>`,
@@ -1035,7 +1071,7 @@ function carimbo(k){
   const cost={g:3,r:4,k:5}[k];if(G.$<cost)return deny("s"+k,"Moedas insuficientes");G.$-=cost;
   const free=G.col.filter(t=>!t.g&&!t.r&&!t.k),t=pick(free.length?free:G.col);t[k]++;
   say("A letra “"+t.l+"” ficou "+{g:"Brilhante (+5 pontos)",r:"Vermelha (+3 bônus)",k:"Dourada (×1,25 bônus)"}[k]);sFly();
-  const from=ctr('.shp-up[data-a="s'+k+'"] .tl');G.popUp="s"+k;ren();upFx(k,t,from);
+  const from=ctr('.shp-up[data-a="s'+k+'"] .tl');G.popUp="s"+k;ren();coopSendSnapshot(true);upFx(k,t,from);
 }
 function reimprimir(){const c=2+G.rr;if(G.$<c)return deny("rr","Moedas insuficientes");G.$-=c;G.rr++;say("");oferta();sRoll();ren()}
 function vender(){const r=G.rel[G.sel];if(!r)return;G.$+=Math.floor(r.c/2);G.rel.splice(G.sel,1);G.sel=-1;say("Vendido por $"+Math.floor(r.c/2));sCoin();ren()}
@@ -1048,7 +1084,7 @@ function fim(v){
    PeerJS faz sinalização; o criador é a autoridade do estado definitivo.
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
-const COOP_PROTOCOL=1;
+const COOP_PROTOCOL=2;
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1168,13 +1204,13 @@ function coopCleanupTransport(){
 function coopLeave(){
   coopCloseChat();
   const dk=Number.isInteger(G.dk)?G.dk:(COOP.deck||0);
-  coopCleanupTransport();Object.assign(COOP,{role:null,status:"off",roomCode:"",peerId:"",deck:dk,modalView:"menu",modalNote:"",rev:0,lastRev:0,remoteDispatch:false,dragRejected:null,hasStarted:false,chatMessages:[],chatOpen:false});
+  coopCleanupTransport();Object.assign(COOP,{role:null,status:"off",roomCode:"",peerId:"",deck:dk,modalView:"menu",modalNote:"",rev:0,lastRev:0,remoteDispatch:false,dragRejected:null,hasStarted:false,chatMessages:[],chatOpen:false,visualSeq:0,lastVisualSeq:0});
   handDrag=null;clearDragMarks();coopCloseModal();const oldS=S;
   G={mode:"title",dk,rel:[],pendingRecord:null,lastRecordNotice:null};R=null;document.body.classList.remove("boss");ren();coopUpdateStatus();
 }
 async function coopCreateRoom(){
   if(COOP.peer)coopCleanupTransport();
-  COOP.role="host";COOP.deck=G.dk||0;COOP.roomCode=coopRandomCode();COOP.peerId="caixa-"+COOP.roomCode.toLowerCase();COOP.connected=false;COOP.status="connecting";COOP.modalView="waiting";COOP.modalNote="Carregando o serviço de conexão…";COOP.rev=0;COOP.lastRev=0;COOP.hasStarted=false;COOP.dragLock=null;COOP.pendingSnapshot=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
+  COOP.role="host";COOP.deck=G.dk||0;COOP.roomCode=coopRandomCode();COOP.peerId="caixa-"+COOP.roomCode.toLowerCase();COOP.connected=false;COOP.status="connecting";COOP.modalView="waiting";COOP.modalNote="Carregando o serviço de conexão…";COOP.rev=0;COOP.lastRev=0;COOP.visualSeq=0;COOP.lastVisualSeq=0;COOP.hasStarted=false;COOP.dragLock=null;COOP.pendingSnapshot=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
   try{await coopLoadPeerJS()}catch(err){coopShowError(err.message);return}
   let peer;
   try{peer=new window.Peer(COOP.peerId,{debug:1});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
@@ -1195,7 +1231,7 @@ async function coopJoinRoom(){
   const input=document.querySelector("#coop-room-input");const code=coopCleanCode(input?input.value:COOP.modalNote);
   if(code.length!==6){coopSetNote("O código precisa ter 6 caracteres.");if(input)input.focus();return}
   if(COOP.peer)coopCleanupTransport();
-  COOP.role="guest";COOP.roomCode=code;COOP.peerId="";COOP.deck=0;COOP.connected=false;COOP.status="connecting";COOP.modalView="join";COOP.modalNote="Conectando à sala…";COOP.lastRev=0;COOP.pendingSnapshot=null;COOP.dragLock=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
+  COOP.role="guest";COOP.roomCode=code;COOP.peerId="";COOP.deck=0;COOP.connected=false;COOP.status="connecting";COOP.modalView="join";COOP.modalNote="Conectando à sala…";COOP.lastRev=0;COOP.lastVisualSeq=0;COOP.pendingSnapshot=null;COOP.dragLock=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
   try{await coopLoadPeerJS()}catch(err){coopShowError(err.message);return}
   let peer;try{peer=new window.Peer({debug:1});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
   const connect=()=>{
@@ -1248,6 +1284,51 @@ function coopUpdateButtonMessage(message){
 function coopSend(message){
   if(!COOP.connected||!COOP.conn||!COOP.conn.open)return false;
   try{COOP.conn.send({...message,from:COOP.role,protocol:COOP_PROTOCOL});return true}catch(_){COOP.status="lost";coopUpdateStatus();return false}
+}
+function coopBroadcastVisual(visual,data={}){
+  if(COOP.role!=="host"||!COOP.connected||COOP.applyingSnapshot)return false;
+  return coopSend({type:"visual",visual:String(visual),data,visualSeq:++COOP.visualSeq});
+}
+function coopAnimateRemoteTotal(data,attempt=0){
+  const el=document.querySelector("#app .tot");
+  if(!el){if(attempt<15)setTimeout(()=>coopAnimateRemoteTotal(data,attempt+1),35);return}
+  const total=Math.max(0,Math.round(Number(data.total)||0)),duration=Math.max(1,Math.min(1500,Number(data.duration)||750)),start=performance.now();
+  el.textContent="= 0";
+  const tick=now=>{
+    if(!el.isConnected)return;
+    const q=Math.min(1,(now-start)/duration),e=1-Math.pow(1-q,3);
+    el.textContent="= "+fmt(total*e);
+    if(q<1)requestAnimationFrame(tick);else el.textContent="= "+fmt(total);
+  };
+  requestAnimationFrame(tick);
+}
+function coopPlayRemoteVisual(kind,data={}){
+  if(COOP.role!=="guest"||!COOP.connected)return;
+  const x=(Number(data.x)||0)*(W||window.innerWidth||1),y=(Number(data.y)||0)*(H||window.innerHeight||1);
+  switch(kind){
+    case "ring":ring(x,y,String(data.c||"#ffffff"),Number(data.d)||0);break;
+    case "burst":burst(x,y,String(data.c||"#ffffff"),Math.max(1,Math.min(90,Number(data.n)||1)),Math.max(.1,Math.min(12,Number(data.sp)||1)),String(data.ch||""));break;
+    case "float":fl(String(data.text||""),x,y,String(data.c||"#ffffff"),!!data.big,data.cls==="big"?"big":"");break;
+    case "shake":shake(Math.max(0,Math.min(24,Number(data.k)||0)));break;
+    case "flash":flash(String(data.c||"#ff5a3d"));break;
+    case "banner":banner(String(data.t||""),String(data.s||""),data.cls==="boss"?"boss":"",Math.max(500,Math.min(5000,Number(data.duration)||2100)));break;
+    case "stamp":coopDrawStampOverlay(Math.max(0,Number(data.t)||0),Math.max(0,Number(data.ratio)||0),String(data.w||""));break;
+    case "score-countup":coopAnimateRemoteTotal(data);break;
+    case "clear-transient":document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());break;
+    case "tray-flip":{const tray=document.querySelector(".tray");if(tray){tray.classList.remove("flip");void tray.offsetWidth;tray.classList.add("flip");setTimeout(()=>tray.classList.remove("flip"),550)}break}
+    case "upgrade":{
+      const k=["g","r","k"].includes(data.k)?data.k:"g",tile=data.tile&&typeof data.tile==="object"?data.tile:null;
+      if(!tile)return;
+      const play=()=>{
+        if(!COOP.connected||COOP.role!=="guest")return;
+        const source=document.querySelector('.shp-up[data-a="s'+k+'"] .tl');
+        if(!source)return;
+        const r=source.getBoundingClientRect();upFx(k,tile,{x:r.left+r.width/2,y:r.top+r.height/2},true);
+      };
+      if(document.querySelector('.shp-up[data-a="s'+k+'"] .tl'))play();else setTimeout(play,45);
+      break;
+    }
+  }
 }
 function coopMakeSnapshot(){
   const g={...G,rel:(G.rel||[]).map(r=>r&&r.id).filter(Boolean)};
@@ -1321,6 +1402,10 @@ function coopHandleGuestMessage(msg){
   if(msg.type==="chat"){coopAppendChatMessage(msg.message,"host");return}
   if(msg.type==="chatRelay"){coopAppendChatMessage(msg.message);return}
   if(msg.type==="chatHistory"){if(Array.isArray(msg.messages))msg.messages.slice(-40).forEach(m=>coopAppendChatMessage(m));return}
+  if(msg.type==="visual"){
+    const seq=Number(msg.visualSeq)||0;if(seq&&seq<=COOP.lastVisualSeq)return;if(seq)COOP.lastVisualSeq=seq;
+    coopPlayRemoteVisual(msg.visual,msg.data||{});return;
+  }
   if(msg.type==="state"){
     if(handDrag){if(!COOP.pendingSnapshot||msg.rev>COOP.pendingSnapshot.rev)COOP.pendingSnapshot=msg;return}
     coopApplySnapshot(msg);return;
