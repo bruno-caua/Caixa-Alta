@@ -30,7 +30,7 @@ body.boss{background:#170d0c}
 .goal{flex:1;min-width:0}
 .gt{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.2em;color:var(--mu);margin-bottom:6px}
 .gt b{color:var(--tx);font-weight:600;letter-spacing:.02em}
-.bar{height:3px;background:var(--ln)}.bar i{display:block;height:100%;background:var(--ti);transition:width .6s cubic-bezier(.2,.8,.2,1)}.bar.bs i{background:var(--ca)}
+.bar{height:3px;background:var(--ln)}.bar i{display:block;height:100%;background:var(--ti);transition:width .6s cubic-bezier(.2,.8,.2,1)}.bar.bs i{background:var(--bc,var(--ca))}
 .mute{flex:none;border:1px solid var(--ln);background:none;color:var(--mu);font:500 9px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.14em;padding:7px 9px;border-radius:3px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--ln)}
 .st{padding:7px 4px;text-align:center;font:600 16px/1.1 'Chivo Mono',ui-monospace,monospace}
@@ -38,7 +38,10 @@ body.boss{background:#170d0c}
 .st small{display:block;font:500 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.2em;color:var(--mu);margin-bottom:3px}
 .st.g{color:var(--mo)}
 .key{padding:2px 0 5px;text-align:center;border-bottom:1px solid var(--ln)}
-.key small{font:500 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.34em;color:var(--mu)}
+.key small{display:block;font:500 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.34em;color:var(--mu)}
+.key small.key-prize{margin:0 auto 3px;max-width:94%;font:600 12px/1.35 'Chivo Mono',ui-monospace,monospace;letter-spacing:.01em;color:color-mix(in srgb,var(--tx) 78%,var(--mu));opacity:1;white-space:normal;text-wrap:balance}
+.key small.key-prize::before{content:'◆ ';color:var(--mx);font-size:10px;vertical-align:1px}
+.key small.key-prize .kp-label{color:var(--mx);font-weight:700}
 .key b{display:block;margin:0 0 5px;font:700 28px/1.15 'Alfa Slab One',Georgia,serif;letter-spacing:0;color:var(--mx);text-indent:0}
 .key-word{position:relative;display:inline-flex;gap:.24em;line-height:1.15;white-space:nowrap}
 .key-word>span{display:block;letter-spacing:0}
@@ -46,8 +49,20 @@ body.boss{background:#170d0c}
 /* Selo de prêmio Caixa Alta: tipográfico, discreto e sem ícone. */
 .key em{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;max-width:min(100%,360px);margin:0;padding:4px 10px;border:1px solid color-mix(in srgb,var(--mx) 32%,var(--ln));border-left:2px solid var(--mx);border-radius:3px;background:linear-gradient(105deg,color-mix(in srgb,var(--mx) 10%,transparent),color-mix(in srgb,var(--mx) 2%,transparent));font:600 9px/1.25 'Chivo Mono',ui-monospace,monospace;letter-spacing:.035em;color:var(--tx);text-align:center;white-space:normal;overflow-wrap:anywhere;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mx) 3%,transparent)}
 .key em .prize-label{color:var(--mx);font-weight:700}
-.bossb{padding:6px 8px;text-align:center;font-size:11px;color:var(--ca);border:1px solid var(--ca);border-radius:3px}
-.rel{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+/* Aviso de chefe compacto: mantém o vermelho e mostra apenas selo, nome, regra e frase. */
+/* Aviso de chefe mais estreito, sem a faixa decorativa superior e centralizado. */
+.bossb{position:relative;flex:none;display:flex;align-items:center;gap:7px;width:min(100%,340px);max-width:100%;align-self:center;padding:6px 8px 6px 7px;text-align:left;border:1px solid var(--bc,var(--ca));border-left-width:3px;border-radius:3px;overflow:hidden;background:linear-gradient(100deg,color-mix(in srgb,var(--bc,var(--ca)) 16%,transparent),color-mix(in srgb,var(--bc,var(--ca)) 3%,transparent) 72%)}
+.bb-g{position:relative;flex:none;display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--bc,var(--ca));border-radius:3px;font:700 17px/1 'Alfa Slab One',Georgia,serif;letter-spacing:-.02em;color:var(--bc,var(--ca));background:color-mix(in srgb,var(--bc,var(--ca)) 12%,var(--bg));animation:bbPulse 2.6s ease-in-out infinite}
+.bossb[data-b=ce] .bb-g::after,.bossb[data-b=in] .bb-g::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;margin-top:-1.5px;background:var(--bc,var(--ca));rotate:-38deg;box-shadow:0 0 0 1px var(--bg)}
+.bb-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center}
+.bb-top{display:flex;align-items:baseline;justify-content:center;gap:6px;min-width:0;width:100%;text-align:center}
+.bb-top b{font:400 14px/1.1 'Alfa Slab One',Georgia,serif;color:var(--tx);text-align:center}
+.bb-rule{font:700 10px/1.25 'Chivo Mono',ui-monospace,monospace;color:var(--bc);text-align:center;overflow-wrap:anywhere}
+.bb-q{margin:0;font-size:9px;line-height:1.25;font-style:italic;color:var(--mu)}
+@keyframes bbPulse{50%{box-shadow:0 0 10px color-mix(in srgb,var(--bc) 40%,transparent)}}
+@media(prefers-reduced-motion:reduce){.bb-g{animation:none}}
+@media(max-height:700px) and (max-width:600px){.bb-g{width:32px;height:32px;font-size:15px}.bossb{gap:7px;padding-block:5px}.bb-top b{font-size:13px}.bb-rule{font-size:9.5px}.bb-q{font-size:8.5px}}
+.rel{display:grid;grid-template-columns:repeat(var(--rc,5),1fr);gap:6px}
 @keyframes rpop{40%{transform:scale(1.18)}}
 .board{padding:4px 0;display:flex;flex-direction:column;gap:7px;align-items:center}
 .pill{font-size:11px;letter-spacing:.06em;color:var(--mu);min-height:16px;text-align:center}
@@ -90,10 +105,19 @@ body.boss{background:#170d0c}
 .eq{display:flex;gap:14px;align-items:baseline;justify-content:center}
 .pt{text-align:center;min-width:92px;color:var(--ti)}.pt.m{color:var(--ca)}
 .pt small{display:block;font:500 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.3em;color:var(--mu)}
-.pt b{display:block;font:700 30px/1.05 'Alfa Slab One',Georgia,serif}.pt b.pop{animation:pop .32s}
+.pt{position:relative}.pt b{display:block;font:700 30px/1.05 'Alfa Slab One',Georgia,serif;font-variant-numeric:tabular-nums}.pt b.pop{animation:tallyHit .46s cubic-bezier(.2,.9,.25,1.25)}.pt.m b.pop{animation-name:tallyHitM}
 .xx{position:relative;top:22px;transform:translateY(0);color:var(--mu);font:300 22px 'Alfa Slab One',Georgia,serif}
 .tot{min-height:32px;font:700 28px/1.1 'Alfa Slab One',Georgia,serif}.tot.pv{color:var(--mu);font-size:20px}.tot.pop{animation:pop .5s}
 @keyframes pop{40%{transform:scale(1.5)}}
+
+/* Contagem de pontos: número rola, brilha e ganha uma barra de impacto a cada carta/poder. */
+@keyframes tallyHit{0%{transform:scale(1);filter:none}28%{transform:scale(1.4) translateY(-3px);filter:brightness(1.55);text-shadow:0 0 14px currentColor,0 0 32px color-mix(in srgb,currentColor 55%,transparent)}100%{transform:scale(1);filter:none;text-shadow:0 0 0 transparent}}
+@keyframes tallyHitM{0%{transform:scale(1) rotate(0);filter:none}28%{transform:scale(1.48) translateY(-4px) rotate(-3deg);filter:brightness(1.55);text-shadow:0 0 16px currentColor,0 0 36px color-mix(in srgb,currentColor 60%,transparent)}100%{transform:scale(1) rotate(0);filter:none;text-shadow:0 0 0 transparent}}
+.pt:has(b.pop)::after{content:"";position:absolute;left:14%;right:14%;bottom:-6px;height:2px;border-radius:2px;background:currentColor;box-shadow:0 0 10px currentColor;transform-origin:left;animation:tallyBar .46s ease-out both}
+@keyframes tallyBar{0%{transform:scaleX(0);opacity:1}65%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+.tl.hl{animation:tileTally .44s cubic-bezier(.2,.9,.25,1.2) both;box-shadow:0 0 0 2px var(--mx),0 0 24px color-mix(in srgb,var(--mx) 70%,transparent),0 7px 0 #0005}
+@keyframes tileTally{0%{transform:translateY(0) scale(1);filter:none}34%{transform:translateY(-22px) scale(1.26) rotate(-3deg);filter:brightness(1.4) saturate(1.25)}68%{transform:translateY(-12px) scale(1.12) rotate(1.5deg)}100%{transform:translateY(-14px) scale(1.15);filter:none}}
+@media(prefers-reduced-motion:reduce){.pt b.pop,.pt:has(b.pop)::after,.tl.hl{animation:none!important}}
 .msg{font-size:11px;min-height:14px;text-align:center;color:var(--mx)}
 .tl{position:relative;width:var(--tw);height:var(--th);border:0;padding:0;border-radius:3px;cursor:pointer;background:var(--pp);color:var(--pk);font:700 calc(var(--tw)*.64)/1 'Alfa Slab One',Georgia,serif;display:grid;place-items:center;box-shadow:0 3px 0 var(--ps);transition:transform .12s}
 .tl small{position:absolute;right:3px;bottom:2px;font:600 calc(var(--tw)*.22) 'Chivo Mono',ui-monospace,monospace;opacity:.55}
@@ -186,7 +210,9 @@ span.rs{cursor:default}
 .bn{position:fixed;left:0;right:0;top:32%;z-index:60;pointer-events:none;text-align:center;padding:16px 0;background:color-mix(in srgb,var(--bg) 93%,transparent);border-block:1px solid var(--ln);animation:bn 2s ease forwards}
 .bn b{display:block;font:700 clamp(26px,8vw,40px) 'Alfa Slab One',Georgia,serif;letter-spacing:.2em;text-indent:.2em}
 .bn span{font-size:11px;letter-spacing:.1em;color:var(--mu)}
-.bn.boss b{color:var(--ca)}
+.bn.boss b{color:var(--bc,var(--ca))}
+.bn.boss{border-block-color:var(--bc,var(--ca));background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--bc,var(--ca)) 14%,var(--bg)) 22% 78%,transparent)}
+.bn.boss span{color:var(--tx);font-weight:600;letter-spacing:.08em}
 @keyframes bn{0%{opacity:0;scale:.9}14%{opacity:1;scale:1.03}24%{scale:1}80%{opacity:1}100%{opacity:0}}
 .pt.m b{text-shadow:0 0 calc(var(--hot,0)*18px) var(--ca),0 0 calc(var(--hot,0)*42px) var(--ca)}
 @keyframes land{0%{scale:.55;rotate:-9deg}60%{scale:1.14;rotate:3deg}100%{scale:1;rotate:0}}
@@ -194,7 +220,7 @@ span.rs{cursor:default}
 .rdy{animation:rdy 1s ease-in-out infinite}@keyframes rdy{50%{box-shadow:0 0 0 5px #ffffff30}}
 .bar.hot i{animation:glow .7s ease-in-out infinite alternate}@keyframes glow{to{filter:brightness(1.7);box-shadow:0 0 12px #fff}}
 .key.hit{animation:kh .5s}@keyframes kh{40%{scale:1.08}}
-.logo .tl{animation:bob 2.6s ease-in-out infinite;animation-delay:calc(var(--i)*-.2s)}@keyframes bob{50%{translate:0 -7px;rotate:2deg}}
+.logo .tl{animation:bob 2.6s ease-in-out infinite;animation-delay:calc(var(--i)*-.2s - var(--ph,0s))}@keyframes bob{50%{translate:0 -7px;rotate:2deg}}
 .steps{display:flex;flex-direction:column;gap:9px;width:100%;text-align:left}.steps div{display:flex;gap:10px;align-items:flex-start;color:color-mix(in srgb,var(--tx) 78%,var(--bg));font-size:12px;line-height:1.45}.steps i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--tx);color:var(--bg);display:grid;place-items:center;font:700 11px 'Chivo Mono',monospace;font-style:normal}
 .tgs{display:flex;gap:6px;flex:none}
 :root[data-theme=l]{--bg:#efebe2;--tx:#16140f;--mu:#6f695c;--ln:#d3ccbb;--pp:#fffdf8;--pk:#16140f;--ps:#b9b19d;--ti:#16140f;--ca:#e2431f;--mx:#b36d00;--mo:#1d8f52;--ex:#7a4fd6;--gs:#000;--gg:#0003;--fc:#e2431f;color-scheme:light}
@@ -318,9 +344,9 @@ span.rs{cursor:default}
 .shp-pay{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;font-size:10px;line-height:1.4;color:var(--mu)}
 .shp-pay i{font:600 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.18em;font-style:normal}
 .shp-pay b{font-weight:700;color:var(--mo);margin-left:2px}
-.shp-boss{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 7px;padding-top:6px;border-top:1px solid var(--edge);font-size:10px;line-height:1.35;color:var(--mu)}
-.shp-boss i{font:700 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.16em;font-style:normal;color:var(--ca)}
-.shp-boss b{font-size:11px;color:var(--tx)}
+.shp-boss{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:3px 6px;padding:0;margin:0;font-size:10px;line-height:1.35;color:var(--mu)}
+.shp-boss-label{font:600 10px 'Chivo Mono',ui-monospace,monospace;color:var(--mu);letter-spacing:0}
+.shp-boss-name{font:700 11px 'Chivo Mono',ui-monospace,monospace;color:var(--ca)!important;letter-spacing:0}
 .shp-msg{min-height:15px;margin:-2px 0;text-align:center;font-size:10.5px;line-height:1.4;color:var(--mx)}
 .shp-msg.bad{color:var(--ca)}
 
@@ -535,7 +561,7 @@ span.rs{cursor:default}
   #app:has(.handw)>.stats .st{font-size:20px;padding:10px}
   #app:has(.handw)>.key{padding:10px 0 14px}
   #app:has(.handw)>.key b{font-size:clamp(36px,4vw,54px);margin-bottom:10px}
-  #app:has(.handw)>.rel{grid-template-columns:repeat(5,minmax(74px,110px));justify-content:start;gap:10px;padding:2px 0}
+  #app:has(.handw)>.rel{grid-template-columns:repeat(var(--rc,5),minmax(74px,110px));justify-content:start;gap:10px;padding:2px 0}
   #app:has(.handw)>.rel .rs{--rh:88px;max-width:110px}
   #app:has(.handw)>.rel .rs .art{--af:34px}
   #app:has(.handw)>.board{grid-column:1;align-self:center;width:100%;gap:12px;padding:8px 0}
@@ -731,6 +757,24 @@ span.rs{cursor:default}
 @media(max-width:360px){.shp-artifact{grid-template-columns:34px minmax(0,1fr) auto;gap:8px;padding:8px}.shp-art-mark{width:32px;height:42px;font-size:17px}.shp-art-title b{font-size:9px}.shp-art-copy small{font-size:8px}.shp-tab{font-size:8px;letter-spacing:.08em}}
 @media(prefers-reduced-motion:reduce){.shp-tab,.shp-artifact{transition:none!important}}
 
+
+/* ===== Fases: cada uma muda o clima do fundo, e o chefe se adapta à cor da fase ===== */
+body{transition:background-color .9s ease}
+body.wd1{--bg:#081318;--bc:#c77dff}
+body.wd1.boss{background:#160a1f}
+body.wd2{--bg:#14100b;--bc:#5fb0ff}
+body.wd2.boss{background:#091221}
+:root[data-theme=l] body.wd1{--bg:#e0edec;--bc:#8a3fd0}
+:root[data-theme=l] body.wd1.boss{background:#ebdff5}
+:root[data-theme=l] body.wd2{--bg:#f2e9d4;--bc:#1f6fc0}
+:root[data-theme=l] body.wd2.boss{background:#dae7f6}
+.wnext{display:inline-flex;align-items:center;gap:8px;font:700 9px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.22em;color:var(--mu)}
+.wnext i{width:9px;height:9px;border-radius:50%;background:var(--wc,var(--mx));box-shadow:0 0 12px var(--wc,var(--mx))}
+.devtag{font:700 9px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.3em;color:var(--mo)}
+.devrow{flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;width:100%;padding:6px 8px;border:1px dashed color-mix(in srgb,var(--mo) 55%,var(--ln));border-radius:4px;font:600 9px 'Chivo Mono',ui-monospace,monospace;color:var(--mo)}
+.devrow i{font-style:normal;font-weight:700;letter-spacing:.24em}
+.devrow button{font:inherit;letter-spacing:.06em;color:var(--tx);background:color-mix(in srgb,var(--mo) 10%,transparent);border:1px solid color-mix(in srgb,var(--mo) 40%,var(--ln));border-radius:3px;padding:6px 9px;cursor:pointer}
+#app:has(.handw)>.devrow{grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -920,11 +964,11 @@ const UPS={
 };
 const ARTIFACTS=[
  {id:"seal",n:"Selo de Expansão",d:"Abre +1 espaço permanente para um poder nesta partida.",c:22,r:2,mark:"＋"},
- {id:"glove",n:"Luva do Crupiê",d:"Você recebe +1 carta na mão em cada fase.",c:15,r:1,mark:"Ⅱ"},
- {id:"ticket",n:"Bilhete Dourado",d:"Concede +1 jogada em todas as fases seguintes.",c:21,r:2,mark:"↗"},
- {id:"exchange",n:"Ficha de Reposição",d:"Concede +1 troca de letras por fase.",c:16,r:1,mark:"↻"},
+ {id:"glove",n:"Luva do Crupiê",d:"Você recebe +1 carta na mão em cada partida.",c:15,r:1,mark:"Ⅱ"},
+ {id:"ticket",n:"Bilhete Dourado",d:"Concede +1 jogada em todas as partidas seguintes.",c:21,r:2,mark:"↗"},
+ {id:"exchange",n:"Ficha de Reposição",d:"Concede +1 troca de letras por partida.",c:16,r:1,mark:"↻"},
  {id:"press",n:"Prensa de Tinta",d:"Toda palavra válida começa com +8 pontos extras.",c:16,r:1,mark:"＋"},
- {id:"vault",n:"Cofre de Fase",d:"Receba +2 moedas sempre que concluir uma fase.",c:20,r:2,mark:"$"},
+ {id:"vault",n:"Cofre de Partida",d:"Receba +2 moedas sempre que concluir uma partida.",c:20,r:2,mark:"$"},
  {id:"lens",n:"Lente das Raras",d:"Cada letra rara usada acrescenta +3 de bônus.",c:18,r:2,mark:"◇"},
  {id:"merchant",n:"Lente do Mercador",d:"Trocar a vitrine custa $1 a menos (mínimo $1).",c:16,r:1,mark:"−"},
  {id:"ledger",n:"Livro-Caixa",d:"Palavras de 5 letras ou mais rendem +$1.",c:14,r:1,mark:"$"},
@@ -949,22 +993,37 @@ const POW=[
  {n:"Geada",d:"+120 pontos",f:x=>ac(x,120)}
 ];
 const BOSSES=[
- {id:"ce",n:"O Censor",d:"Uma letra fica proibida"},
- {id:"cu",n:"O Exigente",d:"Só vale palavra com 4+ letras"},
- {id:"ga",n:"O Gago",d:"Sem letras repetidas"},
- {id:"av",n:"O Avarento",d:"−1 jogada e −1 troca"}
+ {id:"ce",n:"O Censor",t:"Guardião do Alfabeto",g:"?",q:"“Esta letra não passa. Já risquei da língua.”",d:"Uma letra fica proibida"},
+ {id:"cu",n:"O Exigente",t:"Mestre da Medida",g:"4+",q:"“Palavrinha curta? Aqui não. Quero tamanho.”",d:"Só vale palavra com 4+ letras"},
+ {id:"ga",n:"O Gago",t:"Rei do Eco",g:"A·A",q:"“Re-re-repetir letra? N-n-nem pensar!”",d:"Sem letras repetidas"},
+ {id:"av",n:"O Avarento",t:"Guardião do Cofre",g:"−1",q:"“Cada jogada custa caro. Vou cobrar a minha.”",d:"−1 jogada e −1 troca"}
 ];
-const FINAL={id:"le",n:"O Professor",d:"Só vale palavra com 5+ letras"};
-const bossTxt=b=>b.id==="ce"&&b.ban?"letra proibida: "+b.ban:b.d;
+const FINAL={id:"le",n:"O Professor",t:"Examinador Final",g:"5+",q:"“Cinco letras ou nada. A caneta vermelha já está na minha mão.”",d:"Só vale palavra com 5+ letras"};
+const FINAL2={id:"in",n:"O Inquisidor",t:"Juiz da Última Palavra",g:"5+",q:"“Cinco letras, nenhuma proibida. Erre e eu risco você.”",d:"5+ letras e uma letra proibida"};
+const bossTxt=b=>b.ban&&b.id==="ce"?"letra proibida: "+b.ban:b.ban&&b.id==="in"?"5+ letras e letra proibida: "+b.ban:b.d;
+const cap=x=>{x=String(x??"");return x.charAt(0).toUpperCase()+x.slice(1)};
 const METAS=[230,460,820,1400,2250,3600,5600,8500];
 const metaOf=n=>n<8?METAS[n]:Math.round(METAS[7]*Math.pow(1.65,n-7));
-const bossAt=n=>n===7?FINAL:(n===2||n===5||(n>7&&n%3===1))?pick(BOSSES):null;
+/* Uma fase = 8 partidas. O chefe só aparece na última partida de cada fase. */
+const worldOf=n=>Math.floor(Math.max(0,Number(n)||0)/8);
+const bossAt=n=>{if(n%8!==7)return null;const w=worldOf(n);return w===0?FINAL:w===1?FINAL2:pick([...BOSSES,FINAL,FINAL2])};
+const WORLDS=[
+ {n:"Tinta",d:"as letras sobem como bolhas de tinta",fx:"#ffb21f"},
+ {n:"Aurora",d:"uma chuva de letras sob a luz do norte",fx:"#7ee8d8"},
+ {n:"Eclipse",d:"as letras orbitam um sol apagado",fx:"#ffcf6e"}
+];
 const STD="A7 E7 I4 O6 U3 S5 R4 N3 T3 D3 M3 C3 L3 P2 V2 F2 B2 G2 H1 Q1 J1 X1 Z1 K1 W1 Y1";
 const DECKS=[
  {n:"Clássica",d:"Letras equilibradas. Boa para começar.",mk:STD,$:4,rel:[],jog:0,desc:0},
  {n:"Raridades",d:"Cheio de letras raras (J Q X Z K W Y), que valem muito. Já começa com Letras Raras.",mk:"A6 E6 I3 O5 U2 S5 R4 N3 T3 D2 M2 C2 L2 P2 V1 F1 B1 G1 H1 Q2 J2 X2 Z2 K2 W2 Y2",$:4,rel:["lr"],jog:0,desc:0},
  {n:"Curtinhas",d:"Já começa com Palavra Curta (×2 bônus em palavras de 3 a 4 letras), mas com 1 troca a menos.",mk:STD,$:4,rel:["ne"],jog:0,desc:-1},
- {n:"Reserva",d:"Começa com $10 e o poder Cofrinho (+$2 por fase), mas com 1 jogada a menos.",mk:STD,$:10,rel:["cx"],jog:-1,desc:0}
+ {n:"Reserva",d:"Começa com $10 e o poder Cofrinho (+$2 por partida), mas com 1 jogada a menos.",mk:STD,$:10,rel:["cx"],jog:-1,desc:0},
+ {n:"Vogais",d:"Quase só vogais. Começa com Refrão (+3 bônus por vogal).",mk:"A9 E9 I5 O7 U3 S5 R4 N4 T3 D2 M2 C2 L2 P1 V1 B1 G1 H1",$:4,rel:["re"],jog:0,desc:0},
+ {n:"Consoantes",d:"Muitas consoantes e poucas vogais. Começa com Fogueira (+3 bônus por consoante).",mk:"A6 E6 I4 O5 U3 S6 R5 N5 T5 D4 M4 C4 L4 P3 V2 F2 B2 G2 H2",$:4,rel:["fo"],jog:0,desc:0},
+ {n:"Longas",d:"Começa com Maré (×1,6 em palavras de 5+ letras), mas só com $2.",mk:STD,$:2,rel:["ma"],jog:0,desc:0},
+ {n:"Dourada",d:"8 letras já douradas e o poder Fio de Ouro (+4 bônus por letra melhorada), com $3.",mk:STD,$:3,rel:["fi"],jog:0,desc:0,gd:8},
+ {n:"Alfabeto",d:"Todas as letras bem distribuídas. Começa com Diversidade (+3 pontos por letra diferente).",mk:"A4 E4 I3 O3 U2 S3 R3 N3 T3 D2 M2 C2 L2 P2 V2 F2 B2 G2 H2 Q2 J2 X2 Z2 K2 W2 Y2",$:4,rel:["dv"],jog:0,desc:0},
+ {n:"Aposta",d:"Começa com Bônus Geral (×1,5 em toda palavra), mas com 1 jogada e 1 troca a menos.",mk:STD,$:4,rel:["pe"],jog:-1,desc:-1}
 ];
 
 /* ---------- estado ---------- */
@@ -1011,15 +1070,16 @@ function stamp(t,ratio,w){
   if(ratio>.25)flash(c);
 }
 let G={mode:"title",dk:0,rel:[],relics:[],relicOffers:[],shopTab:"powers",pendingRecord:null,lastRecordNotice:null},R=null,TID=0;
-const hasMoney=cost=>!!(G&&G.biaMode)||Number(G&&G.$||0)>=Number(cost||0);
-const spendMoney=cost=>{if(G&&!G.biaMode)G.$-=Number(cost||0)};
-const moneyLabel=()=>G&&G.biaMode?"∞":"$"+fmt(Math.max(0,Number(G&&G.$)||0));
+let DEV=false;
+const hasMoney=cost=>!!(G&&G.biaMode)||DEV||Number(G&&G.$||0)>=Number(cost||0);
+const spendMoney=cost=>{if(G&&!G.biaMode&&!DEV)G.$-=Number(cost||0)};
+const moneyLabel=()=>G&&(G.biaMode||DEV)?"∞":"$"+fmt(Math.max(0,Number(G&&G.$)||0));
 /* O Coop fica isolado do save e das regras do modo solo. */
 let COOP={role:null,status:"off",peer:null,conn:null,roomCode:"",peerId:"",deck:0,modalView:"menu",modalNote:"",createBiaMode:false,biaMode:false,connected:false,rev:0,lastRev:0,syncTimer:0,pendingSnapshot:null,applyingSnapshot:false,remoteDispatch:false,suppressAudioRelay:false,dragLock:null,remotePreview:null,dragRejected:null,hasStarted:false,previewPending:null,previewLastAt:0,previewTimer:0,chatMessages:[],chatOpen:false,chatUnread:0,visualSeq:0,lastVisualSeq:0,audioPending:[],audioTimer:0,audioSeq:0,actionSeq:0,optimisticActions:[],landAcc:new Set(),suppressLandIds:new Set(),dragCommitPending:null,swapHiddenIds:new Set()};
 const mkTile=l=>({l,g:0,r:0,k:0,skin:"",up:{},id:++TID,o:0});
 const cnt=p=>G.rel.filter(r=>r.p===p).length;
 const wd=ts=>ts.map(t=>t.l).join("");
-const banned=t=>R&&R.boss&&R.boss.id==="ce"&&R.boss.ban===t.l;
+const banned=t=>R&&R.boss&&(R.boss.id==="ce"||R.boss.id==="in")&&R.boss.ban===t.l;
 
 /* ---------- áudio ---------- */
 let ax=null;
@@ -1096,6 +1156,41 @@ function size(){
 window.addEventListener("resize",size,{passive:true});
 window.addEventListener("orientationchange",()=>requestAnimationFrame(size),{passive:true});
 size();
+let WIDX=0;
+const WFX=[
+ {boss:"#ff4f7b"},
+ {ink:"#7ee8d8",inkL:"#14857a",boss:"#d9a0ff",bossL:"#7a3fc0",a:["126,232,216","120,140,255","110,240,160"],ab:["190,110,255","255,120,200","120,150,255"]},
+ {ink:"#ffcf6e",inkL:"#a8650a",boss:"#8fc8ff",bossL:"#2a6fb8",c:"255,190,90",cb:"110,170,255",bg:["#14100b","#091221"],bgL:["#f2e9d4","#dae7f6"]}
+];
+function applyWorld(){
+  const idx=(typeof G!=="undefined"&&G&&G.mode!=="title"&&Number.isFinite(G.n))?worldOf(G.n)%WORLDS.length:0;
+  WIDX=idx;const c=document.body.classList;c.toggle("wd1",idx===1);c.toggle("wd2",idx===2);
+}
+/* Camada de trás: cortinas de aurora (fase 2) e coroa do eclipse (fase 3). */
+function worldBack(t,boss,light){
+  const tt=t/1000;
+  if(WIDX===1){
+    const cols=boss?WFX[1].ab:WFX[1].a,al=light?.15:.2;
+    for(let k=0;k<3;k++){
+      const x=W*(.14+.36*k+.1*Math.sin(tt*.23+k*2.1)),y=H*(.1+.08*Math.sin(tt*.31+k*1.7)),r=Math.max(W,H*.75)*(.55+.08*Math.sin(tt*.4+k));
+      bc.save();bc.translate(x,0);bc.scale(.5,1);
+      const gr=bc.createRadialGradient(0,y,0,0,y,r);gr.addColorStop(0,"rgba("+cols[k]+","+al+")");gr.addColorStop(1,"rgba("+cols[k]+",0)");
+      bc.globalAlpha=1;bc.fillStyle=gr;bc.fillRect(-W*2,0,W*4,H);bc.restore();
+    }
+  }else if(WIDX===2){
+    const f=WFX[2],c=boss?f.cb:f.c,R0=Math.min(W,H)*.17*(1+.012*Math.sin(tt*1.3)),cx=W/2,cy=H*.4;
+    const gr=bc.createRadialGradient(cx,cy,R0*.85,cx,cy,R0*2.5);gr.addColorStop(0,"rgba("+c+","+(light?.3:.34)+")");gr.addColorStop(1,"rgba("+c+",0)");
+    bc.globalAlpha=1;bc.fillStyle=gr;bc.fillRect(0,0,W,H);
+  }
+}
+/* Camada da frente: o disco escuro do eclipse cobre as letras que passam atrás dele. */
+function worldFront(t,boss,light){
+  if(WIDX!==2)return;
+  const f=WFX[2],tt=t/1000,R0=Math.min(W,H)*.17*(1+.012*Math.sin(tt*1.3)),cx=W/2,cy=H*.4,c=boss?f.cb:f.c;
+  bc.globalAlpha=1;bc.fillStyle=(light?f.bgL:f.bg)[boss?1:0];bc.beginPath();bc.arc(cx,cy,R0,0,6.2832);bc.fill();
+  bc.lineWidth=7;bc.strokeStyle="rgba("+c+",.12)";bc.stroke();
+  bc.lineWidth=1.6;bc.strokeStyle="rgba("+c+",.7)";bc.stroke();
+}
 const GL=[];for(let i=0;i<34;i++)GL.push({x:Math.random(),y:Math.random(),s:16+Math.random()*38,v:.02+Math.random()*.06,ch:"ABCDEFGHIJLMNOPQRSTUVXZ"[i%23],a:.04+Math.random()*.07,w:Math.random()*6});
 function burst(x,y,col,n,sp,ch){
   coopBroadcastVisual("burst",{x:x/(W||window.innerWidth||1),y:y/(H||window.innerHeight||1),c:String(col||"#ffffff"),n:Math.max(1,Math.min(90,Math.round(Number(n)||1))),sp:Math.max(.1,Math.min(12,Number(sp)||1)),ch:ch?String(ch).slice(0,2):""});
@@ -1105,8 +1200,23 @@ function loop(t){
   frameHandle=null;
   const dt=Math.min(40,t-lastT)/16.7;lastT=t;
   bc.setTransform(DPR,0,0,DPR,0,0);bc.clearRect(0,0,W,H);
-  bc.fillStyle=document.body.classList.contains("boss")?"#ff4f7b":ink();bc.textAlign="center";bc.textBaseline="middle";
-  for(const g of GL){g.y-=g.v*dt*.012;if(g.y<-.1){g.y=1.1;g.x=Math.random()}g.w+=.01*dt;bc.globalAlpha=g.a;bc.font="900 "+g.s+"px 'Alfa Slab One',Georgia,serif";bc.save();bc.translate(g.x*W+Math.sin(g.w)*12,g.y*H);bc.rotate(Math.sin(g.w*.7)*.4);bc.fillText(g.ch,0,0);bc.restore()}
+  const isBoss=document.body.classList.contains("boss"),light=!!S.theme,wf=WFX[WIDX]||WFX[0];
+  const letterCol=isBoss?((light&&wf.bossL)||wf.boss):(wf.ink?(light?wf.inkL:wf.ink):ink());
+  worldBack(t,isBoss,light);
+  bc.fillStyle=letterCol;bc.textAlign="center";bc.textBaseline="middle";
+  if(WIDX===1){
+    /* Fase 2 · Aurora: as letras caem em chuva, deixando um rastro. */
+    for(const g of GL){g.y+=(g.v*.03+.0007)*dt;if(g.y>1.1){g.y=-.1;g.x=Math.random()}g.w+=.008*dt;
+      const sz=g.s*.8,x=g.x*W+Math.sin(g.w)*6;bc.font="900 "+sz+"px 'Alfa Slab One',Georgia,serif";
+      for(let k=0;k<4;k++){bc.globalAlpha=Math.min(.2,g.a*1.25)*(1-k*.27);bc.save();bc.translate(x,g.y*H-k*sz*.5);bc.rotate(.12);bc.fillText(g.ch,0,0);bc.restore()}}
+  }else if(WIDX===2){
+    /* Fase 3 · Eclipse: as letras giram em órbita ao redor do sol apagado. */
+    for(const g of GL){g.w+=.0032*dt*(.6+g.v*8);const a=g.w+g.x*6.2832,dp=Math.sin(a),x=W/2+Math.cos(a)*W*(.2+.42*g.x),y=H*.4+dp*H*(.16+.3*g.y);
+      bc.globalAlpha=Math.min(.22,g.a*(.75+.5*dp));bc.font="900 "+(g.s*(.78+.3*dp))+"px 'Alfa Slab One',Georgia,serif";bc.save();bc.translate(x,y);bc.rotate(Math.cos(a)*.3);bc.fillText(g.ch,0,0);bc.restore()}
+  }else{
+    for(const g of GL){g.y-=g.v*dt*.012;if(g.y<-.1){g.y=1.1;g.x=Math.random()}g.w+=.01*dt;bc.globalAlpha=g.a;bc.font="900 "+g.s+"px 'Alfa Slab One',Georgia,serif";bc.save();bc.translate(g.x*W+Math.sin(g.w)*12,g.y*H);bc.rotate(Math.sin(g.w*.7)*.4);bc.fillText(g.ch,0,0);bc.restore()}
+  }
+  worldFront(t,isBoss,light);
   bc.globalAlpha=1;
   fc.setTransform(DPR,0,0,DPR,0,0);fc.clearRect(0,0,W,H);fc.textAlign="center";fc.textBaseline="middle";
   for(let i=P.length-1;i>=0;i--){const p=P[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.l-=p.d*dt;if(p.l<=0){P.splice(i,1);continue}
@@ -1119,6 +1229,10 @@ window.addEventListener("pagehide",stopFrames);
 window.addEventListener("pageshow",()=>{size();startFrames()});
 startFrames();
 function ctr(q){const e=document.querySelector(q);if(!e)return{x:W/2,y:H/2};const r=e.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
+function rollNum(el,a,b,ms,f){
+  if(!el||a===b)return;const t0=performance.now();
+  (function r(n){if(!el.isConnected)return;const q=Math.min(1,(n-t0)/ms),e=1-Math.pow(1-q,3);el.textContent=f(a+(b-a)*e);if(q<1)requestAnimationFrame(r);else el.textContent=f(b)})(t0)
+}
 function fl(txt,x,y,col,big,cls){
   coopBroadcastVisual("float",{text:String(txt??"").slice(0,100),x:x/(W||window.innerWidth||1),y:y/(H||window.innerHeight||1),c:String(col||"#ffffff"),big:!!big,cls:cls==="big"?"big":""});
   const e=document.createElement("div");e.className="ft"+(big?" x":"")+(cls?" "+cls:"");e.textContent=txt;e.style.cssText="left:"+x+"px;top:"+y+"px;color:"+col;document.body.appendChild(e);setTimeout(()=>e.remove(),1500)
@@ -1186,6 +1300,8 @@ function legal(ts){
     if(b.id==="cu"&&w.length<4)return"O Exigente quer 4+ letras";
     if(b.id==="ga"&&new Set(w).size<w.length)return"O Gago proíbe letras repetidas";
     if(b.id==="le"&&w.length<5)return"O Professor quer 5+ letras";
+    if(b.id==="in"&&w.length<5)return"O Inquisidor quer 5+ letras";
+    if(b.id==="in"&&ts.some(t=>t.l===b.ban))return"O Inquisidor proíbe a letra "+b.ban;
   }
   return null;
 }
@@ -1194,6 +1310,7 @@ function forma(w,pool){const u=new Set(),ts=[];for(const ch of w.toUpperCase()){
 function novo(){
   au();sDeal();const dk=DECKS[G.dk||0],col=[];
   dk.mk.split(" ").forEach(s=>{for(let i=0;i<+s.slice(1);i++)col.push(mkTile(s[0]))});
+  if(dk.gd){const ix=col.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,dk.gd);ix.forEach(i=>{col[i].g=1})}
   const coopRun=COOP.role==="host"&&COOP.connected,biaMode=coopRun&&!!COOP.biaMode;
   G={mode:"play",dk:G.dk||0,$:coopRun?(biaMode?dk.$:0):dk.$,biaMode,n:0,rel:dk.rel.map(id=>REL.find(r=>r.id===id)),relics:[],relicOffers:[],shopTab:"powers",col,jogB:dk.jog,descB:dk.desc,endless:false,rr:0,nb:null,sel:-1,msg:"",sellNotice:null,pendingRecord:null,lastRecordNotice:null,stat:{words:0,neo:0,bw:"",bs:0}};
   S.runs++;save();rodada();
@@ -1202,13 +1319,13 @@ function rodada(){
   const n=G.n,bo=n>0&&G.nb?{...G.nb}:null;
   const okW=w=>{const W=w.toUpperCase();if(!bo)return true;if(bo.id==="ga")return new Set(W).size===W.length;if(bo.id==="cu")return W.length>=4;return true};
   let sw;do{sw=pick(POOLW)}while(!okW(sw));
-  if(bo&&bo.id==="ce")bo.ban=pick("AEOSRNI".split("").filter(l=>!sw.toUpperCase().includes(l)));
+  if(bo&&(bo.id==="ce"||bo.id==="in"))bo.ban=pick("AEOSRNI".split("").filter(l=>!sw.toUpperCase().includes(l)));
   const av=bo&&bo.id==="av"?1:0;
   R={n,meta:metaOf(n),sc:0,jog:Math.max(1,4+cnt("jog")+G.jogB-av+(hasArtifact("ticket")?1:0)),desc:Math.max(0,3+cnt("desc")+G.descB-av+(hasArtifact("exchange")?1:0)),sw,pw:pick(POW),boss:bo,hs:8+cnt("hand")+(hasArtifact("glove")?1:0),hand:[],st:[],stPos:[],deck:emb([...G.col]),msg:"",an:null,lock:false,fast:false,fresh:new Set(),landId:null,oc:1};
   for(const ch of sw.toUpperCase()){const i=R.deck.findIndex(t=>t.l===ch);const t=i>=0?R.deck.splice(i,1)[0]:mkTile(ch);R.hand.push(t)}
   R.hand.forEach(t=>{t.o=Math.random();R.fresh.add(t.id)});
   puxa();G.mode="play";ren();
-  banner("FASE "+(n+1),bo?"CHEFE · "+bo.n+" · "+bossTxt(bo):"Faça "+fmt(R.meta)+" pontos",bo?"boss":"");
+  banner(bo?"PARTIDA "+(n%8+1)+" · CHEFE DA FASE":"PARTIDA "+(n%8+1),bo?bo.n+", "+bo.t.toLowerCase()+" — "+bossTxt(bo):"Faça "+fmt(R.meta)+" pontos",bo?"boss":"");
 }
 function puxa(){while(R.hand.length+R.st.length<R.hs&&R.deck.length){const t=R.deck.pop();t.o=1+R.oc++;R.hand.push(t);R.fresh.add(t.id)}R.hand.sort((a,b)=>a.o-b.o)}
 function sortStByPos(){
@@ -1283,15 +1400,16 @@ async function jogar(){
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
-    const A=R.an;A.pop=(A.c!==s.c?"c":"")+(A.m!==s.m?"m":"");A.c=s.c;A.m=s.m;A.tile=s.k==="t"?s.i:-1;A.rel=s.k==="r"?s.i:-1;
-    if(s.k==="pw")A.msg="TRECHO ENCAIXADO · "+R.pw.d;
+    const A=R.an,pc=A.c,pm=A.m;A.pop=(A.c!==s.c?"c":"")+(A.m!==s.m?"m":"");A.c=s.c;A.m=s.m;A.tile=s.k==="t"?s.i:-1;A.rel=s.k==="r"?s.i:-1;
     ren();coopSendSnapshot(true);
+    {const bs=document.querySelectorAll(".eq .pt b");if(bs[0]&&pc!==A.c)rollNum(bs[0],pc,A.c,340,v=>fmt(Math.round(v)));if(bs[1]&&pm!==A.m)rollNum(bs[1],pm,A.m,340,v=>fm(v))}
+    {const k=Math.min(14,x.steps.indexOf(s));tone(520*Math.pow(2,k/12),0,.17,.045,"sine",0,1);tone(1040*Math.pow(2,k/12),.03,.12,.02,"triangle",0,1)}
     const sel=s.k==="t"?'[data-s="'+s.i+'"]':s.k==="r"?'.rel [data-r="'+s.i+'"]':".key",p=ctr(sel);COOP.anchorSel=sel;
     s.lb.forEach((l,j)=>fl(l.t,p.x+(j%2?20:-20),p.y-14-j*16,colK[l.k]||"#fff",l.k==="x"));
     if(s.k==="t"){sMar(s.i);burst(p.x,p.y,ink(),7,3,ts[s.i].l);vb(5);fxT(ts[s.i],p)}
     else{sRel(s.k==="r"?s.i:5);fxR(s,p);if(s.lb.some(l=>l.k==="x"))shake(5)}
     COOP.anchorSel=null;
-    await dz(s.k==="t"?420:600);
+    await dz(s.k==="t"?Math.max(280,430-x.steps.indexOf(s)*18):600);
   }
   const t=Math.round(x.c*x.m),ratio=t/R.meta;
   R.lastScore={value:t,word:x.w,at:Date.now()};
@@ -1329,7 +1447,7 @@ async function vence(){
   G.pendingRecord=null;G.lastRecordNotice=null;
   // Nunca permita que mensagens flutuantes sobrevivam à troca para a loja.
   coopClearTransientVisuals();
-  if(G.n===7&&!G.endless){fim(true);return}
+  if(G.n%8===7){fim(true);return}
   // Atualiza a tela da fase atual e mostra as mensagens em sequência, ainda fora da loja.
   ren();coopSendSnapshot(true);burst(W/2,H*.3,"#ffb21f",60,8);
   if(recordNotice){
@@ -1337,7 +1455,7 @@ async function vence(){
     await d0(1330);
     coopClearTransientVisuals();
   }
-  banner("FASE VENCIDA",G.biaMode?"MODO BIA · MOEDAS ∞":"+$"+p.tot+" moedas","money",1450);
+  banner("PARTIDA VENCIDA",G.biaMode?"MODO BIA · MOEDAS ∞":"+$"+p.tot+" moedas","money",1450);
   await d0(1750);
   coopClearTransientVisuals();
   G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";oferta();ofertaRelics();ren();coopSendSnapshot(true);
@@ -1351,8 +1469,8 @@ function oferta(){
 function ofertaRelics(){
   const owned=new Set(Array.isArray(G.relics)?G.relics:[]),pool=ARTIFACTS.filter(a=>!owned.has(a.id));
   G.relicOffers=[];
-  if(!pool.length||Math.random()>=.28)return;
-  const count=pool.length>1&&Math.random()<.16?2:1;
+  if(!pool.length||Math.random()>=.13)return;
+  const count=pool.length>1&&Math.random()<.05?2:1;
   while(G.relicOffers.length<count&&pool.length){
     const weights=pool.map(a=>a.r===0?6:a.r===1?3:1);let roll=Math.random()*weights.reduce((a,b)=>a+b,0),i=0;
     for(;i<pool.length;i++){roll-=weights[i];if(roll<0)break}
@@ -1431,6 +1549,53 @@ function vender(){
   sCoin();ren();coopSendSnapshot(true);
   setTimeout(()=>{if(G&&G.sellNotice&&G.sellNotice.id===notice.id){G.sellNotice=null;ren();coopSendSnapshot(true)}},2300);
 }
+/* ===== Fases: avanço, apresentação e modo dev ===== */
+function worldIntro(){
+  const w=worldOf(G.n),th=WORLDS[w%WORLDS.length];
+  banner("FASE "+(w+1),th.n.toUpperCase()+" · "+th.d,"money",2300);
+  flash(th.fx);burst(W/2,H*.32,th.fx,80,9);
+}
+function avancarFase(){
+  G.endless=true;G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";
+  oferta();ofertaRelics();sOk();ren();worldIntro();
+}
+/* Modo dev: toque em C A C A C nas letras do título. Moedas infinitas e pulo de partidas/fases (só fora do Coop). */
+const devRow=()=>DEV&&!COOP.role?`<div class="devrow"><i>DEV</i><button type="button" data-dev="part">Pular partida</button><button type="button" data-dev="fase">Pular fase</button><button type="button" data-dev="off">Sair</button></div>`:"";
+function devToggle(){
+  if(COOP.role){banner("MODO DEV","Indisponível durante o Coop","",1800);sErr();return}
+  DEV=!DEV;sWin();if(DEV)burst(W/2,H*.3,"#62c98a",60,7);
+  banner(DEV?"MODO DEV":"MODO DEV OFF",DEV?"Moedas infinitas · pule partidas e fases":"Voltou ao normal","money",1700);
+  ren();
+}
+function devToShop(){
+  G.win=false;G.endless=true;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";
+  oferta();ofertaRelics();sOk();ren();if(G.n%8===0)worldIntro();
+}
+function devAct(a){
+  if(!DEV||COOP.role||!G)return;
+  if(a==="off"){DEV=false;sTec();ren();return}
+  if(G.mode==="title")return;
+  if(a==="part"){
+    if(G.mode==="play"&&R){if(R.lock)return;R.sc=Math.max(R.sc,R.meta);sOk();vence();return}
+    if(G.mode==="over"&&G.win){avancarFase();return}
+    G.n++;devToShop();return;
+  }
+  if(a==="fase"){
+    if(G.mode==="play"&&R&&R.lock)return;
+    G.n=(worldOf(G.n)+1)*8;devToShop();
+  }
+}
+let devBuf="",devT=0;
+document.addEventListener("click",e=>{
+  const bt=e.target.closest&&e.target.closest("[data-dev]");
+  if(bt){e.preventDefault();devAct(bt.dataset.dev);return}
+  const el=e.target.closest&&e.target.closest(".logo .tl");
+  if(!el||!G||G.mode!=="title")return;
+  const now=Date.now();if(now-devT>2600)devBuf="";devT=now;
+  devBuf=(devBuf+(el.textContent||"").trim().toUpperCase()).slice(-5);
+  try{el.animate([{scale:1},{scale:1.2},{scale:1}],{duration:240,easing:"ease-out"})}catch(_){}
+  if(devBuf==="CACAC"){devBuf="";devToggle()}
+});
 function fim(v){
   G.mode="over";G.win=v;const ed=G.n+(v?1:0);if(ed>S.best)S.best=ed;if(v)S.wins++;save();
   document.body.classList.remove("boss");if(v){sWin();burst(W/2,H*.35,"#ffb21f",90,9)}else sErr();ren();coopSendSnapshot(true);
@@ -2028,7 +2193,7 @@ function coopApplySnapshot(msg){
     COOP.optimisticActions=pending.filter(a=>!confirmed.has(a.actionId));
     for(const action of COOP.optimisticActions)coopApplyOptimisticAction(action);
     COOP.lastRev=msg.rev;COOP.status="connected";COOP.connected=true;COOP.modalNote="";
-    coopCloseModal();coopUpdateStatus();document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);
+    coopCloseModal();coopUpdateStatus();document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);applyWorld();
     ren();
   }catch(err){console.error("Falha ao aplicar estado Coop",err);COOP.modalNote="Recebi uma atualização inválida. Tente reconectar.";coopUpdateStatus()}
   finally{COOP.applyingSnapshot=false}
@@ -2323,19 +2488,21 @@ const tH=(t,a,i,extra,dl)=>{
   return `<button class="${cl}" data-id="${t.id}" ${a}="${i}" style="--k:${i%3-1};--d:${dl||0}">${t.l}<small>${tilePoints(t)}</small></button>`;
 };
 function relRow(shop,pop){
-  let h='<div class="rel">';
-  for(let i=0;i<powerSlotLimit();i++){const r=G.rel[i];h+=r?`<button class="rs on k${r.k} q${r.r}${R&&R.an&&R.an.rel===i&&G.mode==="play"?" fl":""}${shop&&G.sel===i?" sel":""}${shop&&pop===i?" buy":""}" data-r="${i}" data-tip><span class="art"><b>${ini(r)}</b></span><small>${r.n}</small></button>`:'<span class="rs"></span>'}
+  const n=powerSlotLimit();let h=`<div class="rel" style="--rc:${n>=8&&n%4===0?4:5}">`;
+  for(let i=0;i<n;i++){const r=G.rel[i];h+=r?`<button class="rs on k${r.k} q${r.r}${R&&R.an&&R.an.rel===i&&G.mode==="play"?" fl":""}${shop&&G.sel===i?" sel":""}${shop&&pop===i?" buy":""}" data-r="${i}" data-tip><span class="art"><b>${ini(r)}</b></span><small>${r.n}</small></button>`:'<span class="rs"></span>'}
   return h+"</div>";
 }
 const muteB=()=>`<span class=</button></span>`;
+/* Relógio do título: ao redesenhar a tela (trocar de baralho, tema…), a animação continua de onde estava. */
+const TT0=performance.now();
 function vTitle(){
   const row=(s,o)=>`<div class="lrow">${[...s].map((ch,i)=>`<span class="tl${(o+i)%4===1?" gd":(o+i)%7===3?" rb":""}" style="--i:${o+i}">${ch}</span>`).join("")}</div>`;
-  return `<div class="hdr" style="justify-content:flex-end">${muteB()}</div><div class="ov"><div class="logo">${row("CAIXA",0)}${row("ALTA",5)}</div><div class="sub">FORME PALAVRAS. BATA A META.</div>
-  <div class="steps"><div><i>1</i><span>Toque nas letras da sua mão para montar uma palavra.</span></div><div><i>2</i><span>Cada letra vale <strong style="color:var(--tx)">pontos</strong>. Palavras longas e poderes dão <strong style="color:var(--ca)">bônus</strong>.</span></div><div><i>3</i><span>Pontos × bônus = sua pontuação. Chegue à meta antes que as jogadas acabem.</span></div><div><i>4</i><span><strong style="color:var(--mx)">Dica:</strong> toda fase sorteia um trecho. Se sua palavra contiver esse trecho, você ganha um prêmio extra.</span></div></div>
+  return `<div class="hdr" style="justify-content:flex-end">${muteB()}</div><div class="ov"><div class="logo" style="--ph:${((performance.now()-TT0)/1000).toFixed(3)}s">${row("CAIXA",0)}${row("ALTA",5)}</div><div class="sub">FORME PALAVRAS. BATA A META.</div>${DEV?'<div class="devtag">MODO DEV ATIVO</div>':""}
+  <div class="steps"><div><i>1</i><span>Toque nas letras da sua mão para montar uma palavra.</span></div><div><i>2</i><span>Cada letra vale <strong style="color:var(--tx)">pontos</strong>. Palavras longas e poderes dão <strong style="color:var(--ca)">bônus</strong>.</span></div><div><i>3</i><span>Pontos × bônus = sua pontuação. Chegue à meta antes que as jogadas acabem.</span></div><div><i>4</i><span><strong style="color:var(--mx)">Dica:</strong> toda partida sorteia um trecho. Se sua palavra contiver esse trecho, você ganha um prêmio extra.</span></div></div>
   <div class="lbl">ESCOLHA SEU BARALHO <button type="button" class="coop-help" data-coop-ui="open" aria-label="Abrir modo cooperativo experimental" title="Coop online experimental">?</button></div>
   <div class="dk">${DECKS.map((d,i)=>`<button class="dkc${G.dk===i?" sel":""}" data-dk="${i}"><b>${d.n}</b><small>${d.d}</small></button>`).join("")}</div>
   <button class="big" data-a="start">COMEÇAR</button>
-  <p style="font-size:10px;color:var(--mu)">${S.runs?`Recorde: fase ${S.best}/8 · ${S.wins} vitória(s)`+(S.bw?`<br>Melhor palavra: ${S.bw} (${fmt(S.bs)})`:""):"Sua primeira partida começa agora."}</p></div>`;
+  <p style="font-size:10px;color:var(--mu)">${S.runs?`Recorde: ${S.best} partida(s) vencida(s) · ${S.wins} fase(s) concluída(s)`+(S.bw?`<br>Melhor palavra: ${S.bw} (${fmt(S.bs)})`:""):"Sua primeira partida começa agora."}</p></div>`;
 }
 function wordTierForLength(length){
   const n=Math.max(3,Math.floor(Number(length)||3));
@@ -2396,20 +2563,20 @@ function vPlay(){
   coopShareWordTier(tierMatch?{name:pill,level:Number(tierMatch[1])||3}:null,w);
   const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
-  return `<div class="hdr"><div class="ed"><small>FASE</small>${G.n+1}<i>${G.endless?"":"/8"}</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
+  return `<div class="hdr"><div class="ed"><small>PARTIDA</small>${G.n%8+1}<i>/8</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
   <div class="stats"><div class="st"><small>JOGADAS</small>${R.jog}</div><div class="st"><small>TROCAS</small>${R.desc}</div><div class="st g"><small>MOEDAS</small>${moneyLabel()}</div></div>
-  <div class="key${hit?" hit":""}"><small></small><b><span class="key-word">${[...R.sw.toUpperCase()].map(ch=>`<span>${ch}</span>`).join("")}</span></b><em><span class="prize-label">Prêmio:</span> ${R.pw.d}</em></div>
-  ${b?`<div class="bossb">CHEFE · ${b.n} — ${bossTxt(b)}</div>`:""}
+  <div class="key${hit?" hit":""}"><small class="key-prize" title="Recompensa da palavra-chave"><span class="kp-label">Recompensa:</span> ${cap(R.pw.d)}</small><b><span class="key-word">${[...R.sw.toUpperCase()].map(ch=>`<span>${ch}</span>`).join("")}</span></b></div>
+  ${b?`<div class="bossb" data-b="${b.id}"><span class="bb-g" aria-hidden="true">${b.id==="ce"||b.id==="in"?(b.ban||"?"):b.g}</span><div class="bb-body"><div class="bb-top"><b>${b.n}</b></div><div class="bb-rule">${cap(bossTxt(b))}</div></div></div>`:""}
   ${relRow(false)}
   <div class="board"><div class="pill ${pc}">${pill}</div>
    <div class="tray">${Array.from({length:8},(_,slot)=>{const i=R.stPos.indexOf(slot),t=i>=0?st[i]:null;return t?`<div class="slot f" data-slot="${slot}">${tH(t,"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(t.l)?" rr":""):"")+(R.landId!=null&&String(R.landId)===String(t.id)?" lnd":""))}</div>`:`<div class="slot" data-slot="${slot}"></div>`}).join("")}</div>
    <div class="eq"><div class="pt"><small>PONTOS</small><b class="${pop.includes("c")?"pop":""}">${fmt(c)}</b></div><span class="xx">×</span><div class="pt m" style="--hot:${Math.min(1,(m-1)/30)}"><small>BÔNUS</small><b class="${pop.includes("m")?"pop":""}">${fm(m)}</b></div></div>
    ${tot}<div class="msg">${a?"":R.msg}</div></div>
   <div class="handw"><div class="hand">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${"Eu te amo, Bia" } </div></div>
-  <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}" data-a="play" ${!a&&(st.length<3||!consecutive)?"disabled":""}>JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}`;
+  <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}" data-a="play" ${!a&&(st.length<3||!consecutive)?"disabled":""}>JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}${devRow()}`;
 }
 function vShop(){
-  const p=G.pay,nb=G.nb,sel=G.rel[G.sel],full=G.rel.length>=powerSlotLimit(),rc=Math.max(1,2+G.rr-(hasArtifact("merchant")?1:0)),artTab=G.shopTab==="relics";
+  const p=G.pay,nb=G.nb,sel=G.rel[G.sel],full=G.rel.length>=powerSlotLimit(),rc=Math.max(1,2+G.rr-(hasArtifact("merchant")?1:0));
   const an=G.offAnim,pop=G.popRel,nope=G.nope,pu=G.popUp;G.offAnim=0;G.popRel=-1;G.nope="";G.popUp="";
   if(COOP.role==="host"&&!COOP.applyingSnapshot){const f=COOP.shopFx||(COOP.shopFx={an:0,pop:-1,nope:"",pu:""});if(an)f.an=1;if(Number.isInteger(pop)&&pop>=0)f.pop=pop;if(nope)f.nope=nope;if(pu)f.pu=pu}
   const gain=G.biaMode?0:[p.bs,p.jg,p.cx,p.int,p.b,p.relic].reduce((a,v)=>a+(v||0),0);
@@ -2431,25 +2598,23 @@ function vShop(){
     return `<button type="button" class="shp-artifact r${a.r}${low?" off":""}" data-artifact="${a.id}" aria-label="${a.n}. ${a.d} Custa $${a.c}."${low?' aria-disabled="true"':''}><span class="shp-art-mark" aria-hidden="true">${a.mark}</span><span class="shp-art-copy"><span class="shp-art-title"><b>${a.n}</b><em>${rarity}</em></span><small>${a.d}</small></span><strong class="shp-art-cost">$${a.c}</strong></button>`;
   }).join("");
   const relicOwned=(G.relics||[]).map(id=>ARTIFACTS.find(a=>a.id===id)).filter(Boolean);
-  const relicBody=artTab?`<div class="shp-relics"><div class="shp-relic-intro"><b>ACHADOS DE PARTIDA</b><small>APARIÇÃO INCOMUM</small></div><div class="shp-relic-list">${relicCards||`<div class="shp-relic-empty"><b>NENHUM ACHADO DESTA VEZ</b><small>As relíquias surgem raramente entre as fases. O próximo mostruário pode revelar uma nova peça.</small></div>`}</div>${relicOwned.length?`<div class="shp-relic-owned"><small>RELÍQUIAS ATIVAS · ${relicOwned.length}</small><div class="shp-relic-chips">${relicOwned.map(a=>`<span>${a.n}</span>`).join("")}</div></div>`:""}</div>`:"";
+  const relicShelf=relicCards?`<div class="shp-letters shp-find"><div class="shp-head"><div class="shp-t"><b>Achado raro</b></div></div><div class="shp-relic-list">${relicCards}</div></div>`:"";
+  const relicChips=relicOwned.length?`<div class="shp-relic-chips" style="margin-top:8px">${relicOwned.map(a=>`<span>${a.n}</span>`).join("")}</div>`:"";
   return `<div class="ov shop">
   <div class="hdr2"><h2>Loja</h2><div class="st g">${moneyLabel()}${gain&&!G.biaMode?`<i class="gain">+$${gain}</i>`:""}</div></div>
-  <div class="shp-line"><span>Fase <b>${G.n+1}</b></span><span>Meta <b>${fmt(metaOf(G.n))}</b></span></div>
-  ${nb?`<div class="shp-boss"><b>${nb.n}</b><span>${nb.d}</span></div>`:''}
+  <div class="shp-line"><span>Fase <b>${worldOf(G.n)+1}</b> · Partida <b>${G.n%8+1}</b></span><span>Meta <b>${fmt(metaOf(G.n))}</b></span></div>
+  ${nb?`<div class="shp-boss"><span class="shp-boss-label">Próxima fase:</span><b class="shp-boss-name">${nb.n}</b></div>`:''}
   ${statusMarkup}
   <section class="shp-panel shp-owned">
     <div class="shp-head"><div class="shp-t"><b>Seus poderes</b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell">Vender <b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
     ${relRow(true,pop)}
+    ${relicChips}
   </section>
   <section class="shp-panel shp-market">
-    <div class="shp-head"><div class="shp-t"><b>${artTab?"Relíquias de partida":"Poderes e melhorias"}</b></div></div>
-    <div class="shp-tabs" role="tablist" aria-label="Categorias da loja">
-      <button type="button" class="shp-tab${!artTab?" active":""}" data-a="store-tab-powers" role="tab" aria-selected="${!artTab}">PODERES <em>LOJA</em></button>
-      <button type="button" class="shp-tab${artTab?" active":""}" data-a="store-tab-relics" role="tab" aria-selected="${artTab}">RELÍQUIAS <em>${(G.relicOffers||[]).length?((G.relicOffers||[]).length+" DISP."):"RARAS"}</em></button>
-    </div>
-    ${artTab?relicBody:`<div class="shp-grid">
+    <div class="shp-head"><div class="shp-t"><b>Poderes</b></div></div>
+    <div class="shp-grid">
       <div class="shp-actions">
-        <button class="shp-go" data-a="next"><span>COMEÇAR<br>FASE&nbsp;${G.n+1}</span></button>
+        <button class="shp-go" data-a="next"><span>COMEÇAR<br>PARTIDA&nbsp;${G.n%8+1}</span></button>
         <button class="shp-roll${!hasMoney(rc)?" off":""}${nope==="rr"?" nope":""}" data-a="rr"${!hasMoney(rc)?' aria-disabled="true"':''}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v5h-5"/></svg><span>TROCAR</span><b class="rc">$${rc}</b></button>
       </div>
       <div class="shp-offers">${[0,1,2].map(offer).join('')}</div>
@@ -2457,18 +2622,19 @@ function vShop(){
     <div class="shp-letters">
       <div class="shp-head"><div class="shp-t"><b>Melhorias de letras</b></div></div>
       <div class="shp-ups">${upg}</div>
-    </div>`}
+    </div>
+    ${relicShelf}
   </section>
+  ${devRow()}
   </div>`;
 }
 function vOver(){
-  const s=G.stat,ed=G.n+(G.win?1:0);
-  return `<div class="ov">${G.win?'<h1>Você venceu!</h1><p>Oito fases concluídas.</p>':`<h1 class="lose">Fim de jogo</h1><p>Você caiu na fase ${G.n+1} (${fmt(R.sc)} / ${fmt(R.meta)})${R.boss?" diante de "+R.boss.n:""}.</p>`}
-  <div class="sum"><div>Fases vencidas<b>${ed}</b></div><div>Palavras jogadas<b>${s.words}</b></div><div>Letras usadas<b>${s.neo}</b></div><div>Melhor palavra<b>${s.bw||"—"} ${s.bs?fmt(s.bs):""}</b></div></div>
+  const s=G.stat,ed=G.n+(G.win?1:0),w=worldOf(G.n);
+  return `<div class="ov">${G.win?`<h1>Fase ${w+1} vencida!</h1>`:`<h1 class="lose">Fim de jogo</h1><p>Você caiu na fase ${w+1}, partida ${G.n%8+1} (${fmt(R.sc)} / ${fmt(R.meta)})${R.boss?" diante de "+R.boss.n:""}.</p>`}
+  <div class="sum"><div>Partidas vencidas<b>${ed}</b></div><div>Palavras jogadas<b>${s.words}</b></div><div>Letras usadas<b>${s.neo}</b></div><div>Melhor palavra<b>${s.bw||"—"} ${s.bs?fmt(s.bs):""}</b></div></div>
   ${relRow(false).replace(/data-r/g,"data-x")}
-  <button class="big" data-a="again">JOGAR DE NOVO</button>
-  ${G.win?'<button class="big alt" data-a="endless">CONTINUAR SEM LIMITE</button>':""}
-  <button class="big alt" data-a="title">ESCOLHER OUTRO BARALHO</button></div>`;
+  ${G.win?`<button class="big" data-a="endless">AVANÇAR PARA A FASE ${w+2}</button>`:""}
+  <button class="big${G.win?" alt":""}" data-a="again">JOGAR DE NOVO</button>${devRow()}</div>`;
 }
 const dkAng=i=>0;
 const dkUp=t=>{if(!t)return "";if(t.skin&&UPS[t.skin]){const classic={g:" ug",r:" ur",k:" uk"};return classic[t.skin]||(" skin-"+t.skin)}return (t.g?" ug":"")+(t.r?" ur":"")+(t.k?" uk":"")+(t.up&&t.up.s?" skin-s":"")+(t.up&&t.up.c?" skin-c":"")+(t.up&&t.up.p?" skin-p":"")+(t.up&&t.up.n?" skin-n":"")+(t.up&&t.up.o?" skin-o":"")+(t.up&&t.up.h?" skin-h":"")+(t.up&&t.up.u?" skin-u":"")+(t.up&&t.up.a?" skin-a":"")+(t.up&&t.up.e?" skin-e":"")+(t.up&&t.up.z?" skin-z":"")+(t.up&&t.up.m?" skin-m":"")};
@@ -2559,7 +2725,7 @@ function ren(){hideTip();
     if(COOP.role==="host"&&COOP.connected&&!COOP.applyingSnapshot){if(!(COOP.landAcc instanceof Set))COOP.landAcc=new Set();COOP.landAcc.add(landId)}
     R.landId=null;
   }
-  document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);
+  document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);applyWorld();
   A.querySelectorAll("[data-id]").forEach(e=>{const o=old[e.dataset.id];if(!o)return;const n=e.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top;if(!dx&&!dy)return;
     e.style.transition="none";e.style.translate=dx+"px "+dy+"px";void e.offsetWidth;e.style.transition="translate .3s cubic-bezier(.2,.8,.3,1.08)";e.style.translate="0 0"});
   if(R){
@@ -2898,7 +3064,7 @@ document.addEventListener("click",e=>{
   }
   if(G.mode==="over"){
     if(D.a==="again")novo();else if(D.a==="title"){G.mode="title";ren()}
-    else if(D.a==="endless"){G.endless=true;G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";oferta();ofertaRelics();sOk();ren()}return;
+    else if(D.a==="endless"){avancarFase()}return;
   }
   if(G.mode==="shop"){
     if(D.artifact!==undefined){buyArtifact(String(D.artifact));return}
