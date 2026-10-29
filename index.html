@@ -177,6 +177,7 @@ span.rs{cursor:default}
 .sc{position:fixed;left:0;right:0;top:34%;z-index:61;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:6px;animation:slam 1.8s both}
 .sn{font:clamp(54px,19vw,96px)/1 'Alfa Slab One',Georgia,serif;color:var(--tx);text-shadow:5px 5px 0 var(--ca),-3px -3px 0 color-mix(in srgb,var(--ex) 75%,transparent);letter-spacing:.01em}
 .sc.t1 .sn{font-size:clamp(38px,13vw,62px);text-shadow:3px 3px 0 var(--ca)}
+.sc.out{animation:scout .26s ease-in forwards}@keyframes scout{from{opacity:1}to{opacity:0;translate:0 -34px;scale:1.05}}
 .sc.t3 .sn{text-shadow:5px 5px 0 var(--ex),-3px -3px 0 var(--ca)}
 .sl{font:600 11px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.4em;background:var(--tx);color:var(--bg);padding:3px 10px 3px 14px}
 @keyframes slam{0%{opacity:0;scale:2.5;rotate:-9deg;filter:blur(7px)}11%{opacity:1;scale:.9;rotate:-2deg;filter:none}20%{scale:1.06}30%{scale:1;rotate:-2deg}78%{opacity:1}100%{opacity:0;translate:0 -46px;scale:1.04}}
@@ -740,8 +741,8 @@ function stamp(t,ratio,w){
   coopBroadcastVisual("stamp",{t:Number(t)||0,ratio:Number(ratio)||0,w:String(w||"").slice(0,24)});
   const tier=ratio>=1?3:ratio>.4?2:1,c=tier>2?"#b794f6":"#ff5a3d";
   coopDrawStampOverlay(t,ratio,w);
-  const cp=ctr(".tray");ring(cp.x,cp.y,c);if(tier>1)ring(cp.x,cp.y,"var(--ink)",.12);if(tier>2)ring(cp.x,cp.y,c,.24);
-  burst(cp.x,cp.y,c,Math.min(70,18+ratio*80),7,w[0]);
+  const cp=ctr(".tray");COOP.anchorSel=".tray";ring(cp.x,cp.y,c);if(tier>1)ring(cp.x,cp.y,"var(--ink)",.12);if(tier>2)ring(cp.x,cp.y,c,.24);
+  burst(cp.x,cp.y,c,Math.min(70,18+ratio*80),7,w[0]);COOP.anchorSel=null;
   if(ratio>.25)flash(c);
 }
 let G={mode:"title",dk:0,rel:[],pendingRecord:null,lastRecordNotice:null},R=null,TID=0;
@@ -860,9 +861,15 @@ function banner(t,s,cls,duration=2100){
   const title=document.createElement("b"),sub=document.createElement("span");title.textContent=String(t??"");sub.textContent=String(s??"");e.append(title,sub);
   e.style.animationDuration=duration+"ms";document.body.appendChild(e);setTimeout(()=>e.remove(),duration+80);return e
 }
+/* Limpa avisos antes da loja. O carimbo sai com uma animação curta em vez de sumir de repente.
+   Só toca nos elementos soltos no body (.bn também é a classe de letra proibida nas peças). */
+function coopFlushTransient(){
+  document.querySelectorAll("body>.bn,body>.ft").forEach(el=>el.remove());
+  document.querySelectorAll("body>.sc:not(.out)").forEach(el=>{el.classList.add("out");setTimeout(()=>el.remove(),300)});
+}
 function coopClearTransientVisuals(){
   coopBroadcastVisual("clear-transient",{});
-  document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());
+  coopFlushTransient();
 }
 
 /* ---------- regras ---------- */
@@ -976,10 +983,11 @@ async function jogar(){
     const A=R.an;A.pop=(A.c!==s.c?"c":"")+(A.m!==s.m?"m":"");A.c=s.c;A.m=s.m;A.tile=s.k==="t"?s.i:-1;A.rel=s.k==="r"?s.i:-1;
     if(s.k==="pw")A.msg="TRECHO ENCAIXADO · "+R.pw.d;
     ren();coopSendSnapshot(true);
-    const p=ctr(s.k==="t"?'[data-s="'+s.i+'"]':s.k==="r"?'.rel [data-r="'+s.i+'"]':".key");
+    const sel=s.k==="t"?'[data-s="'+s.i+'"]':s.k==="r"?'.rel [data-r="'+s.i+'"]':".key",p=ctr(sel);COOP.anchorSel=sel;
     s.lb.forEach((l,j)=>fl(l.t,p.x+(j%2?20:-20),p.y-14-j*16,colK[l.k]||"#fff",l.k==="x"));
     if(s.k==="t"){sMar(s.i);burst(p.x,p.y,ink(),7,3,ts[s.i].l);vb(5);fxT(ts[s.i],p)}
     else{sRel(s.k==="r"?s.i:5);fxR(s,p);if(s.lb.some(l=>l.k==="x"))shake(5)}
+    COOP.anchorSel=null;
     await dz(s.k==="t"?190:500);
   }
   const t=Math.round(x.c*x.m),ratio=t/R.meta;
@@ -1056,7 +1064,7 @@ function upFx(k,t,from,remote=false){
   const card=o.querySelector(".upc"),f1=o.querySelector(".f1"),sh=o.querySelector(".ush em"),tx=o.querySelector(".upt"),
     rm=matchMedia("(prefers-reduced-motion:reduce)").matches,r=card.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,
     ease="cubic-bezier(.2,.9,.3,1.1)",A=(e,kf,op)=>e.animate(kf,Object.assign({fill:"both",easing:ease},op));
-  const hit=()=>{ring(cx,cy,N[2]);ring(cx,cy,N[2],.1);burst(cx,cy,N[2],34,8);burst(cx,cy,"#ffffff",14,5);flash(N[2]);shake(6);vb([30,20,50]);sStamp();sUpg(k)};
+  const hit=()=>{const q=COOP.quiet;COOP.quiet=!remote;try{ring(cx,cy,N[2]);ring(cx,cy,N[2],.1);burst(cx,cy,N[2],34,8);burst(cx,cy,"#ffffff",14,5);flash(N[2]);shake(6);vb([30,20,50]);sStamp();sUpg(k)}finally{COOP.quiet=q}};
   if(rm){f1.style.opacity=1;tx.style.opacity=1;hit();setTimeout(()=>o.remove(),1100);return}
   A(card,[{translate:(from.x-cx)+"px "+(from.y-cy)+"px",scale:.3,rotate:"-28deg",opacity:0},{translate:"0 0",scale:1.14,rotate:"5deg",opacity:1,offset:.72},{translate:"0 0",scale:1,rotate:"0deg",opacity:1}],{duration:480});
   A(card,[{scale:1,rotate:"0deg"},{scale:.9,rotate:"-3deg",offset:.4},{scale:1.28,rotate:"2deg",offset:.62},{scale:1,rotate:"0deg"}],{duration:380,delay:600,composite:"add"});
@@ -1085,6 +1093,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
+const BUILD="2026.10.29-coop-fx";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -1189,7 +1198,8 @@ function coopUpdateStatus(){
   const role=COOP.role==="host"?"P1 / ANFITRIÃO":"P2 / CONVIDADO";
   const status=COOP.connected?"conectado":COOP.status==="waiting"?"aguardando P2":COOP.status==="lost"?"conexão perdida":COOP.status==="syncing"?"sincronizando":"conectando";
   const code=COOP.roomCode?` · ${COOP.roomCode}`:"";
-  el.innerHTML=`<span class="cs-main">COOP · ${role} · ${status}${coopEscape(code)}</span><span class="cs-actions">${COOP.connected?'<button data-coop-ui="chat">CHAT</button>':""}<button data-coop-ui="show">INFO</button>${COOP.status==="lost"?'<button data-coop-ui="retry">RECON.</button>':""}<button class="cs-leave" data-coop-ui="leave">SAIR</button></span>`;
+  const main=COOP.versionMismatch?"VERSÕES DIFERENTES ENTRE P1 E P2 · ATUALIZE":`COOP · ${role} · ${status}${code}`;
+  el.innerHTML=`<span class="cs-main"${COOP.versionMismatch?' style="color:var(--mx)"':""}>${coopEscape(main)}</span><span class="cs-actions">${COOP.versionMismatch?'<button data-coop-ui="reload" style="color:var(--mx);border-color:var(--mx)">ATUALIZAR</button>':""}${COOP.connected?'<button data-coop-ui="chat">CHAT</button>':""}<button data-coop-ui="show">INFO</button>${COOP.status==="lost"?'<button data-coop-ui="retry">RECON.</button>':""}<button class="cs-leave" data-coop-ui="leave">SAIR</button></span>`;
 }
 function coopSetStatus(status,note){COOP.status=status;if(note!==undefined)COOP.modalNote=String(note);coopUpdateStatus()}
 function coopShowError(message){COOP.status="error";COOP.modalNote=String(message||"Erro de conexão desconhecido.");COOP.modalView="error";coopRenderModal();coopUpdateStatus()}
@@ -1204,7 +1214,7 @@ function coopCleanupTransport(){
 function coopLeave(){
   coopCloseChat();
   const dk=Number.isInteger(G.dk)?G.dk:(COOP.deck||0);
-  coopCleanupTransport();Object.assign(COOP,{role:null,status:"off",roomCode:"",peerId:"",deck:dk,modalView:"menu",modalNote:"",rev:0,lastRev:0,remoteDispatch:false,dragRejected:null,hasStarted:false,chatMessages:[],chatOpen:false,visualSeq:0,lastVisualSeq:0});
+  coopCleanupTransport();Object.assign(COOP,{role:null,status:"off",roomCode:"",peerId:"",deck:dk,modalView:"menu",modalNote:"",rev:0,lastRev:0,remoteDispatch:false,dragRejected:null,hasStarted:false,chatMessages:[],chatOpen:false,visualSeq:0,lastVisualSeq:0,seenVisual:null,versionMismatch:false,shopFx:null,freshAcc:null,anchorSel:null,quiet:false,ghostLand:null});
   handDrag=null;clearDragMarks();coopCloseModal();const oldS=S;
   G={mode:"title",dk,rel:[],pendingRecord:null,lastRecordNotice:null};R=null;document.body.classList.remove("boss");ren();coopUpdateStatus();
 }
@@ -1217,7 +1227,7 @@ async function coopCreateRoom(){
   peer.on("open",()=>{if(COOP.peer!==peer)return;coopSetStatus("waiting","Sala pronta. Envie o código para P2.");COOP.modalView="waiting";coopRenderModal()});
   peer.on("connection",conn=>{
     if(COOP.peer!==peer)return;
-    if(COOP.conn&&COOP.conn.open){conn.on("open",()=>{try{conn.send({type:"room-full",from:"host"})}catch(_){}conn.close()});return}
+    if(COOP.conn&&COOP.conn.open){conn.on("open",()=>{try{conn.send({type:"room-full",protocol:COOP_PROTOCOL,build:BUILD,from:"host"})}catch(_){}conn.close()});return}
     coopAttachConnection(conn,"host");
   });
   peer.on("disconnected",()=>{if(COOP.peer===peer&&!COOP.connected)coopSetStatus("connecting","Sinalização desconectada. Tentando manter a sala disponível…")});
@@ -1231,7 +1241,7 @@ async function coopJoinRoom(){
   const input=document.querySelector("#coop-room-input");const code=coopCleanCode(input?input.value:COOP.modalNote);
   if(code.length!==6){coopSetNote("O código precisa ter 6 caracteres.");if(input)input.focus();return}
   if(COOP.peer)coopCleanupTransport();
-  COOP.role="guest";COOP.roomCode=code;COOP.peerId="";COOP.deck=0;COOP.connected=false;COOP.status="connecting";COOP.modalView="join";COOP.modalNote="Conectando à sala…";COOP.lastRev=0;COOP.lastVisualSeq=0;COOP.pendingSnapshot=null;COOP.dragLock=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
+  COOP.role="guest";COOP.roomCode=code;COOP.peerId="";COOP.deck=0;COOP.connected=false;COOP.status="connecting";COOP.modalView="join";COOP.modalNote="Conectando à sala…";COOP.lastRev=0;COOP.lastVisualSeq=0;COOP.seenVisual=null;COOP.versionMismatch=false;COOP.pendingSnapshot=null;COOP.dragLock=null;COOP.chatMessages=[];coopCloseChat();coopRenderModal();coopUpdateStatus();
   try{await coopLoadPeerJS()}catch(err){coopShowError(err.message);return}
   let peer;try{peer=new window.Peer({debug:1});COOP.peer=peer}catch(err){coopShowError("Não foi possível iniciar PeerJS: "+err.message);return}
   const connect=()=>{
@@ -1250,7 +1260,7 @@ function coopAttachConnection(conn,side){
     if(COOP.conn!==conn)return;
     COOP.connected=true;COOP.status=side==="guest"?"syncing":"connected";
     if(side==="guest"){
-      try{conn.send({type:"hello",protocol:COOP_PROTOCOL,from:"guest"})}catch(_){}
+      try{conn.send({type:"hello",protocol:COOP_PROTOCOL,build:BUILD,from:"guest"})}catch(_){}
       COOP.modalNote="Conexão aberta; recebendo a partida do anfitrião…";COOP.modalView="join";coopRenderModal();coopUpdateStatus();if(COOP.chatOpen)coopRenderChatPanel(false);
       setTimeout(()=>{if(COOP.conn===conn&&COOP.role==="guest"&&COOP.lastRev===0&&!COOP.pendingSnapshot)coopSetNote("A conexão abriu, mas o estado da partida ainda não chegou. Tente reconectar.")},7000);
     }else{
@@ -1283,10 +1293,23 @@ function coopUpdateButtonMessage(message){
 }
 function coopSend(message){
   if(!COOP.connected||!COOP.conn||!COOP.conn.open)return false;
-  try{COOP.conn.send({...message,from:COOP.role,protocol:COOP_PROTOCOL});return true}catch(_){COOP.status="lost";coopUpdateStatus();return false}
+  try{COOP.conn.send({...message,from:COOP.role,protocol:COOP_PROTOCOL,build:BUILD});return true}catch(_){COOP.status="lost";coopUpdateStatus();return false}
 }
 function coopBroadcastVisual(visual,data={}){
-  if(COOP.role!=="host"||!COOP.connected||COOP.applyingSnapshot)return false;
+  if(COOP.role!=="host"||!COOP.connected||COOP.applyingSnapshot||COOP.quiet)return false;
+  /* Ancora o efeito num elemento da mesa: o P2 recalcula a posição no layout dele
+     (telas de tamanhos diferentes continuam com o efeito em cima da letra certa). */
+  if(COOP.anchorSel&&typeof data.x==="number"&&typeof data.y==="number"){
+    try{
+      const el=document.querySelector(COOP.anchorSel);
+      if(el){const r=el.getBoundingClientRect();
+        if(r.width&&r.height){
+          const px=data.x*(W||window.innerWidth||1),py=data.y*(H||window.innerHeight||1);
+          data.a={s:COOP.anchorSel,dx:(px-(r.left+r.width/2))/r.width,dy:(py-(r.top+r.height/2))/r.height};
+        }
+      }
+    }catch(_){}
+  }
   return coopSend({type:"visual",visual:String(visual),data,visualSeq:++COOP.visualSeq});
 }
 function coopAnimateRemoteTotal(data,attempt=0){
@@ -1304,7 +1327,15 @@ function coopAnimateRemoteTotal(data,attempt=0){
 }
 function coopPlayRemoteVisual(kind,data={}){
   if(COOP.role!=="guest"||!COOP.connected)return;
-  const x=(Number(data.x)||0)*(W||window.innerWidth||1),y=(Number(data.y)||0)*(H||window.innerHeight||1);
+  let x=(Number(data.x)||0)*(W||window.innerWidth||1),y=(Number(data.y)||0)*(H||window.innerHeight||1);
+  if(data.a&&typeof data.a.s==="string"&&/^[\w\s.\[\]="\-]+$/.test(data.a.s)){
+    try{
+      const el=document.querySelector(data.a.s);
+      if(el){const r=el.getBoundingClientRect();
+        if(r.width&&r.height){x=r.left+r.width/2+(Number(data.a.dx)||0)*r.width;y=r.top+r.height/2+(Number(data.a.dy)||0)*r.height}
+      }
+    }catch(_){}
+  }
   switch(kind){
     case "ring":ring(x,y,String(data.c||"#ffffff"),Number(data.d)||0);break;
     case "burst":burst(x,y,String(data.c||"#ffffff"),Math.max(1,Math.min(90,Number(data.n)||1)),Math.max(.1,Math.min(12,Number(data.sp)||1)),String(data.ch||""));break;
@@ -1314,7 +1345,7 @@ function coopPlayRemoteVisual(kind,data={}){
     case "banner":banner(String(data.t||""),String(data.s||""),data.cls==="boss"?"boss":"",Math.max(500,Math.min(5000,Number(data.duration)||2100)));break;
     case "stamp":coopDrawStampOverlay(Math.max(0,Number(data.t)||0),Math.max(0,Number(data.ratio)||0),String(data.w||""));break;
     case "score-countup":coopAnimateRemoteTotal(data);break;
-    case "clear-transient":document.querySelectorAll(".bn,.ft,.sc").forEach(el=>el.remove());break;
+    case "clear-transient":coopFlushTransient();break;
     case "tray-flip":{const tray=document.querySelector(".tray");if(tray){tray.classList.remove("flip");void tray.offsetWidth;tray.classList.add("flip");setTimeout(()=>tray.classList.remove("flip"),550)}break}
     case "upgrade":{
       const k=["g","r","k"].includes(data.k)?data.k:"g",tile=data.tile&&typeof data.tile==="object"?data.tile:null;
@@ -1333,11 +1364,15 @@ function coopPlayRemoteVisual(kind,data={}){
 function coopMakeSnapshot(){
   const g={...G,rel:(G.rel||[]).map(r=>r&&r.id).filter(Boolean)};
   if(Array.isArray(G.off))g.off=G.off.map(r=>r&&r.id).filter(Boolean);
-  const r=R?{...R,pw:R.pw&&R.pw.n,fresh:R.fresh?[...R.fresh]:[]}:null;
+  /* R.fresh e os efeitos da loja são zerados pelo ren() do P1 antes do envio (que é adiado ~35 ms).
+     Aqui eles são acumulados e entregues junto com o estado, para o P2 também ver as cartas
+     entrando na mão e as animações da loja. */
+  const r=R?{...R,pw:R.pw&&R.pw.n,fresh:[...new Set([...(R.fresh||[]),...(COOP.freshAcc||[])])]}:null;
+  const fx=COOP.shopFx||null;COOP.shopFx=null;COOP.freshAcc=null;
   // A abertura do baralho e as pilhas expandidas são preferências locais de cada tela.
   // Nunca envie R.dv/R.dx: o P1 não deve abrir o baralho do P2 nem o contrário.
   if(r){delete r.dv;delete r.dx}
-  return {type:"state",protocol:COOP_PROTOCOL,from:"host",rev:++COOP.rev,tid:TID,g,r};
+  return {type:"state",protocol:COOP_PROTOCOL,build:BUILD,from:"host",rev:++COOP.rev,tid:TID,g,r,fx};
 }
 function coopSendSnapshot(force=false){
   if(COOP.role!=="host"||!COOP.connected||!COOP.conn||!COOP.conn.open)return;
@@ -1355,6 +1390,7 @@ function coopApplySnapshot(msg){
     const g={...msg.g};g.rel=(msg.g.rel||[]).map(id=>REL.find(r=>r.id===id)).filter(Boolean);
     if(Array.isArray(msg.g.off))g.off=msg.g.off.map(id=>REL.find(r=>r.id===id)).filter(Boolean);
     G=g;
+    if(msg.fx&&typeof msg.fx==="object"){G.offAnim=msg.fx.an?1:0;G.popRel=Number.isInteger(msg.fx.pop)?msg.fx.pop:-1;G.nope=String(msg.fx.nope||"");G.popUp=String(msg.fx.pu||"")}
     if(msg.r){const r={...msg.r};r.pw=POW.find(p=>p.n===msg.r.pw)||POW[0];r.fresh=new Set(msg.r.fresh||[]);
       r.dv=G.mode==="play"&&localDeckOpen?1:0;
       r.dx=r.dv?localDeckExpanded:{};
@@ -1370,7 +1406,13 @@ function coopApplySnapshot(msg){
 function coopQueuePendingSnapshot(){
   setTimeout(()=>{if(handDrag)return;const snap=COOP.pendingSnapshot;if(snap){COOP.pendingSnapshot=null;coopApplySnapshot(snap)}},90)
 }
+function coopCheckBuild(msg){
+  if(!msg||COOP.versionMismatch||msg.build===BUILD)return;
+  COOP.versionMismatch=String(msg.build||"anterior");coopUpdateStatus();
+}
+function coopHardReload(){location.replace(location.pathname+"?v="+Date.now())}
 function coopHandleHostMessage(msg){
+  if(msg.from==="guest")coopCheckBuild(msg);
   if(msg.protocol!==COOP_PROTOCOL||msg.from!=="guest")return;
   if(msg.type==="hello"){coopSendSnapshot(true);coopSend({type:"chatHistory",messages:(COOP.chatMessages||[]).slice(-40)});return}
   if(msg.type==="chat"){const received=coopAppendChatMessage(msg.message,"guest");if(received)coopSend({type:"chatRelay",message:received});return}
@@ -1397,13 +1439,21 @@ function coopHandleHostMessage(msg){
   }
 }
 function coopHandleGuestMessage(msg){
+  if(msg.from==="host")coopCheckBuild(msg);
   if(msg.protocol!==COOP_PROTOCOL||msg.from!=="host")return;
   if(msg.type==="room-full"){coopShowError("Esta sala já tem dois jogadores.");return}
   if(msg.type==="chat"){coopAppendChatMessage(msg.message,"host");return}
   if(msg.type==="chatRelay"){coopAppendChatMessage(msg.message);return}
   if(msg.type==="chatHistory"){if(Array.isArray(msg.messages))msg.messages.slice(-40).forEach(m=>coopAppendChatMessage(m));return}
   if(msg.type==="visual"){
-    const seq=Number(msg.visualSeq)||0;if(seq&&seq<=COOP.lastVisualSeq)return;if(seq)COOP.lastVisualSeq=seq;
+    const seq=Number(msg.visualSeq)||0;
+    if(seq){
+      if(!COOP.seenVisual)COOP.seenVisual=new Set();
+      if(COOP.seenVisual.has(seq))return;
+      COOP.seenVisual.add(seq);
+      if(COOP.seenVisual.size>600)COOP.seenVisual.delete(COOP.seenVisual.values().next().value);
+      COOP.lastVisualSeq=Math.max(COOP.lastVisualSeq,seq);
+    }
     coopPlayRemoteVisual(msg.visual,msg.data||{});return;
   }
   if(msg.type==="state"){
@@ -1539,6 +1589,7 @@ function coopShowRemoteDrag(msg){
 }
 function coopClearRemoteDrag(reRender=false){
   const p=COOP.remotePreview;if(!p)return;
+  if(p.ghost){try{const gr=p.ghost.getBoundingClientRect();if(gr.width>0)COOP.ghostLand={id:String(p.id),rect:gr,at:performance.now()}}catch(_){}}
   try{p.ghost?.remove();p.placeholder?.remove();if(p.hiddenTile&&p.hiddenTile.isConnected)p.hiddenTile.style.display=p.hiddenDisplay||"";p.sourceSlot?.classList.remove("drag-source") }catch(_){}
   COOP.remotePreview=null;clearDragMarks();
   if(reRender&&typeof ren==="function"&&!COOP.applyingSnapshot)ren();
@@ -1554,6 +1605,7 @@ function coopHandleUi(e){
   if(act==="chat"){e.preventDefault();coopToggleChat();return}
   if(act==="chat-close"){e.preventDefault();coopCloseChat();return}
   if(act==="chat-send"){e.preventDefault();coopSendChat();return}
+  if(act==="reload"){e.preventDefault();coopHardReload();return}
   if(!document.querySelector(".coop-modal")&&!["show","leave","retry","chat","chat-close","chat-send"].includes(act))return;
   e.preventDefault();
   if(act==="close"){coopCloseModal();return}
@@ -1637,6 +1689,7 @@ function vPlay(){
 function vShop(){
   const p=G.pay,nb=G.nb,sel=G.rel[G.sel],full=G.rel.length>=RMAX,rc=2+G.rr;
   const an=G.offAnim,pop=G.popRel,nope=G.nope,pu=G.popUp;G.offAnim=0;G.popRel=-1;G.nope="";G.popUp="";
+  if(COOP.role==="host"&&!COOP.applyingSnapshot){const f=COOP.shopFx||(COOP.shopFx={an:0,pop:-1,nope:"",pu:""});if(an)f.an=1;if(Number.isInteger(pop)&&pop>=0)f.pop=pop;if(nope)f.nope=nope;if(pu)f.pu=pu}
   const pay=[['Fase',p.bs],['Jogadas',p.jg],['Cofrinho',p.cx],['Juros',p.int],['Chefe',p.b]].filter(q=>q[1]>0).map(q=>`<span>${q[0]} <b>+$${q[1]}</b></span>`).join('');
   const offer=i=>{
     const r=G.off[i];
@@ -1744,12 +1797,18 @@ function vDeck(){
 function view(){return G.mode==="title"?vTitle():G.mode==="shop"?vShop():G.mode==="over"?vOver():vPlay()}
 function ren(){hideTip();
   const A=$("#app"),old={};
-  if(!COOP.applyingSnapshot)A.querySelectorAll("[data-id]").forEach(e=>{old[e.dataset.id]=e.getBoundingClientRect()});
+  A.querySelectorAll("[data-id]").forEach(e=>{const r=e.getBoundingClientRect();if(r.width>0&&r.height>0)old[e.dataset.id]=r});
+  /* Se o outro jogador acabou de soltar uma letra, ela desliza a partir de onde o fantasma foi solto. */
+  const gl=COOP.ghostLand;COOP.ghostLand=null;
+  if(gl&&performance.now()-gl.at<700)old[gl.id]=gl.rect;
   A.innerHTML=view();
   document.body.classList.toggle("boss",G.mode==="play"&&!!R&&!!R.boss);
-  if(!COOP.applyingSnapshot)A.querySelectorAll("[data-id]").forEach(e=>{const o=old[e.dataset.id];if(!o)return;const n=e.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top;if(!dx&&!dy)return;
+  A.querySelectorAll("[data-id]").forEach(e=>{const o=old[e.dataset.id];if(!o)return;const n=e.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top;if(!dx&&!dy)return;
     e.style.transition="none";e.style.translate=dx+"px "+dy+"px";void e.offsetWidth;e.style.transition="translate .3s cubic-bezier(.2,.8,.3,1.08)";e.style.translate="0 0"});
-  if(R)R.fresh.clear();
+  if(R){
+    if(COOP.role==="host"&&!COOP.applyingSnapshot&&R.fresh.size){if(!COOP.freshAcc)COOP.freshAcc=new Set();R.fresh.forEach(id=>COOP.freshAcc.add(id))}
+    R.fresh.clear();
+  }
   if(typeof COOP!=="undefined"&&COOP.role==="host"&&!COOP.applyingSnapshot)coopSendSnapshot();
 }
 
@@ -2053,6 +2112,20 @@ document.addEventListener("keydown",e=>{
   else if(k==="Backspace"){e.preventDefault();if(R.st.length)unstage(R.st.length-1)}
 });
 applyTheme();ren();
+/* Se o navegador abriu uma cópia antiga em cache, busca a versão atual e recarrega uma única vez. */
+(function autoUpdate(){
+  try{
+    if(location.protocol==="file:")return;
+    fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{
+      const m=/const BUILD="([^"]+)"/.exec(t);
+      if(!m||m[1]===BUILD||G.mode!=="title"||COOP.role)return;
+      let tried="";try{tried=sessionStorage.getItem("cxBuildTry")||""}catch(_){}
+      if(tried===m[1])return;
+      try{sessionStorage.setItem("cxBuildTry",m[1])}catch(_){}
+      location.replace(location.pathname+"?v="+encodeURIComponent(m[1]));
+    }).catch(()=>{});
+  }catch(_){}
+})();
 </script>
 </body>
 </html>
