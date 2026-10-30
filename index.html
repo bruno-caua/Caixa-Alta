@@ -1474,7 +1474,7 @@ async function jogar(){
   }
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
-  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(450);
+  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(450);
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
