@@ -590,7 +590,7 @@ span.rs{cursor:default}
   #app:has(.handw){display:grid;grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr);align-content:start;align-items:stretch;column-gap:clamp(18px,2.5vw,34px);row-gap:13px}
   #app:has(.handw)>.hdr,#app:has(.handw)>.stats,#app:has(.handw)>.key,#app:has(.handw)>.bossb,#app:has(.handw)>.rel{grid-column:1/-1}
   #app:has(.handw)>.hdr{align-items:center;padding-bottom:3px}
-  #app:has(.handw)>.ed{font-size:42px}
+  #app:has(.handw)>.hdr .ed{font-size:42px}
   #app:has(.handw)>.stats .st{font-size:20px;padding:10px}
   #app:has(.handw)>.key{padding:10px 0 14px}
   #app:has(.handw)>.key b{font-size:clamp(36px,4vw,54px);margin-bottom:10px}
@@ -853,6 +853,169 @@ body.wd2.boss{background:#091221}
   #app>.rel .rs.on small{font-size:7px}
 }
 @media(max-width:759px) and (max-height:700px){#app>.rel .rs{--rh:32px}}
+
+/* =====================================================================
+   CAIXA ALTA — experiência desktop
+   Mantém a linguagem visual original; reorganiza a hierarquia para mouse,
+   teclado e telas largas, sem ampliar os elementos como se fossem mobile.
+   ===================================================================== */
+@media (min-width:760px){
+  html,body{min-height:100%;overflow-x:hidden;overflow-y:auto}
+  #app{width:min(1380px,calc(100% - 36px));min-height:100dvh;height:auto;margin:0 auto;padding:26px clamp(22px,3.4vw,50px) 42px;gap:16px;overflow:visible}
+
+  /* Título: marca à esquerda, escolha de baralho e início à direita. */
+  #app:has(.title-screen){max-width:1240px;justify-content:center}
+  .title-screen{display:grid;grid-template-columns:minmax(330px,.92fr) minmax(420px,1.08fr);grid-template-areas:"hero label" "hero decks" "tagline decks" "record action";grid-template-rows:auto auto auto auto;align-items:center;column-gap:clamp(28px,4.5vw,66px);row-gap:14px;text-align:left;width:100%;max-width:1040px;min-height:540px;margin:0 auto;padding:28px 0 40px}
+  .title-screen>.logo{grid-area:hero;justify-self:center;align-self:end}
+  .title-screen>.sub{grid-area:tagline;justify-self:center;align-self:start;text-align:center}
+  .title-screen>.lbl{grid-area:label;align-self:end;margin:0 0 2px}
+  .title-screen>.dk{grid-area:decks;grid-template-columns:repeat(2,minmax(0,1fr));align-self:stretch;align-content:start}
+  .title-screen>.big{grid-area:action;justify-self:end;align-self:start}
+  .title-screen>.title-record{grid-area:record;justify-self:center;align-self:center}
+  .title-screen>.devtag{grid-column:1;grid-row:4;justify-self:center;align-self:end}
+  .title-screen .logo{--tw:clamp(58px,6.2vw,76px);--th:calc(var(--tw)*1.3);gap:7px;margin:14px 0 2px}
+  .title-screen .logo .tl{width:var(--tw);height:var(--th);font-size:calc(var(--tw)*.64)}
+  .title-screen .sub{font-size:9px;letter-spacing:.34em;margin-bottom:10px}
+  .title-screen .dk{gap:9px}
+  .title-screen .dkc{min-height:76px;padding:12px 14px;border-radius:4px}
+  .title-screen .dkc b{font-size:15px}
+  .title-screen .dkc small{font-size:9px;line-height:1.45}
+  .title-screen .big{width:min(100%,340px);min-height:54px;margin-top:8px;font-size:12px;transition:transform .14s,filter .14s,box-shadow .14s}
+  .title-screen .big:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 5px 0 color-mix(in srgb,var(--tx) 55%,var(--bg))}
+  .title-screen .title-record{font-size:9px;text-align:left;line-height:1.6}
+  .title-screen .lbl{font-size:9px}
+  .title-screen .coop-help{width:25px;height:25px}
+
+  /* Tela de partida: os elementos de estado permanecem no topo; mesa e mão
+     passam a ocupar colunas de leitura distintas. */
+  #app:has(.handw){display:grid;grid-template-columns:minmax(0,1.04fr) minmax(400px,.96fr);align-content:start;align-items:stretch;column-gap:clamp(20px,2.5vw,36px);row-gap:14px}
+  #app:has(.handw)>.hdr,
+  #app:has(.handw)>.stats,
+  #app:has(.handw)>.key,
+  #app:has(.handw)>.bossb,
+  #app:has(.handw)>.rel,
+  #app:has(.handw)>.devrow{grid-column:1/-1}
+  #app:has(.handw)>.hdr{align-items:center;padding:2px 2px 8px;border-bottom:1px solid var(--ln)}
+  #app:has(.handw)>.ed{font-size:42px}
+  #app:has(.handw)>.stats{grid-template-columns:repeat(3,minmax(0,1fr));max-width:880px;width:100%;justify-self:center}
+  #app:has(.handw)>.stats .st{font-size:21px;padding:12px 8px}
+  #app:has(.handw)>.stats .st small{font-size:9px}
+  #app:has(.handw)>.key{padding:12px 14px 16px;max-width:980px;width:100%;justify-self:center}
+  #app:has(.handw)>.key b{font-size:clamp(38px,4vw,58px);margin:3px 0 8px}
+  #app:has(.handw)>.key small.key-prize{font-size:13px}
+  #app:has(.handw)>.rel{display:grid;grid-template-columns:repeat(var(--rc,4),minmax(84px,112px));justify-content:center;gap:10px 12px;padding:2px 0 4px}
+  #app:has(.handw)>.rel .rs{--rh:92px;max-width:112px;width:100%;border-radius:7px}
+  #app:has(.handw)>.rel .rs .art{--af:36px}
+  #app:has(.handw)>.board{grid-column:1;align-self:center;justify-self:stretch;width:100%;min-width:0;min-height:320px;gap:14px;padding:clamp(16px,2vw,24px);border:1px solid var(--ln);border-radius:7px;background:linear-gradient(145deg,color-mix(in srgb,var(--tx) 3%,var(--bg)),color-mix(in srgb,var(--bg) 96%,#000));box-shadow:0 12px 32px #00000012}
+  #app:has(.handw)>.board .pill{font-size:12px;min-height:18px}
+  #app:has(.handw)>.board .tray{width:max-content;max-width:100%;grid-template-columns:repeat(8,var(--tw));gap:clamp(5px,.65vw,9px);padding:10px;background:color-mix(in srgb,var(--bg) 60%,transparent)}
+  #app:has(.handw)>.board .slot{width:var(--tw);height:var(--th)}
+  #app:has(.handw)>.board .eq{gap:clamp(20px,2.7vw,38px);margin-top:3px}
+  #app:has(.handw)>.board .pt{min-width:112px}
+  #app:has(.handw)>.board .pt b{font-size:clamp(31px,2.8vw,40px)}
+  #app:has(.handw)>.board .tot{min-height:36px;font-size:32px}
+  #app:has(.handw)>.handw{--tw:clamp(38px,3.55vw,52px);--th:calc(var(--tw)*1.3);grid-column:2;align-self:stretch;justify-content:center;gap:20px;min-width:0;min-height:320px;padding:clamp(18px,2vw,30px);border:1px solid var(--ln);border-radius:7px;background:linear-gradient(155deg,color-mix(in srgb,var(--tx) 4%,var(--bg)),color-mix(in srgb,var(--bg) 95%,#000));box-shadow:0 12px 32px #00000012}
+  #app:has(.handw)>.handw .hand{--tw:inherit;--th:inherit;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:14px 8px;max-width:100%}
+  #app:has(.handw)>.handw .hand .tl{width:var(--tw);height:var(--th);flex:0 0 var(--tw);font-size:calc(var(--tw)*.64)}
+  #app:has(.handw)>.handw .deckn{font-size:10px;letter-spacing:.14em;text-align:center}
+  #app:has(.handw)>.btns{grid-column:1;grid-template-columns:repeat(4,minmax(0,1fr));align-self:start;gap:8px}
+  #app:has(.handw)>.btns .btn{height:52px;font-size:10px;letter-spacing:.08em;border-radius:4px;transition:transform .12s,filter .12s,background .12s}
+  #app:has(.handw)>.btns .btn:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px)}
+  #app:has(.handw)>.btns .btn:focus-visible,
+  .title-screen .big:focus-visible,
+  .title-screen .dkc:focus-visible{outline:2px solid var(--mx);outline-offset:3px}
+
+  /* Loja: inventário e vitrine lado a lado; sem desperdiçar a largura do PC. */
+  #app:has(.shop){width:min(1380px,calc(100% - 36px));max-width:1380px}
+  .shop{display:grid;grid-template-columns:minmax(310px,.82fr) minmax(0,1.18fr);align-items:start;gap:14px 18px;padding:4px 0 28px}
+  .shop>.hdr2,.shop>.shp-line,.shop>.shp-boss,.shop>.shp-msg,.shop>.shp-sell-notice,.shop>.devrow{grid-column:1/-1}
+  .shop>.hdr2{padding:0 2px 6px}
+  .shop .hdr2 h2{font-size:36px}
+  .shop .hdr2 .st{font-size:23px}
+  .shop>.shp-line{justify-content:space-between;padding:8px 3px;border-block:1px solid var(--ln);font-size:12px}
+  .shop>.shp-panel{min-width:0;height:100%;padding:15px;border-radius:8px}
+  .shop>.shp-owned{grid-column:1;grid-row:5}
+  .shop>.shp-market{grid-column:2;grid-row:5;gap:12px}
+  .shop .shp-head{min-height:32px;padding:0 4px 9px}
+  .shop .shp-t b{font-size:11px}
+  .shop .shp-t em{font-size:11px}
+  .shop .shp-owned .rel{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:14px 10px}
+  .shop .shp-owned .rs{--rh:102px;max-width:116px;width:100%}
+  .shop .shp-owned .rs .art{--af:38px}
+  .shop .shp-grid{grid-template-columns:148px minmax(0,1fr);gap:12px}
+  .shop .shp-actions{gap:10px}
+  .shop .shp-go,.shop .shp-roll{min-height:76px;border-radius:6px}
+  .shop .shp-offers{gap:12px;padding:14px 10px}
+  .shop .shp-slot{gap:8px}
+  .shop .shp-slot .cd{max-width:132px}
+  .shop .shp-letters{padding:12px 10px;border-radius:7px}
+  .shop .shp-ups{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
+  .shop .shp-up{justify-content:flex-start;padding:5px;gap:9px;border-radius:4px}
+  .shop .shp-up:hover{background:color-mix(in srgb,var(--tx) 5%,transparent)}
+  .shop .shp-up .tl{--tw:38px;--th:50px}
+  .shop .shp-postit-wrap{margin-top:5px}
+  .shop .shp-postit{min-height:72px;padding:12px 16px}
+  .shop .shp-postit-copy b{font-size:12px}
+  .shop .shp-postit-copy small{font-size:9px}
+  .shop .shp-postit-cost{font-size:13px}
+
+  /* Fim de fase: resumo horizontal e controles com espaço de clique confortável. */
+  #app:has(.sum){width:min(980px,calc(100% - 48px));justify-content:center}
+  #app:has(.sum)>.ov{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 24px;align-items:center;width:100%;max-width:920px;margin:auto;padding:26px 0;text-align:center}
+  #app:has(.sum)>.ov>h1,#app:has(.sum)>.ov>p,#app:has(.sum)>.ov>.sum,#app:has(.sum)>.ov>.rel,#app:has(.sum)>.ov>.devrow{grid-column:1/-1}
+  #app:has(.sum)>.ov h1{font-size:clamp(42px,5vw,64px)}
+  #app:has(.sum)>.ov p{max-width:680px;margin:0 auto;font-size:14px}
+  #app:has(.sum)>.ov>.sum{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  #app:has(.sum)>.ov>.sum>div{padding:15px 10px;font-size:11px;border-radius:5px;background:color-mix(in srgb,var(--tx) 3%,var(--bg))}
+  #app:has(.sum)>.ov>.sum b{font-size:24px}
+  #app:has(.sum)>.ov>.rel{grid-template-columns:repeat(var(--rc,4),minmax(84px,112px));justify-content:center}
+  #app:has(.sum)>.ov>.big{width:min(100%,360px);justify-self:center;min-height:54px}
+
+  /* Baralho expandido e balões ocupam uma área própria, legível no monitor. */
+  .dvw{padding:42px clamp(24px,5vw,84px) 54px}
+  .dvh,.dvs,.dvg,.dvf{max-width:1180px}
+  .dvh{margin-bottom:20px}
+  .dvh b{font-size:54px}
+  .dvs{font-size:12px;margin-bottom:30px}
+  .dvg{grid-template-columns:repeat(8,minmax(82px,1fr));gap:26px 18px;padding:0 8px}
+  .cdk{max-width:128px}
+  #tip{width:300px;padding:14px 16px;font-size:13px;border-radius:7px}
+}
+
+/* Notebook e janela dividida: evita duas colunas apertadas demais. */
+@media (min-width:760px) and (max-width:959px){
+  #app{width:min(820px,calc(100% - 28px));padding:20px 18px 34px}
+  #app:has(.handw){display:flex;gap:12px}
+  #app:has(.handw)>.rel{display:grid;grid-template-columns:repeat(4,minmax(78px,1fr));justify-content:center;gap:8px;max-width:500px;width:100%;align-self:center}
+  #app:has(.handw)>.rel .rs{--rh:76px;max-width:112px;width:100%}
+  #app:has(.handw)>.board{width:100%;max-width:620px;align-self:center;padding:16px;border:1px solid var(--ln);border-radius:7px;background:color-mix(in srgb,var(--tx) 2%,var(--bg))}
+  #app:has(.handw)>.handw{--tw:clamp(40px,5vw,48px);--th:calc(var(--tw)*1.3);width:100%;min-height:160px;flex:none;padding:16px;border:1px solid var(--ln);border-radius:7px;background:color-mix(in srgb,var(--tx) 2%,var(--bg))}
+  #app:has(.handw)>.handw .hand{flex-wrap:wrap;gap:10px 7px}
+  #app:has(.handw)>.btns{width:100%;max-width:620px;align-self:center}
+  #app:has(.handw)>.devrow{width:100%}
+  #app:has(.shop){width:min(820px,calc(100% - 28px));max-width:820px}
+  .shop{display:flex;gap:10px}
+  .shop .shp-grid{grid-template-columns:clamp(112px,20%,160px) minmax(0,1fr)}
+  .title-screen{max-width:640px}
+}
+
+@media (min-width:1200px){
+  #app:has(.handw){grid-template-columns:minmax(0,1.08fr) minmax(480px,.92fr);column-gap:34px}
+  #app:has(.handw)>.handw{min-height:360px}
+  #app:has(.handw)>.board{min-height:350px}
+  #app:has(.handw)>.rel .rs{--rh:98px}
+  .shop{grid-template-columns:minmax(350px,.78fr) minmax(0,1.22fr);gap:16px 22px}
+  .shop .shp-owned .rel{gap:14px;padding:16px 12px}
+  .shop .shp-owned .rs{--rh:110px;max-width:124px}
+  .shop .shp-grid{grid-template-columns:164px minmax(0,1fr)}
+}
+
+@media (hover:hover) and (pointer:fine){
+  .title-screen .dkc:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--mx) 65%,var(--ln))}
+  #app:has(.handw)>.rel .rs.on:hover{transform:translateY(-3px);filter:brightness(1.06)}
+  #app:has(.handw) .tl:hover{filter:brightness(1.06)}
+}
+
 </style>
 </head>
 <body>
@@ -1518,7 +1681,7 @@ async function jogar(){
   }
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
-  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(450);
+  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(450);
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
@@ -1721,7 +1884,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.30-megapack-powers-postits3-balance2";
+const BUILD="2026.10.30-megapack-powers-postits3-balance2-desktop1";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -2719,12 +2882,12 @@ function vShop(){
   ${nb?`<div class="shp-boss"><span class="shp-boss-label">Próxima fase:</span><b class="shp-boss-name">${nb.n}</b></div>`:''}
   ${statusMarkup}
   <section class="shp-panel shp-owned">
-    <div class="shp-head"><div class="shp-t"><b></b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
+    <div class="shp-head"><div class="shp-t"><b>Seus poderes</b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
     ${relRow(true,pop)}
     ${postitChips}
   </section>
   <section class="shp-panel shp-market">
-    <div class="shp-head"><div class="shp-t"><b></b></div></div>
+    <div class="shp-head"><div class="shp-t"><b>Poderes</b></div></div>
     <div class="shp-grid">
       <div class="shp-actions">
         <button class="shp-go" data-a="next"><span>COMEÇAR<br>PARTIDA&nbsp;${G.n%8+1}</span></button>
