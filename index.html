@@ -1055,6 +1055,32 @@ body.wd2.boss{background:#091221}
   #app:has(.handw)>.rel .rs{--rh:68px}
 }
 
+/* ===== Loja em PC/notebook: tudo visível de primeira, em 3 colunas (poderes | vitrine | melhorias + postit) ===== */
+@media (min-width:1000px) and (min-height:560px){
+  #app:has(.shop){width:min(1560px,calc(100% - 32px));max-width:none;height:100vh;height:100dvh;min-height:0;overflow-x:hidden;overflow-y:auto;padding:clamp(10px,2vh,24px) clamp(18px,2.4vw,40px);justify-content:center}
+  .shop{--rhs:clamp(62px,10.5vh,92px);grid-template-columns:minmax(250px,.62fr) minmax(0,1fr) minmax(300px,.95fr);grid-template-rows:none;grid-template-areas:"hdr hdr hdr" "line line line" "boss boss boss" "msg msg msg" "own grid let" "own grid post";gap:clamp(8px,1.5vh,14px) clamp(14px,1.8vw,26px);padding:0;align-content:center;align-items:start}
+  .shop>.hdr2{grid-area:hdr;padding:0 2px 4px}
+  .shop .hdr2 h2{font-size:clamp(26px,4.4vh,36px)}
+  .shop>.shp-line{grid-area:line;padding:6px 3px}
+  .shop>.shp-boss{grid-area:boss}
+  .shop>.shp-msg,.shop>.shp-sell-notice{grid-area:msg}
+  .shop>.shp-owned{grid-area:own;height:auto}
+  .shop>.shp-market{display:contents}
+  .shop .shp-grid{grid-area:grid;grid-template-columns:clamp(96px,8vw,128px) minmax(0,1fr);gap:clamp(8px,1vw,14px)}
+  .shop .shp-go,.shop .shp-roll{min-height:clamp(52px,9vh,72px)}
+  .shop .shp-offers{padding:clamp(8px,1.4vh,14px) 8px}
+  .shop .shp-slot .cd{max-width:clamp(92px,17vh,136px)}
+  .shop .shp-letters{grid-area:let;padding:clamp(8px,1.4vh,14px) 10px}
+  .shop .shp-ups{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(4px,1vh,10px) 8px}
+  .shop .shp-up{padding:2px 0 3px;gap:7px}
+  .shop .shp-up .tl{--tw:clamp(28px,4.6vh,40px);--th:calc(var(--tw)*1.3)}
+  .shop .shp-up .tx b{font-size:10.5px}
+  .shop .shp-postit-wrap{grid-area:post;margin-top:0}
+  .shop .shp-postit{min-height:clamp(54px,9vh,72px);padding:10px 14px}
+  .shop .shp-owned .rel{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,1.2vh,12px);padding:2px}
+  .shop .shp-owned .rs{--rh:var(--rhs);max-width:none}
+}
+
 </style>
 </head>
 <body>
@@ -2926,7 +2952,6 @@ function vShop(){
     ${postitChips}
   </section>
   <section class="shp-panel shp-market">
-    <div class="shp-head"><div class="shp-t"><b>Poderes</b></div></div>
     <div class="shp-grid">
       <div class="shp-actions">
         <button class="shp-go" data-a="next"><span>COMEÇAR<br>PARTIDA&nbsp;${G.n%8+1}</span></button>
