@@ -767,7 +767,7 @@ span.rs{cursor:default}
 .shp-postit-copy small{font:500 8px/1.3 'Chivo Mono',monospace;color:#625536;overflow-wrap:anywhere}
 .shp-postit-cost{align-self:center;white-space:nowrap;color:#755516;font:700 11px 'Chivo Mono',monospace}
 .shp-note-tags{display:flex;flex-wrap:wrap;gap:5px;padding-top:7px;margin-top:3px;border-top:1px solid color-mix(in srgb,var(--tx) 9%,var(--ln))}
-.shp-note-tags span{display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border:1px solid color-mix(in srgb,var(--mx) 28%,var(--ln));border-radius:3px;background:color-mix(in srgb,var(--mx) 5%,transparent);color:var(--mu);font:500 7px 'Chivo Mono',monospace;letter-spacing:.02em}
+.shp-note-tags span{cursor:help;display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border:1px solid color-mix(in srgb,var(--mx) 28%,var(--ln));border-radius:3px;background:color-mix(in srgb,var(--mx) 5%,transparent);color:var(--mu);font:500 7px 'Chivo Mono',monospace;letter-spacing:.02em}
 @keyframes postitIn{from{opacity:0;translate:0 8px;rotate:-1.2deg}to{opacity:1;translate:0 0;rotate:0}}
 @media(prefers-reduced-motion:reduce){.shp-postit-wrap{animation:none}.shp-postit{transition:none}}
 
@@ -1014,6 +1014,45 @@ body.wd2.boss{background:#091221}
   .title-screen .dkc:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--mx) 65%,var(--ln))}
   #app:has(.handw)>.rel .rs.on:hover{transform:translateY(-3px);filter:brightness(1.06)}
   #app:has(.handw) .tl:hover{filter:brightness(1.06)}
+}
+
+/* ===== PC e notebook: a mesa inteira cabe na tela; rail de status + relíquias à esquerda, mesa no centro, caixa de letras à direita ===== */
+.hand .tl.kb{transform:translateY(-7px);z-index:6;box-shadow:0 0 0 3px var(--mx),0 0 22px color-mix(in srgb,var(--mx) 55%,transparent),0 3px 0 var(--ps)}
+.hand .tl.kb::after{content:"";position:absolute;left:50%;bottom:-13px;translate:-50% 0;border:6px solid transparent;border-top:0;border-bottom-color:var(--mx)}
+@media (hover:hover) and (pointer:fine) and (min-width:760px){
+  #app:has(.handw)>.handw::after{content:"← → escolhem   ↑ põe na mesa   ↓ devolve   Enter envia";align-self:center;font:500 10px/1.5 'Chivo Mono',ui-monospace,monospace;letter-spacing:.05em;color:var(--mu);text-align:center}
+}
+@media (min-width:1100px) and (min-height:560px){
+  #app:has(.handw){--W:min(1640px,100vw - 32px);--pd:clamp(18px,2.4vw,40px);--rail:clamp(210px,17vw,270px);--cg:clamp(16px,2vw,30px);--g:clamp(5px,.6vw,9px);
+    --av:calc(var(--W) - 2*var(--pd) - var(--rail) - 2*var(--cg));--hw:max(340px,calc(var(--av)*.3827));--ct:calc(var(--av) - var(--hw));
+    --tw:max(34px,min(calc((var(--ct) - 2*clamp(12px,1.6vw,24px) - 22px - 7*var(--g))/8),calc((100dvh - 440px)/1.3),84px));--th:calc(var(--tw)*1.3);
+    width:var(--W);height:100vh;height:100dvh;min-height:0;overflow-x:hidden;overflow-y:auto;padding:clamp(10px,1.8vh,22px) var(--pd);
+    grid-template-columns:var(--rail) minmax(0,1fr) var(--hw);grid-template-rows:auto auto auto minmax(0,1fr) auto;
+    grid-template-areas:"hdr hdr hdr" "stats key key" "stats boss boss" "rel board hand" "rel btns hand";
+    column-gap:var(--cg);row-gap:clamp(8px,1.4vh,14px);align-content:stretch}
+  #app:has(.handw)>.hdr{grid-area:hdr;padding:0 2px 8px}
+  #app:has(.handw)>.stats{grid-area:stats;grid-template-columns:1fr;max-width:none;width:100%;align-self:start;border:1px solid var(--ln);border-radius:7px;background:color-mix(in srgb,var(--tx) 3%,var(--bg))}
+  #app:has(.handw)>.stats .st{display:flex;justify-content:space-between;align-items:baseline;text-align:left;padding:clamp(7px,1.3vh,12px) 14px;font-size:clamp(17px,2.5vh,22px)}
+  #app:has(.handw)>.stats .st+.st{border-left:0;border-top:1px solid var(--ln)}
+  #app:has(.handw)>.stats .st small{margin:0;font-size:9px}
+  #app:has(.handw)>.key{grid-area:key;max-width:none;width:100%;padding:0 0 8px}
+  #app:has(.handw)>.key b{font-size:clamp(30px,6.2vh,56px);margin:2px 0 6px}
+  #app:has(.handw)>.bossb{grid-area:boss;margin:0;justify-self:center}
+  #app:has(.handw)>.rel{grid-area:rel;grid-template-columns:repeat(2,minmax(0,1fr));justify-content:stretch;align-content:start;gap:8px;min-height:0;overflow-y:auto;padding:0 2px 2px}
+  #app:has(.handw)>.rel .rs{--rh:clamp(72px,11vh,100px);max-width:none}
+  #app:has(.handw)>.board{grid-area:board;min-height:0;align-self:stretch;justify-content:center;gap:clamp(8px,1.6vh,16px);padding:clamp(10px,2vh,22px) clamp(12px,1.6vw,24px)}
+  #app:has(.handw)>.board .tray{width:max-content;max-width:100%;grid-template-columns:repeat(8,var(--tw));gap:var(--g)}
+  #app:has(.handw)>.board .pt b{font-size:clamp(24px,4.4vh,40px)}
+  #app:has(.handw)>.board .tot{min-height:0;font-size:clamp(24px,4.6vh,34px)}
+  #app:has(.handw)>.handw{grid-area:hand;--tw:clamp(40px,min(3.4vw,7.6vh),64px);--th:calc(var(--tw)*1.3);min-height:0;overflow-y:auto;align-self:stretch;gap:clamp(10px,2vh,20px)}
+  #app:has(.handw)>.handw .hand{gap:clamp(10px,1.8vh,16px) 8px}
+  #app:has(.handw)>.btns{grid-area:btns;grid-template-columns:repeat(4,minmax(0,1fr))}
+  #app:has(.handw)>.btns .btn{height:clamp(44px,7vh,56px)}
+}
+@media (min-width:1100px) and (min-height:560px) and (max-height:700px){
+  #app:has(.handw){--tw:max(34px,min(calc((var(--ct) - 2*clamp(12px,1.6vw,24px) - 22px - 7*var(--g))/8),calc((100dvh - 400px)/1.3),84px))}
+  #app:has(.handw)>.hdr .ed{font-size:34px}
+  #app:has(.handw)>.rel .rs{--rh:68px}
 }
 
 </style>
@@ -1681,7 +1720,7 @@ async function jogar(){
   }
   R.lock=true;R.fast=false;
   const x=evalWord(ts,false);R.jog--;
-  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"Palavra jogada":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(450);
+  R.an={c:x.real?10:0,m:x.steps[0].m,tile:-1,rel:-1,out:null,msg:x.real?"":"Palavra não encontrada",pop:"",real:x.real};ren();coopSendSnapshot(true);await dz(450);
   const colK={c:"var(--ti)",m:"#ff5a3d",x:"#ffb21f",$:"#62c98a"};
   for(const s of x.steps){
     if(s.k==="base")continue;
@@ -2852,7 +2891,7 @@ function vPlay(){
    <div class="tray">${Array.from({length:8},(_,slot)=>{const i=R.stPos.indexOf(slot),t=i>=0?st[i]:null;return t?`<div class="slot f" data-slot="${slot}">${tH(t,"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(t.l)?" rr":""):"")+(R.landId!=null&&String(R.landId)===String(t.id)?" lnd":""))}</div>`:`<div class="slot" data-slot="${slot}"></div>`}).join("")}</div>
    <div class="eq"><div class="pt"><small>PONTOS</small><b class="${pop.includes("c")?"pop":""}">${fmt(c)}</b></div><span class="xx">×</span><div class="pt m" style="--hot:${Math.min(1,(m-1)/30)}"><small>BÔNUS</small><b class="${pop.includes("m")?"pop":""}">${fm(m)}</b></div></div>
    ${tot}<div class="msg">${a||R.msg==="Mínimo de 3 letras"||R.msg==="Mantenha as letras em casas consecutivas"?"":R.msg}</div></div>
-  <div class="handw"><div class="hand" style="--hn:${hsz}">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${hsz>8?`<span class="hchip">MÃO ${hsz}</span>`:""}${"Eu te amo, Bia" } </div></div>
+  <div class="handw"><div class="hand" style="--hn:${hsz}">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${hsz>8?`<span class="hchip">MÃO ${hsz}</span>`:""}</div></div>
   <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}${!a&&(st.length<3||!consecutive)?" off":""}" data-a="play"${!a&&(st.length<3||!consecutive)?` aria-disabled="true"`:""}>JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}${devRow()}`;
 }
 function vShop(){
@@ -2873,16 +2912,16 @@ function vShop(){
   }).join('');
   const statusMarkup=G.sellNotice?`<div class="shp-sell-notice" role="status"><span class="ssn-label">PODER DISPENSADO</span><span class="ssn-name">${coopEscape(G.sellNotice.name)}</span><b class="ssn-value">${G.biaMode?"∞":"+$"+G.sellNotice.payout}</b></div>`:`<div class="shp-msg${G.msgBad?" bad":""}" role="status">${G.msg||""}</div>`;
   const note=POSTITS.find(item=>item.id===G.postitOffer&&!hasPostIt(item.id));
-  const postitShelf=note?`<div class="shp-postit-wrap"><small class="shp-postit-label">POST-IT · OFERTA DA VEZ</small><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="shp-postit-copy"><b>${note.n}</b><small>${note.d}</small></span><strong class="shp-postit-cost">$${note.c}</strong></button></div>`:"";
+  const postitShelf=note?`<div class="shp-postit-wrap"><div class="shp-t shp-postit-label"><b>Postit</b></div><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="shp-postit-copy"><b>${note.n}</b><small>${note.d}</small></span><strong class="shp-postit-cost">$${note.c}</strong></button></div>`:"";
   const ownedNotes=(G.postits||[]).map(id=>POSTITS.find(item=>item.id===id)).filter(Boolean);
-  const postitChips=ownedNotes.length?`<div class="shp-note-tags">${ownedNotes.map(item=>`<span title="${item.d}">${item.n}</span>`).join("")}</div>`:"";
+  const postitChips=ownedNotes.length?`<div class="shp-note-tags">${ownedNotes.map(item=>`<span data-tip data-pn="${item.id}" tabindex="0" aria-label="${item.n}. ${item.d}">${item.n}</span>`).join("")}</div>`:"";
   return `<div class="ov shop">
   <div class="hdr2"><h2>Loja</h2><div class="st g">${moneyLabel()}${gain&&!G.biaMode?`<i class="gain">+$${gain}</i>`:""}</div></div>
   <div class="shp-line"><span>Fase <b>${worldOf(G.n)+1}</b> · Partida <b>${G.n%8+1}</b></span><span>Meta <b>${fmt(metaOf(G.n))}</b></span></div>
   ${nb?`<div class="shp-boss"><span class="shp-boss-label">Próxima fase:</span><b class="shp-boss-name">${nb.n}</b></div>`:''}
   ${statusMarkup}
   <section class="shp-panel shp-owned">
-    <div class="shp-head"><div class="shp-t"><b>Seus poderes</b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
+    <div class="shp-head"><div class="shp-t"><b>${G.rel.length}/${powerSlotLimit()}</b></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
     ${relRow(true,pop)}
     ${postitChips}
   </section>
@@ -3227,6 +3266,7 @@ let tipFor=null,tipTimer=0,tipAuto=0,pressTimer=0,tipHeld=false,tipBlock=0,press
 function hideTip(){clearTimeout(tipTimer);clearTimeout(tipAuto);tipEl.classList.remove("on");tipFor=null}
 function tipHtml(el){
   const D=el.dataset;
+  if(D.pn){const it=POSTITS.find(q=>q.id===D.pn);return it?`<div class="th"><b class="tn">${it.n}</b></div><div class="ts"><small>DESCRIÇÃO</small><p>${it.d}</p></div>`:""}
   if(G.mode==="play"&&R&&R.dv&&el.closest(".dvw")&&D.k){
     const isStack=String(D.k).startsWith("s"),letter=isStack?String(D.k).slice(1):String(D.l||"");
     const pile=isStack?dkTiles(letter):null,tile=isStack?pile[0]:R.deck.find(t=>String(t.id)===String(D.k).slice(1));
@@ -3381,6 +3421,32 @@ document.addEventListener("keydown",e=>{
   if(/^[a-zA-Z]$/.test(k)){const i=R.hand.findIndex(t=>t.l===k.toUpperCase());if(i>=0)stage(i);else sErr()}
   else if(k==="Enter"){e.preventDefault();jogar()}
   else if(k==="Backspace"){e.preventDefault();if(R.st.length)unstage(R.st.length-1)}
+});
+/* ---------- cursor por teclado: ← → escolhem, ↑ põe na mesa, ↓ devolve, Enter envia ---------- */
+let kbI=-1;
+const kbHand=()=>[...document.querySelectorAll(".hand [data-h]")];
+function kbMark(){
+  document.querySelectorAll(".tl.kb").forEach(e=>e.classList.remove("kb"));
+  if(kbI<0||G.mode!=="play"||!R)return;
+  const h=kbHand();if(!h.length){kbI=-1;return}
+  kbI=Math.min(kbI,h.length-1);h[kbI].classList.add("kb");
+}
+(function(){const r0=ren;ren=function(){r0.apply(this,arguments);kbMark()}})();
+document.addEventListener("pointerover",e=>{
+  if(e.pointerType!=="mouse"||!e.target.closest)return;
+  const t=e.target.closest(".hand [data-h]");if(!t)return;
+  const i=kbHand().indexOf(t);if(i>=0&&i!==kbI){kbI=i;kbMark()}
+});
+document.addEventListener("keydown",e=>{
+  const k=e.key;if(k!=="ArrowLeft"&&k!=="ArrowRight"&&k!=="ArrowUp"&&k!=="ArrowDown")return;
+  const t=e.target;
+  if(t instanceof Element&&(t.matches("input,textarea,select")||t.isContentEditable||t.closest(".cc-panel,.coop-modal")))return;
+  if(e.metaKey||e.ctrlKey||e.altKey||G.mode!=="play"||!R||R.lock||R.dv)return;
+  const h=kbHand();e.preventDefault();
+  if(k==="ArrowDown"){const s=[...document.querySelectorAll(".tray [data-s]")].pop();if(s)s.click();return}
+  if(!h.length)return;
+  if(k==="ArrowUp"){if(kbI<0)kbI=0;h[Math.min(kbI,h.length-1)].click();return}
+  kbI=kbI<0?0:(kbI+(k==="ArrowRight"?1:-1)+h.length)%h.length;kbMark();
 });
 applyTheme();ren();
 /* Se o navegador abriu uma cópia antiga em cache, busca a versão atual e recarrega uma única vez. */
