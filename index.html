@@ -51,7 +51,7 @@ body.boss{background:#170d0c}
 .key em .prize-label{color:var(--mx);font-weight:700}
 /* Aviso de chefe compacto: mantém o vermelho e mostra apenas selo, nome, regra e frase. */
 /* Aviso de chefe mais estreito, sem a faixa decorativa superior e centralizado. */
-.bossb{position:relative;flex:none;display:flex;align-items:center;gap:7px;width:min(100%,340px);max-width:100%;align-self:center;padding:6px 8px 6px 7px;text-align:left;border:1px solid var(--bc,var(--ca));border-left-width:3px;border-radius:3px;overflow:hidden;background:linear-gradient(100deg,color-mix(in srgb,var(--bc,var(--ca)) 16%,transparent),color-mix(in srgb,var(--bc,var(--ca)) 3%,transparent) 72%)}
+.bossb{position:relative;flex:none;display:flex;align-items:center;gap:7px;width:min(100%,286px);max-width:100%;align-self:center;padding:6px 8px 6px 7px;text-align:left;border:1px solid var(--bc,var(--ca));border-left-width:3px;border-radius:3px;overflow:hidden;background:linear-gradient(100deg,color-mix(in srgb,var(--bc,var(--ca)) 16%,transparent),color-mix(in srgb,var(--bc,var(--ca)) 3%,transparent) 72%)}
 .bb-g{position:relative;flex:none;display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--bc,var(--ca));border-radius:3px;font:700 17px/1 'Alfa Slab One',Georgia,serif;letter-spacing:-.02em;color:var(--bc,var(--ca));background:color-mix(in srgb,var(--bc,var(--ca)) 12%,var(--bg));animation:bbPulse 2.6s ease-in-out infinite}
 .bossb[data-b=ce] .bb-g::after,.bossb[data-b=in] .bb-g::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;margin-top:-1.5px;background:var(--bc,var(--ca));rotate:-38deg;box-shadow:0 0 0 1px var(--bg)}
 .bb-body{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center}
@@ -274,6 +274,37 @@ span.rs{cursor:default}
 @keyframes dealc{from{opacity:0;translate:0 50px;scale:.6;rotate:24deg}}
 .dvf{max-width:380px;margin:30px auto 0;text-align:center;font-size:10px;line-height:1.5;color:var(--mu)}
 
+
+/* Tela inicial: o cenário animado continua livre; a interface fica em uma composição curta. */
+.title-head{width:min(100%,440px);margin:0 auto}
+.title-screen{width:100%;max-width:440px;margin:0 auto;padding:0 2px 18px;gap:10px}
+.title-screen .logo{margin:clamp(10px,4vh,30px) 0 1px;gap:5px}
+.title-screen .sub{font-size:8px;letter-spacing:.3em;color:var(--mu);margin-bottom:8px}
+.title-screen .steps{display:none}
+.title-screen .lbl{display:flex;align-items:center;justify-content:space-between;margin:5px 1px 0;padding:0 0 5px;font-size:8px;letter-spacing:.22em}
+.title-screen .dk{gap:6px}
+.title-screen .dkc{min-height:58px;padding:8px 10px;border-radius:4px;background:color-mix(in srgb,var(--tx) 2%,var(--bg));transition:border-color .16s,background .16s,transform .16s}
+.title-screen .dkc b{font-size:13px;letter-spacing:.02em}
+.title-screen .dkc small{font-size:8.5px;line-height:1.3}
+.title-screen .dkc.sel{border-color:var(--mx);background:color-mix(in srgb,var(--mx) 7%,var(--bg));box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--mx) 75%,transparent)}
+.title-screen .big{width:min(100%,320px);margin-top:4px;padding:14px 20px;letter-spacing:.22em}
+.title-screen .title-record{max-width:100%;margin:1px 0 0;font-size:8px;line-height:1.45;color:var(--mu);text-align:center}
+@media(max-width:390px){
+  .title-screen{gap:8px}
+  .title-screen .logo{margin-top:8px}
+  .title-screen .dk{gap:5px}
+  .title-screen .dkc{min-height:54px;padding:7px 8px}
+  .title-screen .dkc b{font-size:12px}
+  .title-screen .dkc small{font-size:8px}
+}
+@media(max-width:600px) and (max-height:700px){
+  .title-screen .logo{margin-top:2px}
+  .title-screen .logo .tl{--tw:calc((min(100vw,480px) - 68px)/6);--th:calc(var(--tw)*1.3)}
+  .title-screen .sub{margin-bottom:3px}
+  .title-screen .dkc{min-height:48px}
+  .title-screen .title-record{font-size:7.5px}
+}
+
 @media(max-width:390px){
  .hdr{gap:8px}
  .ed{font-size:30px}
@@ -359,9 +390,11 @@ span.rs{cursor:default}
 .shp-head small{font-size:8.5px;letter-spacing:.03em;line-height:1.3;color:var(--mu);text-align:right}
 .h-mouse{display:none}
 @media(hover:hover) and (pointer:fine){.h-touch{display:none}.h-mouse{display:inline}}
-.shp-sell{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--ca);border-radius:6px;background:none;color:var(--ca);font:700 9.5px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.1em;cursor:pointer}
-.shp-sell b{font-size:11px;color:var(--mo);letter-spacing:0}
+ .shp-sell{display:inline-flex;align-items:center;gap:6px;padding:5px 2px;border:0;border-bottom:1px solid color-mix(in srgb,var(--ca) 38%,transparent);border-radius:0;background:transparent;color:var(--mu);font:700 8.5px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.13em;cursor:pointer;transition:color .15s,border-color .15s,transform .15s}
+.shp-sell i{font:400 17px/1 'Chivo Mono',monospace;font-style:normal;color:var(--ca)}
+.shp-sell b{font-size:10px;color:var(--coin);letter-spacing:0}
 .shp-sell:active{transform:translateY(1px)}
+@media(hover:hover){.shp-sell:hover{color:var(--tx);border-color:var(--ca)}}
 
 /* poderes comprados */
 .shp-owned .rel{padding:9px 6px;border-radius:8px;background:var(--well)}
@@ -448,8 +481,8 @@ span.rs{cursor:default}
 .shop button:focus-visible{outline:2px solid var(--mx);outline-offset:2px}
 
 /* animação ao comprar melhoria de letra */
-.upov{position:fixed;inset:0;z-index:39;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:radial-gradient(circle at 50% 45%,rgba(0,0,0,.5),rgba(0,0,0,.78) 80%);animation:upbg 1.75s ease both}
-@keyframes upbg{0%{opacity:0}12%{opacity:1}82%{opacity:1}100%{opacity:0}}
+.upov{position:fixed;inset:0;z-index:39;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:radial-gradient(circle at 50% 45%,rgba(0,0,0,.5),rgba(0,0,0,.78) 80%);animation:upbg 2.65s ease both}
+@keyframes upbg{0%{opacity:0}10%{opacity:1}88%{opacity:1}100%{opacity:0}}
 .upc{position:relative;width:112px;aspect-ratio:3/4}
 .uf{position:absolute;inset:0;border-radius:10px;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 1px var(--ps),0 14px 32px #000a}
 .uf b{font:700 58px/1 'Alfa Slab One',Georgia,serif}
@@ -467,8 +500,8 @@ span.rs{cursor:default}
 .upt small{font:500 10px 'Chivo Mono',monospace;letter-spacing:.32em;color:#d8d3c6}
 .upt b{font:700 30px/1 'Alfa Slab One',Georgia,serif;color:var(--uc);text-shadow:0 0 22px var(--uc),0 3px 0 #0008}
 .upt span{font:700 13px 'Chivo Mono',monospace;color:#fff;letter-spacing:.06em}
-.shp-up.pu .tl{animation:upk .6s cubic-bezier(.2,.9,.3,1.4)}
-@keyframes upk{0%{transform:none}30%{transform:translateY(-11px) rotate(-14deg) scale(1.4)}62%{transform:translateY(0) rotate(6deg) scale(.88)}100%{transform:none}}
+.shp-up.pu .tl{animation:upk .86s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes upk{0%{transform:none}34%{transform:translateY(-13px) rotate(-11deg) scale(1.32)}68%{transform:translateY(1px) rotate(4deg) scale(.94)}100%{transform:none}}
 @media(prefers-reduced-motion:reduce){
   .shp-up.pu .tl{animation:none}
   .shp-slot.deal,.rs.buy,.nope{animation:none}
@@ -654,7 +687,7 @@ span.rs{cursor:default}
 .shp-owned .rel,.shp-offers,.shp-letters{background:none;padding:0}
 .shp-letters{margin-top:8px}
 .ptag{border:0;background:none;padding:0;font-size:11px}
-.shp-sell{padding:3px 9px}
+.shp-sell{padding:2px 3px;color:var(--ca)}
 .shp-go{font:700 11px/1.35 'Chivo Mono',ui-monospace,monospace;letter-spacing:.08em}
 .shp-ups{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 4px}
 .shp-up{flex-direction:column;gap:4px;padding:0}
@@ -722,40 +755,22 @@ span.rs{cursor:default}
 @media(prefers-reduced-motion:reduce){.bn.money span,.shp-sell-notice{animation:none!important}}
 
 
-/* Aba de relíquias: coleção rara, acabamento editorial e discreto como o restante da loja. */
-.shp-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:2px 0 10px;padding:3px;border:1px solid color-mix(in srgb,var(--tx) 10%,var(--ln));border-radius:8px;background:color-mix(in srgb,var(--tx) 2%,transparent)}
-.shp-tab{display:flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:6px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--mu);font:600 9px 'Chivo Mono',monospace;letter-spacing:.12em;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
-.shp-tab em{font:600 8px 'Chivo Mono',monospace;letter-spacing:.02em;font-style:normal;opacity:.75}
-.shp-tab.active{background:color-mix(in srgb,var(--mx) 11%,var(--bg));border-color:color-mix(in srgb,var(--mx) 35%,var(--ln));color:var(--tx);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--mx) 10%,transparent)}
-.shp-tab.active em{color:var(--mx);opacity:1}
-.shp-relics{display:flex;flex-direction:column;gap:8px;min-width:0}
-.shp-relic-intro{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 2px 3px}
-.shp-relic-intro b{font:600 9px 'Chivo Mono',monospace;letter-spacing:.12em;color:var(--mu)}
-.shp-relic-intro small{font:500 8px 'Chivo Mono',monospace;letter-spacing:.04em;color:var(--mu);text-align:right}
-.shp-relic-list{display:flex;flex-direction:column;gap:7px}
-.shp-artifact{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;min-height:76px;padding:9px 10px;border:1px solid color-mix(in srgb,var(--tx) 12%,var(--ln));border-radius:8px;background:linear-gradient(110deg,color-mix(in srgb,var(--tx) 4%,var(--bg)),color-mix(in srgb,var(--tx) 1%,var(--bg)));color:var(--tx);text-align:left;font:inherit;cursor:pointer;transition:border-color .16s,transform .16s,opacity .16s,background .16s;overflow:hidden}
-.shp-artifact::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:var(--art-accent,var(--mx));opacity:.85}
-.shp-artifact.r1{--art-accent:#8fa8c1;border-color:color-mix(in srgb,#8fa8c1 28%,var(--ln))}
-.shp-artifact.r2{--art-accent:#c6a0f6;border-color:color-mix(in srgb,#c6a0f6 40%,var(--ln));background:linear-gradient(110deg,color-mix(in srgb,#9b72f0 8%,var(--bg)),color-mix(in srgb,var(--tx) 1%,var(--bg)))}
-.shp-artifact:active:not(.off){transform:translateY(1px)}
-@media(hover:hover){.shp-artifact:not(.off):hover{border-color:var(--art-accent);background:color-mix(in srgb,var(--art-accent) 7%,var(--bg))}}
-.shp-artifact.off{opacity:.43;filter:saturate(.5)}
-.shp-art-mark{display:grid;place-items:center;width:38px;height:48px;border:1px solid color-mix(in srgb,var(--art-accent,var(--mx)) 45%,transparent);border-radius:5px;background:color-mix(in srgb,var(--art-accent,var(--mx)) 9%,var(--bg));color:var(--art-accent,var(--mx));font:700 20px/1 'Alfa Slab One',Georgia,serif;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--art-accent,var(--mx)) 5%,transparent)}
-.shp-art-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
-.shp-art-title{display:flex;flex-wrap:wrap;align-items:center;gap:5px 7px;min-width:0}
-.shp-art-title b{font:700 10px/1.15 'Chivo Mono',monospace;letter-spacing:.01em;overflow-wrap:anywhere}
-.shp-art-title em{font:600 7px 'Chivo Mono',monospace;letter-spacing:.1em;font-style:normal;color:var(--art-accent,var(--mx))}
-.shp-art-copy small{font:400 9px/1.4 'Chivo Mono',monospace;color:var(--mu);overflow-wrap:anywhere}
-.shp-art-cost{align-self:center;white-space:nowrap;color:var(--art-accent,var(--mx));font:700 12px 'Chivo Mono',monospace}
-.shp-relic-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:94px;padding:16px 10px;border:1px dashed color-mix(in srgb,var(--tx) 17%,var(--ln));border-radius:8px;text-align:center}
-.shp-relic-empty b{font:600 9px 'Chivo Mono',monospace;letter-spacing:.12em;color:var(--tx)}
-.shp-relic-empty small{max-width:260px;font:400 9px/1.45 'Chivo Mono',monospace;color:var(--mu)}
-.shp-relic-owned{display:flex;flex-direction:column;gap:6px;padding-top:7px;margin-top:3px;border-top:1px solid color-mix(in srgb,var(--tx) 9%,var(--ln))}
-.shp-relic-owned>small{font:600 8px 'Chivo Mono',monospace;letter-spacing:.14em;color:var(--mu)}
-.shp-relic-chips{display:flex;flex-wrap:wrap;gap:5px}
-.shp-relic-chips span{padding:4px 7px;border:1px solid color-mix(in srgb,var(--ex) 28%,var(--ln));border-radius:4px;color:var(--tx);font:500 8px 'Chivo Mono',monospace;background:color-mix(in srgb,var(--ex) 5%,transparent)}
-@media(max-width:360px){.shp-artifact{grid-template-columns:34px minmax(0,1fr) auto;gap:8px;padding:8px}.shp-art-mark{width:32px;height:42px;font-size:17px}.shp-art-title b{font-size:9px}.shp-art-copy small{font-size:8px}.shp-tab{font-size:8px;letter-spacing:.08em}}
-@media(prefers-reduced-motion:reduce){.shp-tab,.shp-artifact{transition:none!important}}
+/* Post-it: pequeno achado de papel, dentro da própria vitrine. */
+.shp-postit-wrap{display:flex;flex-direction:column;gap:5px;padding:2px 2px 0;animation:postitIn .48s cubic-bezier(.2,.85,.25,1.15) both}
+.shp-postit-label{padding-left:3px;font:700 7px 'Chivo Mono',monospace;letter-spacing:.2em;color:var(--mu)}
+.shp-postit{--note:#e9d9a9;position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:58px;padding:9px 13px 9px 12px;overflow:hidden;border:1px solid #bba46d;border-left:3px solid #c59d3e;border-radius:3px;background:linear-gradient(112deg,#f0e4bf 0%,#e8d8aa 72%,#dfcb96 100%);color:#292319;text-align:left;font:inherit;cursor:pointer;box-shadow:0 2px 0 #76633d,0 5px 12px #0002;transition:transform .15s,filter .15s}
+.shp-postit::after{content:"";position:absolute;z-index:-1;right:0;top:0;width:15px;height:15px;background:linear-gradient(225deg,#b9a16b 0 49%,#d6c28e 50%);clip-path:polygon(0 0,100% 100%,100% 0);opacity:.8}
+.shp-postit:active:not(.off){transform:translateY(2px);box-shadow:0 0 0 #76633d,0 2px 7px #0002}
+.shp-postit.off{opacity:.5;filter:saturate(.55)}
+.shp-postit-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.shp-postit-copy b{font:700 10px/1.15 'Chivo Mono',monospace;letter-spacing:.015em;color:#282217}
+.shp-postit-copy small{font:500 8px/1.3 'Chivo Mono',monospace;color:#625536;overflow-wrap:anywhere}
+.shp-postit-cost{align-self:center;white-space:nowrap;color:#755516;font:700 11px 'Chivo Mono',monospace}
+.shp-note-tags{display:flex;flex-wrap:wrap;gap:5px;padding-top:7px;margin-top:3px;border-top:1px solid color-mix(in srgb,var(--tx) 9%,var(--ln))}
+.shp-note-tags span{display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border:1px solid color-mix(in srgb,var(--mx) 28%,var(--ln));border-radius:3px;background:color-mix(in srgb,var(--mx) 5%,transparent);color:var(--mu);font:500 7px 'Chivo Mono',monospace;letter-spacing:.02em}
+@keyframes postitIn{from{opacity:0;translate:0 8px;rotate:-1.2deg}to{opacity:1;translate:0 0;rotate:0}}
+@media(prefers-reduced-motion:reduce){.shp-postit-wrap{animation:none}.shp-postit{transition:none}}
+
 
 
 /* ===== Fases: cada uma muda o clima do fundo, e o chefe se adapta à cor da fase ===== */
@@ -806,10 +821,6 @@ body.wd2.boss{background:#091221}
 .rs[data-p=jog]{--rk:var(--c-jog)}.rs[data-p=desc]{--rk:var(--c-tro)}.rs[data-p=hand]{--rk:var(--c-mao)}.rs[data-p=cx]{--rk:var(--coin)}
 .rs .rk{display:none}
 .rs.on[data-p] .rk{display:block;position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--rk);box-shadow:0 0 0 1.5px rgba(0,0,0,.35),0 0 9px var(--rk);z-index:3}
-.shp-artifact[data-artifact=ticket] .shp-art-mark{--art-accent:var(--c-jog)}
-.shp-artifact[data-artifact=exchange] .shp-art-mark{--art-accent:var(--c-tro)}
-.shp-artifact[data-artifact=glove] .shp-art-mark{--art-accent:var(--c-mao)}
-.shp-artifact[data-artifact=vault] .shp-art-mark,.shp-artifact[data-artifact=ledger] .shp-art-mark{--art-accent:var(--coin)}
 .hchip{display:inline-block;margin-right:9px;padding:2px 7px;border-radius:99px;border:1px solid color-mix(in srgb,var(--c-mao) 45%,transparent);background:color-mix(in srgb,var(--c-mao) 16%,transparent);color:var(--c-mao);font:700 8px/1.3 'Chivo Mono',ui-monospace,monospace;letter-spacing:.14em}
 
 /* ---- contagem de cada carta/poder: mesmo estilo de antes, só com a fonte do jogo ---- */
@@ -960,8 +971,8 @@ function validarPalavraEmSilencio(){
 const DICARR=[...DIC],POOLW=BASE.filter(w=>w.length>=4&&w.length<=6);
 const VAL={};"AEIOSURNT".split("").forEach(l=>VAL[l]=1);"DLMCP".split("").forEach(l=>VAL[l]=2);"BGFVH".split("").forEach(l=>VAL[l]=3);"KWY".split("").forEach(l=>VAL[l]=4);"JQX".split("").forEach(l=>VAL[l]=5);VAL.Z=6;
 const VOG="AEIOU",RARAS="JQXZKWY",RMAX=8;
-const powerSlotLimit=()=>RMAX+(G&&Array.isArray(G.relics)&&G.relics.includes("seal")?1:0);
-const hasArtifact=id=>!!(G&&Array.isArray(G.relics)&&G.relics.includes(id));
+const powerSlotLimit=()=>RMAX;
+const hasPostIt=id=>!!(G&&Array.isArray(G.postits)&&G.postits.includes(id));
 const vc=w=>[...w].filter(l=>VOG.includes(l)).length;
 
 /* ---------- pontuação: TINTA (fichas) × CAOS (multiplicador) ---------- */
@@ -973,45 +984,61 @@ const REL=[
  {id:"cf",n:"Consoantes",d:"Cada consoante: +8 pontos",c:4,r:0,f:x=>{const k=x.w.length-vc(x.w);if(!k)return;ac(x,8*k);return 1}},
  {id:"du",n:"Letra Repetida",d:"Letra repetida: +6 bônus",c:5,r:0,f:x=>{if(new Set(x.w).size<x.w.length){am(x,6);return 1}}},
  {id:"ca",n:"Vogal Inicial",d:"Começa com vogal: +10 bônus",c:5,r:0,f:x=>{if(VOG.includes(x.w[0])){am(x,10);return 1}}},
- {id:"tg",n:"Brinde",d:"+60 pontos por palavra",c:4,r:0,f:x=>{ac(x,60);return 1}},
- {id:"co",n:"Coleção",d:"+3 bônus por poder que você tem",c:5,r:0,f:x=>{am(x,3*G.rel.length);return 1}},
+ {id:"tg",n:"Brinde",d:"+45 pontos por palavra",c:4,r:0,f:x=>{ac(x,45);return 1}},
+ {id:"co",n:"Coleção",d:"+2 bônus por poder que você tem",c:5,r:0,f:x=>{am(x,2*G.rel.length);return 1}},
  {id:"te",n:"Gorjeta",d:"+$1 por palavra",c:5,r:0,f:x=>{x.$+=1;x.lb.push({t:"+$1",k:"$"});return 1}},
  {id:"cx",n:"Cofrinho",d:"+$2 ao vencer cada fase",c:4,r:0,p:"cx"},
  {id:"jx",n:"Jogada Extra",d:"+1 jogada por fase",c:5,r:0,p:"jog"},
  {id:"dx",n:"Troca Extra",d:"+1 troca por fase",c:4,r:0,p:"desc"},
- {id:"lr",n:"Letras Raras",d:"J Q X Z K W Y: ×1,5 bônus cada",c:6,r:1,f:x=>{let k=0;for(const l of x.w)if(RARAS.includes(l)){xm(x,1.5);k++}return k}},
- {id:"pl",n:"Palavra Longa",d:"6+ letras: ×2 bônus",c:6,r:1,f:x=>{if(x.w.length>=6){xm(x,2);return 1}}},
- {id:"ne",n:"Palavra Curta",d:"Palavras de 3 a 4 letras: ×2 bônus",c:7,r:1,f:x=>{if(x.w.length<=4){xm(x,2);return 1}}},
- {id:"di",n:"Bônus Fixo",d:"+14 bônus por palavra",c:6,r:1,f:x=>{am(x,14);return 1}},
- {id:"pa",n:"Espelho",d:"Lê igual de trás pra frente: ×4",c:7,r:1,f:x=>{if(x.w===[...x.w].reverse().join("")){xm(x,4);return 1}}},
- {id:"ri",n:"Vai e Vem",d:"Consoante e vogal alternadas: ×2,5",c:7,r:1,f:x=>{const v=[...x.w].map(l=>VOG.includes(l));if(v.every((b,i)=>i===0||b!==v[i-1])){xm(x,2.5);return 1}}},
- {id:"ou",n:"Volta ao Início",d:"Começa e termina na mesma letra: ×3",c:7,r:1,f:x=>{if(x.w[0]===x.w[x.w.length-1]){xm(x,3);return 1}}},
- {id:"pe",n:"Bônus Geral",d:"×1,5 bônus em toda palavra",c:7,r:1,f:x=>{xm(x,1.5);return 1}},
+ {id:"lr",n:"Letras Raras",d:"J Q X Z K W Y: ×1,4 bônus cada",c:6,r:1,f:x=>{let k=0;for(const l of x.w)if(RARAS.includes(l)){xm(x,1.4);k++}return k}},
+ {id:"pl",n:"Palavra Longa",d:"6+ letras: ×1,75 bônus",c:6,r:1,f:x=>{if(x.w.length>=6){xm(x,1.75);return 1}}},
+ {id:"ne",n:"Palavra Curta",d:"Palavras de 3 a 4 letras: ×1,75 bônus",c:7,r:1,f:x=>{if(x.w.length<=4){xm(x,1.75);return 1}}},
+ {id:"di",n:"Bônus Fixo",d:"+12 bônus por palavra",c:6,r:1,f:x=>{am(x,12);return 1}},
+ {id:"pa",n:"Espelho",d:"Lê igual de trás pra frente: ×3,5",c:7,r:1,f:x=>{if(x.w===[...x.w].reverse().join("")){xm(x,3.5);return 1}}},
+ {id:"ri",n:"Vai e Vem",d:"Consoante e vogal alternadas: ×2,1",c:7,r:1,f:x=>{const v=[...x.w].map(l=>VOG.includes(l));if(v.every((b,i)=>i===0||b!==v[i-1])){xm(x,2.1);return 1}}},
+ {id:"ou",n:"Volta ao Início",d:"Começa e termina na mesma letra: ×2,5",c:7,r:1,f:x=>{if(x.w[0]===x.w[x.w.length-1]){xm(x,2.5);return 1}}},
+ {id:"pe",n:"Bônus Geral",d:"×1,4 bônus em toda palavra",c:7,r:1,f:x=>{xm(x,1.4);return 1}},
  {id:"be",n:"Mão Maior",d:"+1 letra na mão",c:6,r:1,p:"hand"},
- {id:"mi",n:"Letras Brilhantes",d:"Cada letra brilhante na palavra: ×1,5 bônus",c:9,r:2,f:x=>{let k=0;for(const t of x.ts)if(t.g){xm(x,1.5);k++}return k}},
- {id:"uf",n:"Última Chance",d:"Na última jogada: ×3 bônus",c:9,r:2,f:x=>{if(R.jog===1){xm(x,3);return 1}}},
+ {id:"mi",n:"Letras Brilhantes",d:"Cada letra brilhante na palavra: ×1,35 bônus",c:9,r:2,f:x=>{let k=0;for(const t of x.ts)if(t.g){xm(x,1.35);k++}return k}},
+ {id:"uf",n:"Última Chance",d:"Na última jogada: ×2,6 bônus",c:9,r:2,f:x=>{if(R.jog===1){xm(x,2.6);return 1}}},
  {id:"pr",n:"Pontos em Dobro",d:"Dobra os pontos das letras da palavra",c:10,r:2,f:x=>{const v=x.c;ac(x,v);x.lb[x.lb.length-1].t="×2";return 1}},
- {id:"tr",n:"Trinca",d:"Palavras de 3 letras: ×2,5 bônus",c:6,r:1,f:x=>{if(x.w.length===3){xm(x,2.5);return 1}}},
- {id:"qu",n:"Quarteto",d:"Palavras de 4 letras: +90 pontos",c:6,r:1,f:x=>{if(x.w.length===4){ac(x,90);return 1}}},
+ {id:"tr",n:"Trinca",d:"Palavras de 3 letras: ×2,2 bônus",c:6,r:1,f:x=>{if(x.w.length===3){xm(x,2.2);return 1}}},
+ {id:"qu",n:"Quarteto",d:"Palavras de 4 letras: +70 pontos",c:6,r:1,f:x=>{if(x.w.length===4){ac(x,70);return 1}}},
  {id:"ra",n:"Alquimia Rara",d:"Cada letra rara rende +$1",c:7,r:1,f:x=>{const k=[...x.w].filter(l=>RARAS.includes(l)).length;if(k){x.$+=k;x.lb.push({t:"+$"+k,k:"$"});return k}}},
  {id:"la",n:"Lapidação",d:"Cada letra melhorada: +12 pontos",c:8,r:1,f:x=>{const k=x.ts.filter(t=>tileUpgradeCount(t)>0).length;if(k){ac(x,12*k);return k}}},
  {id:"fi",n:"Fio de Ouro",d:"Cada letra dourada, sólida ou rúnica: +4 bônus",c:8,r:1,f:x=>{const k=x.ts.filter(t=>!!(t.k||(t.up&&((t.up.s||0)>0||(t.up.u||0)>0)))).length;if(k){am(x,4*k);return k}}},
- {id:"vo",n:"Voz do Eco",d:"Se a palavra contém 3 vogais ou mais: ×1,7 bônus",c:7,r:1,f:x=>{if(vc(x.w)>=3){xm(x,1.7);return 1}}},
- {id:"re",n:"Refrão",d:"Cada vogal: +3 bônus",c:7,r:1,f:x=>{const k=vc(x.w);if(k){am(x,3*k);return k}}},
- {id:"ma",n:"Maré",d:"Palavras com 5+ letras: ×1,6 bônus",c:8,r:1,f:x=>{if(x.w.length>=5){xm(x,1.6);return 1}}},
+ {id:"vo",n:"Voz do Eco",d:"Se a palavra contém 3 vogais ou mais: ×1,55 bônus",c:7,r:1,f:x=>{if(vc(x.w)>=3){xm(x,1.55);return 1}}},
+ {id:"re",n:"Refrão",d:"Cada vogal: +2,5 bônus",c:7,r:1,f:x=>{const k=vc(x.w);if(k){am(x,2.5*k);return k}}},
+ {id:"ma",n:"Maré",d:"Palavras com 5+ letras: ×1,5 bônus",c:8,r:1,f:x=>{if(x.w.length>=5){xm(x,1.5);return 1}}},
  {id:"ec",n:"Elo",d:"Usar uma letra melhorada: ×1,25 bônus",c:8,r:1,f:x=>{if(x.ts.some(t=>tileUpgradeCount(t)>0)){xm(x,1.25);return 1}}},
- {id:"fo",n:"Fogueira",d:"Cada consoante: +3 bônus",c:7,r:1,f:x=>{const k=x.w.length-vc(x.w);if(k){am(x,3*k);return k}}},
- {id:"ln",n:"Lente Rara",d:"Cada letra rara: +7 pontos",c:8,r:1,f:x=>{const k=[...x.w].filter(l=>RARAS.includes(l)).length;if(k){ac(x,7*k);return k}}},
- {id:"it",n:"Primeira Faísca",d:"Começa com a primeira letra do desafio: +24 pontos",c:5,r:0,f:x=>{if(x.w[0]===String(R.sw||"")[0]){ac(x,24);return 1}}},
- {id:"dv",n:"Diversidade",d:"Cada letra diferente: +3 pontos",c:5,r:0,f:x=>{const k=new Set(x.w).size;if(k){ac(x,3*k);return 1}}},
- {id:"sq",n:"Escadinha",d:"Três letras em sequência alfabética: +12 bônus",c:6,r:1,f:x=>{const a=[...x.w].map(ch=>ch.charCodeAt(0));for(let i=0;i<a.length-2;i++)if(a[i+1]===a[i]+1&&a[i+2]===a[i]+2){am(x,12);return 1}}},
+ {id:"fo",n:"Fogueira",d:"Cada consoante: +2,5 bônus",c:7,r:1,f:x=>{const k=x.w.length-vc(x.w);if(k){am(x,2.5*k);return k}}},
+ {id:"ln",n:"Lente Rara",d:"Cada letra rara: +8 pontos",c:8,r:1,f:x=>{const k=[...x.w].filter(l=>RARAS.includes(l)).length;if(k){ac(x,8*k);return k}}},
+ {id:"it",n:"Primeira Faísca",d:"Começa com a primeira letra do desafio: +30 pontos",c:5,r:0,f:x=>{if(x.w[0]===String(R.sw||"")[0]){ac(x,30);return 1}}},
+ {id:"dv",n:"Diversidade",d:"Cada letra diferente: +4 pontos",c:5,r:0,f:x=>{const k=new Set(x.w).size;if(k){ac(x,4*k);return 1}}},
+ {id:"sq",n:"Escadinha",d:"Três letras em sequência alfabética: +14 bônus",c:6,r:1,f:x=>{const a=[...x.w].map(ch=>ch.charCodeAt(0));for(let i=0;i<a.length-2;i++)if(a[i+1]===a[i]+1&&a[i+2]===a[i]+2){am(x,14);return 1}}},
  {id:"sv",n:"Boa Gorjeta",d:"Palavras com 5+ letras: +$1",c:5,r:0,f:x=>{if(x.w.length>=5){x.$+=1;x.lb.push({t:"+$1",k:"$"});return 1}}},
- {id:"rm",n:"Ressonância",d:"Palavras com 6+ letras: ×1,25 bônus",c:7,r:1,f:x=>{if(x.w.length>=6){xm(x,1.25);return 1}}}
+ {id:"rm",n:"Ressonância",d:"Palavras com 6+ letras: ×1,2 bônus",c:7,r:1,f:x=>{if(x.w.length>=6){xm(x,1.2);return 1}}},
+ /* MEGAPACK · poderes de construção de palavra */
+ {id:"rg",n:"Régua",d:"Palavras de 4 letras: +45 pontos",c:5,r:0,f:x=>{if(x.w.length===4){ac(x,45);return 1}}},
+ {id:"tm",n:"Trama",d:"Cada troca entre vogal e consoante: +9 pontos",c:6,r:0,f:x=>{let n=0;for(let i=1;i<x.w.length;i++)if(VOG.includes(x.w[i])!==VOG.includes(x.w[i-1]))n++;if(n){ac(x,9*n);return n}}},
+ {id:"pv",n:"Centro",d:"Uma das letras centrais é vogal: ×1,5 bônus",c:7,r:1,f:x=>{const a=Math.floor((x.w.length-1)/2),b=Math.ceil((x.w.length-1)/2);if(VOG.includes(x.w[a])||VOG.includes(x.w[b])){xm(x,1.5);return 1}}},
+ {id:"pd",n:"Paridade",d:"Palavras com quantidade par de letras: +42 pontos",c:5,r:0,f:x=>{if(x.w.length%2===0){ac(x,42);return 1}}},
+ {id:"im",n:"Ímpeto",d:"Palavras com quantidade ímpar de letras: ×1,45 bônus",c:7,r:1,f:x=>{if(x.w.length%2===1){xm(x,1.45);return 1}}},
+ {id:"db",n:"Dobra",d:"Usar uma letra repetida: ×1,5 bônus",c:7,r:1,f:x=>{if(new Set(x.w).size<x.w.length){xm(x,1.5);return 1}}},
+ {id:"bl",n:"Balança",d:"Mesmo número de vogais e consoantes: ×1,7 bônus",c:10,r:2,f:x=>{const v=vc(x.w),c=x.w.length-v;if(v>0&&v===c){xm(x,1.7);return 1}}},
+ {id:"fg",n:"Fôlego",d:"Palavras com 7+ letras: +1 jogada",c:10,r:2,f:x=>{if(x.w.length>=7){x.jog++;x.lb.push({t:"+1 jogada",k:"$"});return 1}}},
+ {id:"ms",n:"Mosaico",d:"Nenhuma letra repetida: ×1,3 bônus",c:8,r:1,f:x=>{if(new Set(x.w).size===x.w.length){xm(x,1.3);return 1}}},
+ {id:"vt",n:"Vértice",d:"Começa e termina com vogal: ×1,6 bônus",c:8,r:1,f:x=>{if(VOG.includes(x.w[0])&&VOG.includes(x.w[x.w.length-1])){xm(x,1.6);return 1}}},
+ {id:"ct",n:"Contraponto",d:"3+ consoantes: +8 pontos por consoante",c:5,r:0,f:x=>{const n=x.w.length-vc(x.w);if(n>=3){ac(x,8*n);return n}}},
+ {id:"dt",n:"Dueto",d:"Exatamente 2 vogais: +40 pontos",c:7,r:1,f:x=>{if(vc(x.w)===2){ac(x,40);return 1}}},
+ {id:"fv",n:"Ponto Final",d:"Termina em vogal: +$1",c:5,r:0,f:x=>{if(VOG.includes(x.w[x.w.length-1])){x.$+=1;x.lb.push({t:"+$1",k:"$"});return 1}}},
+ {id:"cp",n:"Encontro",d:"Duas vogais juntas: +12 bônus",c:7,r:1,f:x=>{if(/[AEIOU]{2}/.test(x.w)){am(x,12);return 1}}},
+ {id:"nc",n:"Conexão",d:"Duas consoantes juntas: ×1,4 bônus",c:8,r:1,f:x=>{if(/[^AEIOU]{2}/.test(x.w)){xm(x,1.4);return 1}}}
 ];
 const ini=r=>r.n.normalize("NFD")[0].toUpperCase(),dms=n=>'<span class="dms">'+'<i></i>'.repeat(n+1)+'</span>',RAR=['COMUM','RARO','ÉPICO'];
 const KG={m:'<path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-3 2-4 2-7 1 1 2 2 3 3 0-3 0-5 0-7z"/>',o:'<ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/>',u:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/>',c:'<path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9.5 3.5L12 6l2.5-2.5M9.5 20.5L12 18l2.5 2.5"/>',x:'<path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/>'};
 const kg=k=>`<svg class="kg" viewBox="0 0 24 24" aria-hidden="true">${KG[k]}</svg>`;
-const KL={c:"PONTOS",m:"BÔNUS",x:"×BÔNUS",o:"MOEDAS",u:"EXTRA"},KIND={vf:"m",cf:"c",du:"m",ca:"m",tg:"c",co:"m",te:"o",cx:"o",jx:"u",dx:"u",lr:"x",pl:"x",ne:"x",di:"m",pa:"x",ri:"x",ou:"x",pe:"x",be:"u",mi:"x",uf:"x",pr:"c",tr:"x",qu:"c",ra:"o",la:"c",fi:"m",vo:"x",re:"m",ma:"x",ec:"x",fo:"m",ln:"c",it:"c",dv:"c",sq:"m",sv:"o",rm:"x"};REL.forEach(r=>r.k=KIND[r.id]);
+const KL={c:"PONTOS",m:"BÔNUS",x:"×BÔNUS",o:"MOEDAS",u:"EXTRA"},KIND={vf:"m",cf:"c",du:"m",ca:"m",tg:"c",co:"m",te:"o",cx:"o",jx:"u",dx:"u",lr:"x",pl:"x",ne:"x",di:"m",pa:"x",ri:"x",ou:"x",pe:"x",be:"u",mi:"x",uf:"x",pr:"c",tr:"x",qu:"c",ra:"o",la:"c",fi:"m",vo:"x",re:"m",ma:"x",ec:"x",fo:"m",ln:"c",it:"c",dv:"c",sq:"m",sv:"o",rm:"x",rg:"c",tm:"c",pv:"x",pd:"c",im:"x",db:"x",bl:"x",fg:"u",ms:"x",vt:"x",ct:"c",dt:"c",fv:"o",cp:"m",nc:"x"};REL.forEach(r=>r.k=KIND[r.id]);
 /* Melhorias de letras: acabamentos distintos, comprados no painel clássico e aplicados a uma carta aleatória. */
 const UPS={
  g:{n:"Brilhante",c:3,k:"c",ef:"+5 pontos por nível",b:"Adiciona +5 pontos por nível quando a carta é usada.",d:"Tinta luminosa com acabamento perolado.",accent:"#b28a27"},
@@ -1029,20 +1056,26 @@ const UPS={
  z:{n:"Ressonante",c:6,k:"x",ef:"×1,08 por nível",b:"Multiplica o bônus por 1,08 por nível quando esta letra é usada.",d:"Ondas violetas concêntricas, finas e quase metálicas.",accent:"#a98af0"},
  m:{n:"Mercúrio",c:6,k:"o",ef:"+$1 por nível",b:"Gera $1 por nível sempre que esta letra é usada.",d:"Filetes prateados e um reflexo metálico discreto.",accent:"#91d8c3"}
 };
-const ARTIFACTS=[
- {id:"seal",n:"Selo de Expansão",d:"Abre +1 espaço permanente para um poder nesta partida.",c:22,r:2,mark:"＋"},
- {id:"glove",n:"Luva do Crupiê",d:"Você recebe +1 carta na mão em cada partida.",c:15,r:1,mark:"Ⅱ"},
- {id:"ticket",n:"Bilhete Dourado",d:"Concede +1 jogada em todas as partidas seguintes.",c:21,r:2,mark:"↗"},
- {id:"exchange",n:"Ficha de Reposição",d:"Concede +1 troca de letras por partida.",c:16,r:1,mark:"↻"},
- {id:"press",n:"Prensa de Tinta",d:"Toda palavra válida começa com +8 pontos extras.",c:16,r:1,mark:"＋"},
- {id:"vault",n:"Cofre de Partida",d:"Receba +2 moedas sempre que concluir uma partida.",c:20,r:2,mark:"$"},
- {id:"lens",n:"Lente das Raras",d:"Cada letra rara usada acrescenta +3 de bônus.",c:18,r:2,mark:"◇"},
- {id:"merchant",n:"Lente do Mercador",d:"Trocar a vitrine custa $1 a menos (mínimo $1).",c:16,r:1,mark:"−"},
- {id:"ledger",n:"Livro-Caixa",d:"Palavras de 5 letras ou mais rendem +$1.",c:14,r:1,mark:"$"},
- {id:"craft",n:"Punção de Oficina",d:"Cada letra melhorada da palavra rende +4 pontos.",c:19,r:2,mark:"✳"},
- {id:"cadence",n:"Selo de Cadência",d:"Palavras de 6 letras ou mais recebem ×1,15 de bônus.",c:20,r:2,mark:"≈"}
+const POSTITS=[
+ {id:"margin",n:"Margem Livre",d:"+1 carta na mão em cada partida",c:15},
+ {id:"first",n:"Primeira Linha",d:"A primeira palavra da partida ganha +18 pontos",c:14},
+ {id:"underline",n:"Sublinhado",d:"Palavras com 5+ letras ganham +8 pontos",c:13},
+ {id:"invoice",n:"Rodapé",d:"Palavras com 6+ letras rendem +$1",c:15},
+ /* MEGAPACK · anotações permanentes durante a sequência de partidas */
+ {id:"clip",n:"Clipe",d:"+1 troca em cada partida",c:9},
+ {id:"bookmark",n:"Marcador",d:"+1 jogada em cada partida",c:13},
+ {id:"draft",n:"Rascunho",d:"A primeira palavra da partida rende +$2",c:11},
+ {id:"ledger",n:"Livro-caixa",d:"Palavras com 4+ letras rendem +$1",c:14},
+ {id:"ruler",n:"Margem Exata",d:"Palavras de 4 letras ganham +25 pontos",c:10},
+ {id:"carbon",n:"Papel-carbono",d:"Palavras de 3 letras rendem +$1",c:11},
+ {id:"highlight",n:"Marca-texto",d:"Palavras com o trecho do desafio ganham +14 pontos",c:12},
+ {id:"staple",n:"Grampo",d:"A primeira palavra com letra melhorada ganha +1 jogada",c:14},
+ {id:"longform",n:"Folha Inteira",d:"Palavras com 7+ letras ganham +35 pontos",c:11},
+ {id:"paperclip",n:"Clips de Arquivo",d:"O primeiro uso de letra rara rende +$2 por partida",c:12},
+ {id:"caption",n:"Legenda",d:"Palavras com exatamente 2 vogais ganham +14 pontos",c:9},
+ {id:"underlay",n:"Entrelinhas",d:"Duas vogais juntas rendem +12 bônus",c:9},
+ {id:"checklist",n:"Lista de Revisão",d:"A primeira palavra da partida ganha +8 bônus",c:10}
 ];
-const ARTIFACT_RARITY=["ACHADO","RARO","MÍSTICO"];
 const MAX_UP_LEVEL=3;
 function tileUpgradeCount(t){if(!t)return 0;const up=t.up&&typeof t.up==="object"?t.up:{};return (Number(t.g)||0)+(Number(t.r)||0)+(Number(t.k)||0)+Object.values(up).reduce((a,b)=>a+(Number(b)||0),0)}
 function tileUpgradeLevel(t,k){if(!t)return 0;if(["g","r","k"].includes(k))return Number(t[k])||0;return Number(t.up&&t.up[k])||0}
@@ -1083,14 +1116,14 @@ const STD="A7 E7 I4 O6 U3 S5 R4 N3 T3 D3 M3 C3 L3 P2 V2 F2 B2 G2 H1 Q1 J1 X1 Z1 
 const DECKS=[
  {n:"Clássica",d:"Letras equilibradas. Boa para começar.",mk:STD,$:4,rel:[],jog:0,desc:0},
  {n:"Raridades",d:"Cheio de letras raras (J Q X Z K W Y), que valem muito. Já começa com Letras Raras.",mk:"A6 E6 I3 O5 U2 S5 R4 N3 T3 D2 M2 C2 L2 P2 V1 F1 B1 G1 H1 Q2 J2 X2 Z2 K2 W2 Y2",$:4,rel:["lr"],jog:0,desc:0},
- {n:"Curtinhas",d:"Já começa com Palavra Curta (×2 bônus em palavras de 3 a 4 letras), mas com 1 troca a menos.",mk:STD,$:4,rel:["ne"],jog:0,desc:-1},
+ {n:"Curtinhas",d:"Já começa com Palavra Curta (×1,75 bônus em palavras de 3 a 4 letras), mas com 1 troca a menos.",mk:STD,$:4,rel:["ne"],jog:0,desc:-1},
  {n:"Reserva",d:"Começa com $10 e o poder Cofrinho (+$2 por partida), mas com 1 jogada a menos.",mk:STD,$:10,rel:["cx"],jog:-1,desc:0},
- {n:"Vogais",d:"Quase só vogais. Começa com Refrão (+3 bônus por vogal).",mk:"A9 E9 I5 O7 U3 S5 R4 N4 T3 D2 M2 C2 L2 P1 V1 B1 G1 H1",$:4,rel:["re"],jog:0,desc:0},
- {n:"Consoantes",d:"Muitas consoantes e poucas vogais. Começa com Fogueira (+3 bônus por consoante).",mk:"A6 E6 I4 O5 U3 S6 R5 N5 T5 D4 M4 C4 L4 P3 V2 F2 B2 G2 H2",$:4,rel:["fo"],jog:0,desc:0},
- {n:"Longas",d:"Começa com Maré (×1,6 em palavras de 5+ letras), mas só com $2.",mk:STD,$:2,rel:["ma"],jog:0,desc:0},
+ {n:"Vogais",d:"Quase só vogais. Começa com Refrão (+2,5 bônus por vogal).",mk:"A9 E9 I5 O7 U3 S5 R4 N4 T3 D2 M2 C2 L2 P1 V1 B1 G1 H1",$:4,rel:["re"],jog:0,desc:0},
+ {n:"Consoantes",d:"Muitas consoantes e poucas vogais. Começa com Fogueira (+2,5 bônus por consoante).",mk:"A6 E6 I4 O5 U3 S6 R5 N5 T5 D4 M4 C4 L4 P3 V2 F2 B2 G2 H2",$:4,rel:["fo"],jog:0,desc:0},
+ {n:"Longas",d:"Começa com Maré (×1,5 em palavras de 5+ letras), mas só com $2.",mk:STD,$:2,rel:["ma"],jog:0,desc:0},
  {n:"Dourada",d:"8 letras já douradas e o poder Fio de Ouro (+4 bônus por letra melhorada), com $3.",mk:STD,$:3,rel:["fi"],jog:0,desc:0,gd:8},
- {n:"Alfabeto",d:"Todas as letras bem distribuídas. Começa com Diversidade (+3 pontos por letra diferente).",mk:"A4 E4 I3 O3 U2 S3 R3 N3 T3 D2 M2 C2 L2 P2 V2 F2 B2 G2 H2 Q2 J2 X2 Z2 K2 W2 Y2",$:4,rel:["dv"],jog:0,desc:0},
- {n:"Aposta",d:"Começa com Bônus Geral (×1,5 em toda palavra), mas com 1 jogada e 1 troca a menos.",mk:STD,$:4,rel:["pe"],jog:-1,desc:-1}
+ {n:"Alfabeto",d:"Todas as letras bem distribuídas. Começa com Diversidade (+4 pontos por letra diferente).",mk:"A4 E4 I3 O3 U2 S3 R3 N3 T3 D2 M2 C2 L2 P2 V2 F2 B2 G2 H2 Q2 J2 X2 Z2 K2 W2 Y2",$:4,rel:["dv"],jog:0,desc:0},
+ {n:"Aposta",d:"Começa com Bônus Geral (×1,4 em toda palavra), mas com 1 jogada e 1 troca a menos.",mk:STD,$:4,rel:["pe"],jog:-1,desc:-1}
 ];
 
 /* ---------- estado ---------- */
@@ -1136,7 +1169,7 @@ function stamp(t,ratio,w){
   burst(cp.x,cp.y,c,Math.min(70,18+ratio*80),7,w[0]);COOP.anchorSel=null;
   if(ratio>.25)flash(c);
 }
-let G={mode:"title",dk:0,rel:[],relics:[],relicOffers:[],shopTab:"powers",pendingRecord:null,lastRecordNotice:null},R=null,TID=0;
+let G={mode:"title",dk:0,rel:[],pendingRecord:null,lastRecordNotice:null},R=null,TID=0;
 let DEV=false;
 const hasMoney=cost=>!!(G&&G.biaMode)||DEV||Number(G&&G.$||0)>=Number(cost||0);
 const spendMoney=cost=>{if(G&&!G.biaMode&&!DEV)G.$-=Number(cost||0)};
@@ -1346,11 +1379,22 @@ function evalWord(ts,dry){
   const w=wd(ts),real=DicionarioLocal.tem(w),n=ts.length;
   const x={w,real,ts,dry,c:10,m:real?Math.max(1,n-1):Math.max(1,Math.floor((n-1)/2)),$:0,jog:0,gild:0,rnd:dry?.5:Math.random(),lb:[],steps:[]};
   if(!real){x.c=0;x.m=1;x.steps.push({k:"base",c:0,m:1,lb:[]});return x}
-  if(hasArtifact("press"))ac(x,8);
-  if(hasArtifact("craft")){const improved=ts.filter(t=>tileUpgradeCount(t)>0).length;if(improved)ac(x,4*improved)}
-  if(hasArtifact("lens")){const rareCount=[...w].filter(l=>RARAS.includes(l)).length;if(rareCount)am(x,3*rareCount)}
-  if(hasArtifact("cadence")&&n>=6)xm(x,1.15);
-  if(hasArtifact("ledger")&&n>=5){x.$+=1;x.lb.push({t:"+$1",k:"$"})}
+  // Toda palavra válida paga uma quantia-base; palavras longas rendem um pouco mais.
+  const wordCash=n>=5?2:1;x.$+=wordCash;x.lb.push({t:"+$"+wordCash,k:"$"});
+  if(hasPostIt("first")&&!R.postitFirstUsed){ac(x,18);if(!dry)R.postitFirstUsed=true}
+  if(hasPostIt("draft")&&!R.postitDraftUsed){x.$+=2;x.lb.push({t:"+$2",k:"$"});if(!dry)R.postitDraftUsed=true}
+  if(hasPostIt("checklist")&&!R.postitChecklistUsed){am(x,8);if(!dry)R.postitChecklistUsed=true}
+  if(hasPostIt("underline")&&n>=5)ac(x,8);
+  if(hasPostIt("invoice")&&n>=6){x.$+=1;x.lb.push({t:"+$1",k:"$"})}
+  if(hasPostIt("ledger")&&n>=4){x.$+=1;x.lb.push({t:"+$1",k:"$"})}
+  if(hasPostIt("ruler")&&n===4)ac(x,25);
+  if(hasPostIt("carbon")&&n===3){x.$+=1;x.lb.push({t:"+$1",k:"$"})}
+  if(hasPostIt("longform")&&n>=7)ac(x,35);
+  if(hasPostIt("highlight")&&w.includes(String(R.sw||"").toUpperCase()))ac(x,14);
+  if(hasPostIt("caption")&&vc(w)===2)ac(x,14);
+  if(hasPostIt("underlay")&&/[AEIOU]{2}/.test(w))am(x,12);
+  if(hasPostIt("paperclip")&&!R.postitRareUsed&&ts.some(t=>RARAS.includes(t.l))){x.$+=2;x.lb.push({t:"+$2",k:"$"});if(!dry)R.postitRareUsed=true}
+  if(hasPostIt("staple")&&!R.postitStapleUsed&&ts.some(t=>tileUpgradeCount(t)>0)){x.jog++;x.lb.push({t:"+1 jogada",k:"$"});if(!dry)R.postitStapleUsed=true}
   x.steps.push({k:"base",c:x.c,m:x.m,lb:x.lb.slice()});x.lb=[];
   ts.forEach((t,i)=>{
     const up=t.up&&typeof t.up==="object"?t.up:{};
@@ -1390,7 +1434,7 @@ function novo(){
   dk.mk.split(" ").forEach(s=>{for(let i=0;i<+s.slice(1);i++)col.push(mkTile(s[0]))});
   if(dk.gd){const ix=col.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,dk.gd);ix.forEach(i=>{col[i].g=1})}
   const coopRun=COOP.role==="host"&&COOP.connected,biaMode=coopRun&&!!COOP.biaMode;
-  G={mode:"play",dk:G.dk||0,$:coopRun?(biaMode?dk.$:0):dk.$,biaMode,n:0,rel:dk.rel.map(id=>REL.find(r=>r.id===id)),relics:[],relicOffers:[],shopTab:"powers",col,jogB:dk.jog,descB:dk.desc,endless:false,rr:0,nb:null,sel:-1,msg:"",sellNotice:null,pendingRecord:null,lastRecordNotice:null,stat:{words:0,neo:0,bw:"",bs:0}};
+  G={mode:"play",dk:G.dk||0,$:coopRun?(biaMode?dk.$:0):dk.$,biaMode,n:0,rel:dk.rel.map(id=>REL.find(r=>r.id===id)),postits:[],postitOffer:null,col,jogB:dk.jog,descB:dk.desc,endless:false,rr:0,nb:null,sel:-1,msg:"",sellNotice:null,pendingRecord:null,lastRecordNotice:null,stat:{words:0,neo:0,bw:"",bs:0}};
   S.runs++;save();rodada();
 }
 function rodada(){
@@ -1399,7 +1443,7 @@ function rodada(){
   let sw;do{sw=pick(POOLW)}while(!okW(sw));
   if(bo&&(bo.id==="ce"||bo.id==="in"))bo.ban=pick("AEOSRNI".split("").filter(l=>!sw.toUpperCase().includes(l)));
   const av=bo&&bo.id==="av"?1:0;
-  R={n,meta:metaOf(n),sc:0,jog:Math.max(1,4+cnt("jog")+G.jogB-av+(hasArtifact("ticket")?1:0)),desc:Math.max(0,3+cnt("desc")+G.descB-av+(hasArtifact("exchange")?1:0)),sw,pw:pick(POW),boss:bo,hs:8+cnt("hand")+(hasArtifact("glove")?1:0),hand:[],st:[],stPos:[],deck:emb([...G.col]),msg:"",an:null,lock:false,fast:false,fresh:new Set(),landId:null,oc:1};
+  R={n,meta:metaOf(n),sc:0,jog:Math.max(1,4+cnt("jog")+G.jogB-av+(hasPostIt("bookmark")?1:0)),desc:Math.max(0,3+cnt("desc")+G.descB-av+(hasPostIt("clip")?1:0)),sw,pw:pick(POW),boss:bo,hs:8+cnt("hand")+(hasPostIt("margin")?1:0),hand:[],st:[],stPos:[],deck:emb([...G.col]),msg:"",an:null,lock:false,fast:false,fresh:new Set(),landId:null,oc:1,postitFirstUsed:false,postitDraftUsed:false,postitChecklistUsed:false,postitStapleUsed:false,postitRareUsed:false};
   for(const ch of sw.toUpperCase()){const i=R.deck.findIndex(t=>t.l===ch);const t=i>=0?R.deck.splice(i,1)[0]:mkTile(ch);R.hand.push(t)}
   R.hand.forEach(t=>{t.o=Math.random();R.fresh.add(t.id)});
   puxa();G.mode="play";ren();
@@ -1518,8 +1562,8 @@ async function jogar(){
   ren();coopSendSnapshot(true);
 }
 async function vence(){
-  const int=Math.min(5,Math.floor(G.$/5)),p={bs:3,jg:R.jog,cx:2*cnt("cx"),int,b:R.boss?3:0,relic:hasArtifact("vault")?2:0};
-  p.tot=p.bs+p.jg+p.cx+p.int+p.b+p.relic;G.pay=p;G.$+=p.tot;sWin();vb([60,40,60,40,120]);
+  const int=Math.min(5,Math.floor(G.$/5)),p={bs:5,jg:R.jog,cx:2*cnt("cx"),int,b:R.boss?3:0};
+  p.tot=p.bs+p.jg+p.cx+p.int+p.b;G.pay=p;G.$+=p.tot;sWin();vb([60,40,60,40,120]);
   if(R)R.lock=true;
   const recordNotice=G.pendingRecord||G.lastRecordNotice;
   G.pendingRecord=null;G.lastRecordNotice=null;
@@ -1536,32 +1580,25 @@ async function vence(){
   banner("PARTIDA VENCIDA",G.biaMode?"MODO BIA · MOEDAS ∞":"+$"+p.tot+" moedas","money",1450);
   await d0(1750);
   coopClearTransientVisuals();
-  G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";oferta();ofertaRelics();ren();coopSendSnapshot(true);
+  G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";oferta();ofertaPostIt();ren();coopSendSnapshot(true);
 }
 function oferta(){
   const pool=REL.filter(r=>!G.rel.includes(r)),out=[];
   while(out.length<3&&pool.length){const w=pool.map(r=>[6,3,1][r.r]);let t=w.reduce((a,b)=>a+b,0)*Math.random(),i=0;for(;i<pool.length;i++){t-=w[i];if(t<=0)break}out.push(pool.splice(Math.min(i,pool.length-1),1)[0])}
   G.off=out;G.offAnim=1;
 }
-/* Relíquias são um achado de loja, não uma rotação comum: chance baixa por fase e itens únicos por partida. */
-function ofertaRelics(){
-  const owned=new Set(Array.isArray(G.relics)?G.relics:[]),pool=ARTIFACTS.filter(a=>!owned.has(a.id));
-  G.relicOffers=[];
-  if(!pool.length||Math.random()>=.13)return;
-  const count=pool.length>1&&Math.random()<.05?2:1;
-  while(G.relicOffers.length<count&&pool.length){
-    const weights=pool.map(a=>a.r===0?6:a.r===1?3:1);let roll=Math.random()*weights.reduce((a,b)=>a+b,0),i=0;
-    for(;i<pool.length;i++){roll-=weights[i];if(roll<0)break}
-    G.relicOffers.push(pool.splice(Math.min(i,pool.length-1),1)[0].id);
-  }
+function ofertaPostIt(){
+  const owned=new Set(Array.isArray(G.postits)?G.postits:[]),pool=POSTITS.filter(note=>!owned.has(note.id));
+  G.postitOffer=null;
+  if(!pool.length||Math.random()>=.30)return;
+  G.postitOffer=pick(pool).id;
 }
-function buyArtifact(id){
-  const artifact=ARTIFACTS.find(a=>a.id===String(id)),offers=Array.isArray(G.relicOffers)?G.relicOffers:[];
-  if(!artifact||!offers.includes(artifact.id)||hasArtifact(artifact.id))return;
-  if(!hasMoney(artifact.c))return deny("artifact-"+artifact.id,"Moedas insuficientes para esta relíquia.");
-  spendMoney(artifact.c);if(!Array.isArray(G.relics))G.relics=[];G.relics.push(artifact.id);
-  G.relicOffers=offers.filter(v=>v!==artifact.id);G.shopTab="relics";G.msg=artifact.n+" adquirido.";G.msgBad=false;G.sellNotice=null;
-  sBuy();ren();coopSendSnapshot(true);
+function buyPostIt(id){
+  const note=POSTITS.find(item=>item.id===String(id));
+  if(!note||G.postitOffer!==note.id||hasPostIt(note.id))return;
+  if(!hasMoney(note.c))return deny("postit-"+note.id,"Moedas insuficientes para este post-it.");
+  spendMoney(note.c);if(!Array.isArray(G.postits))G.postits=[];G.postits.push(note.id);
+  G.postitOffer=null;say(note.n+" anexado.");sBuy();ren();coopSendSnapshot(true);
 }
 const say=(m,bad)=>{G.msg=m;G.msgBad=!!bad;G.sellNotice=null};
 function deny(key,m){G.nope=key;say(m,true);sErr();vb(20);ren()}
@@ -1587,14 +1624,14 @@ function upFx(k,t,from,remote=false,before=null){
     fx=from&&Number.isFinite(from.x)?from:{x:W/2,y:H/2},ease="cubic-bezier(.2,.9,.3,1.1)",A=(e,kf,op)=>e.animate(kf,Object.assign({fill:"both",easing:ease},op));
   const hit=()=>{const q=COOP.quiet;COOP.quiet=!remote;try{ring(cx,cy,N[2]);ring(cx,cy,N[2],.1);burst(cx,cy,N[2],34,8);burst(cx,cy,"#ffffff",14,5);flash(N[2]);shake(6);vb([30,20,50]);sStamp();sUpg(k)}finally{COOP.quiet=q}};
   if(rm){f1.style.opacity=1;tx.style.opacity=1;hit();setTimeout(()=>o.remove(),1100);return}
-  A(card,[{translate:(fx.x-cx)+"px "+(fx.y-cy)+"px",scale:.3,rotate:"-28deg",opacity:0},{translate:"0 0",scale:1.14,rotate:"5deg",opacity:1,offset:.72},{translate:"0 0",scale:1,rotate:"0deg",opacity:1}],{duration:480});
-  A(card,[{scale:1,rotate:"0deg"},{scale:.9,rotate:"-3deg",offset:.4},{scale:1.28,rotate:"2deg",offset:.62},{scale:1,rotate:"0deg"}],{duration:380,delay:600,composite:"add"});
-  A(f1,[{opacity:0,filter:"brightness(3)"},{opacity:1,filter:"brightness(1.5)",offset:.35},{opacity:1,filter:"brightness(1)"}],{duration:340,delay:760,easing:"ease-out"});
-  A(sh,[{translate:"-160% 0"},{translate:"420% 0"}],{duration:620,delay:880,easing:"ease-in-out"});
-  A(tx,[{opacity:0,translate:"0 14px",scale:.8},{opacity:1,translate:"0 0",scale:1}],{duration:340,delay:880});
-  A(card,[{translate:"0 0",scale:1},{translate:"0 -46px",scale:.82}],{duration:340,delay:1380,easing:"ease-in",composite:"add"});
-  A(tx,[{opacity:1},{opacity:0}],{duration:300,delay:1420,easing:"ease-in",fill:"forwards"});
-  setTimeout(hit,760);setTimeout(()=>o.remove(),1800);
+  A(card,[{translate:(fx.x-cx)+"px "+(fx.y-cy)+"px",scale:.3,rotate:"-28deg",opacity:0},{translate:"0 0",scale:1.12,rotate:"4deg",opacity:1,offset:.74},{translate:"0 0",scale:1,rotate:"0deg",opacity:1}],{duration:640});
+  A(card,[{scale:1,rotate:"0deg"},{scale:.94,rotate:"-2deg",offset:.4},{scale:1.2,rotate:"1.5deg",offset:.66},{scale:1,rotate:"0deg"}],{duration:480,delay:760,composite:"add"});
+  A(f1,[{opacity:0,filter:"brightness(2.5)"},{opacity:1,filter:"brightness(1.35)",offset:.38},{opacity:1,filter:"brightness(1)"}],{duration:460,delay:1020,easing:"ease-out"});
+  A(sh,[{translate:"-160% 0"},{translate:"420% 0"}],{duration:820,delay:1200,easing:"ease-in-out"});
+  A(tx,[{opacity:0,translate:"0 14px",scale:.84},{opacity:1,translate:"0 0",scale:1}],{duration:460,delay:1180});
+  A(card,[{translate:"0 0",scale:1},{translate:"0 -46px",scale:.86}],{duration:430,delay:1910,easing:"ease-in",composite:"add"});
+  A(tx,[{opacity:1},{opacity:0}],{duration:420,delay:1960,easing:"ease-in",fill:"forwards"});
+  setTimeout(hit,1020);setTimeout(()=>o.remove(),2700);
 }
 function carimbo(k){
   const u=UPS[k];if(!u)return;
@@ -1618,7 +1655,7 @@ function carimbo(k){
   say("A letra “"+target.l+"” recebeu a melhoria "+u.n+" · nível "+tileUpgradeLevel(target,k));
   sFly();ren();coopSendSnapshot(true);upFx(k,target,from,false,before);
 }
-function reimprimir(){const c=Math.max(1,2+G.rr-(hasArtifact("merchant")?1:0));if(!hasMoney(c))return deny("rr","Moedas insuficientes");spendMoney(c);G.rr++;say("");oferta();sRoll();ren()}
+function reimprimir(){const c=Math.min(5,1+G.rr);if(!hasMoney(c))return deny("rr","Moedas insuficientes");spendMoney(c);G.rr++;say("");oferta();sRoll();ren()}
 function vender(){
   const r=G.rel[G.sel];if(!r)return;
   const payout=Math.floor(r.c/2),notice={id:"sell-"+Date.now()+"-"+Math.random().toString(36).slice(2,6),name:r.n,payout};
@@ -1634,8 +1671,8 @@ function worldIntro(){
   flash(th.fx);burst(W/2,H*.32,th.fx,80,9);
 }
 function avancarFase(){
-  G.endless=true;G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";
-  oferta();ofertaRelics();sOk();ren();worldIntro();
+  G.endless=true;G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";
+  oferta();ofertaPostIt();sOk();ren();worldIntro();
 }
 /* Modo dev: toque em C A C A C nas letras do título. Moedas infinitas e pulo de partidas/fases (só fora do Coop). */
 const devRow=()=>DEV&&!COOP.role?`<div class="devrow"><i>DEV</i><button type="button" data-dev="part">Pular partida</button><button type="button" data-dev="fase">Pular fase</button><button type="button" data-dev="off">Sair</button></div>`:"";
@@ -1646,8 +1683,8 @@ function devToggle(){
   ren();
 }
 function devToShop(){
-  G.win=false;G.endless=true;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";G.shopTab="powers";
-  oferta();ofertaRelics();sOk();ren();if(G.n%8===0)worldIntro();
+  G.win=false;G.endless=true;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";
+  oferta();ofertaPostIt();sOk();ren();if(G.n%8===0)worldIntro();
 }
 function devAct(a){
   if(!DEV||COOP.role||!G)return;
@@ -1684,7 +1721,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.29-coop-bia-rare-artifacts1";
+const BUILD="2026.10.30-megapack-powers-postits3-balance2";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -2381,7 +2418,7 @@ function coopDispatchAction(msg){
   else if(msg.kind==="a")el=document.querySelector(`[data-a="${String(msg.value).replace(/["\\]/g,"")}"]`);
   else if(msg.kind==="dk")el=document.querySelector(`[data-dk="${Number(msg.value)}"]`);
   else if(msg.kind==="o")el=document.querySelector(`[data-o="${Number(msg.value)}"]`);
-  else if(msg.kind==="artifact")el=document.querySelector(`[data-artifact="${String(msg.value).replace(/["\\]/g,"")}"]`);
+  else if(msg.kind==="postit")el=document.querySelector(`[data-postit="${String(msg.value).replace(/["\\]/g,"")}"]`);
   else if(msg.kind==="r")el=document.querySelector(`.rel [data-r="${Number(msg.value)}"]`);
   else if(msg.kind==="l")el=document.querySelector(`.dvw [data-l="${String(msg.value).replace(/["\\]/g,"")}"]`);
   if(!el){coopSend({type:"actionDenied",actionId:msg.actionId,reason:"A carta ou controle mudou. Tente novamente."});return false}
@@ -2436,7 +2473,7 @@ function coopSendActionFromElement(el){
   if(d.s!==undefined){if(coopOptimisticCardAction("tray",String(d.id)))return true;return coopSend({type:"action",kind:"tray",id:String(d.id)})}
   if(d.dk!==undefined)return coopSend({type:"action",kind:"dk",value:Number(d.dk)});
   if(d.o!==undefined)return coopSend({type:"action",kind:"o",value:Number(d.o)});
-  if(d.artifact!==undefined)return coopSend({type:"action",kind:"artifact",value:String(d.artifact)});
+  if(d.postit!==undefined)return coopSend({type:"action",kind:"postit",value:String(d.postit)});
   if(d.r!==undefined)return coopSend({type:"action",kind:"r",value:Number(d.r)});
   if(d.l!==undefined)return coopSend({type:"action",kind:"l",value:String(d.l)});
   if(d.a!==undefined)return coopSend({type:"action",kind:"a",value:String(d.a)});
@@ -2575,12 +2612,11 @@ const muteB=()=>`<span class=</button></span>`;
 const TT0=performance.now();
 function vTitle(){
   const row=(s,o)=>`<div class="lrow">${[...s].map((ch,i)=>`<span class="tl${(o+i)%4===1?" gd":(o+i)%7===3?" rb":""}" style="--i:${o+i}">${ch}</span>`).join("")}</div>`;
-  return `<div class="hdr" style="justify-content:flex-end">${muteB()}</div><div class="ov"><div class="logo" style="--ph:${((performance.now()-TT0)/1000).toFixed(3)}s">${row("CAIXA",0)}${row("ALTA",5)}</div><div class="sub">FORME PALAVRAS. BATA A META.</div>${DEV?'<div class="devtag">MODO DEV ATIVO</div>':""}
-  <div class="steps"><div><i>1</i><span>Toque nas letras da sua mão para montar uma palavra.</span></div><div><i>2</i><span>Cada letra vale <strong style="color:var(--tx)">pontos</strong>. Palavras longas e poderes dão <strong style="color:var(--ca)">bônus</strong>.</span></div><div><i>3</i><span>Pontos × bônus = sua pontuação. Chegue à meta antes que as jogadas acabem.</span></div><div><i>4</i><span><strong style="color:var(--mx)">Dica:</strong> toda partida sorteia um trecho. Se sua palavra contiver esse trecho, você ganha um prêmio extra.</span></div></div>
-  <div class="lbl">ESCOLHA SEU BARALHO <button type="button" class="coop-help" data-coop-ui="open" aria-label="Abrir modo cooperativo experimental" title="Coop online experimental">?</button></div>
+  return `<div class="hdr title-head" style="justify-content:flex-end">${muteB()}</div><div class="ov title-screen"><div class="logo" style="--ph:${((performance.now()-TT0)/1000).toFixed(3)}s">${row("CAIXA",0)}${row("ALTA",5)}</div><div class="sub">FORME PALAVRAS. BATA A META.</div>${DEV?'<div class="devtag">MODO DEV ATIVO</div>':""}
+  <div class="lbl">BARALHO <button type="button" class="coop-help" data-coop-ui="open" aria-label="Abrir modo cooperativo" title="Coop online">?</button></div>
   <div class="dk">${DECKS.map((d,i)=>`<button class="dkc${G.dk===i?" sel":""}" data-dk="${i}"><b>${d.n}</b><small>${d.d}</small></button>`).join("")}</div>
-  <button class="big" data-a="start">COMEÇAR</button>
-  <p style="font-size:10px;color:var(--mu)">${S.runs?`Recorde: ${S.best} partida(s) vencida(s) · ${S.wins} fase(s) concluída(s)`+(S.bw?`<br>Melhor palavra: ${S.bw} (${fmt(S.bs)})`:""):"Sua primeira partida começa agora."}</p></div>`;
+  <button class="big" data-a="start">INICIAR</button>
+  ${S.runs?`<p class="title-record">RECORDE · ${S.best} partidas · ${S.wins} fases${S.bw?`<br>${S.bw} · ${fmt(S.bs)} pontos`:""}</p>`:""}</div>`;
 }
 function wordTierForLength(length){
   const n=Math.max(3,Math.floor(Number(length)||3));
@@ -2641,7 +2677,7 @@ function vPlay(){
   const tot=a&&a.out!==null?`<div class="tot pop">= ${fmt(a.out)}</div>`:pv?`<div class="tot pv">${pv.real?"≈ "+fmt(pv.c*pv.m):"0 PONTOS"}</div>`:'<div class="tot"></div>';
   const sc=R.sc+(a&&a.out||0),pct=Math.min(100,sc/R.meta*100);
   const fxJ=statFx("j",R.jog),fxD=statFx("d",R.desc),fxM=statFx("m",(G.biaMode||DEV)?0:Math.max(0,Number(G.$)||0));
-  const bonJ=cnt("jog")+(Number(G.jogB)||0)+(hasArtifact("ticket")?1:0),bonD=cnt("desc")+(Number(G.descB)||0)+(hasArtifact("exchange")?1:0);
+  const bonJ=cnt("jog")+(Number(G.jogB)||0),bonD=cnt("desc")+(Number(G.descB)||0);
   const chipB=n=>n?`<em>${n>0?"+":"−"}${Math.abs(n)}</em>`:"";
   const hsz=Math.max(8,Number(R.hs)||8);
   return `<div class="hdr"><div class="ed"><small>PARTIDA</small>${G.n%8+1}<i>/8</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
@@ -2657,10 +2693,10 @@ function vPlay(){
   <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}${!a&&(st.length<3||!consecutive)?" off":""}" data-a="play"${!a&&(st.length<3||!consecutive)?` aria-disabled="true"`:""}>JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}${devRow()}`;
 }
 function vShop(){
-  const p=G.pay,nb=G.nb,sel=G.rel[G.sel],full=G.rel.length>=powerSlotLimit(),rc=Math.max(1,2+G.rr-(hasArtifact("merchant")?1:0));
+  const p=G.pay,nb=G.nb,sel=G.rel[G.sel],full=G.rel.length>=powerSlotLimit(),rc=Math.min(5,1+G.rr);
   const an=G.offAnim,pop=G.popRel,nope=G.nope,pu=G.popUp;G.offAnim=0;G.popRel=-1;G.nope="";G.popUp="";
   if(COOP.role==="host"&&!COOP.applyingSnapshot){const f=COOP.shopFx||(COOP.shopFx={an:0,pop:-1,nope:"",pu:""});if(an)f.an=1;if(Number.isInteger(pop)&&pop>=0)f.pop=pop;if(nope)f.nope=nope;if(pu)f.pu=pu}
-  const gain=G.biaMode?0:[p.bs,p.jg,p.cx,p.int,p.b,p.relic].reduce((a,v)=>a+(v||0),0);
+  const gain=G.biaMode?0:[p.bs,p.jg,p.cx,p.int,p.b].reduce((a,v)=>a+(v||0),0);
   const offer=i=>{
     const r=G.off[i];
     if(!r)return `<div class="shp-slot"><span class="ptag gh">$0</span><div class="cd empty"></div></div>`;
@@ -2673,26 +2709,22 @@ function vShop(){
     return `<div class="shp-slot"><span class="ptag${low?" low":""}">$${u.c}</span><button class="shp-up${off?" off":""}${nope===k?" nope":""}${pu===k?" pu":""}" data-a="${k}" data-tip aria-label="${u.n}, ${u.ef}, custa $${u.c}${maxed?", nível máximo":""}"${off?' aria-disabled="true"':''}><span class="tl ${face}" aria-hidden="true">?</span><span class="tx"><b>${u.n}</b>${maxed?'<small>máx.</small>':''}</span></button></div>`;
   }).join('');
   const statusMarkup=G.sellNotice?`<div class="shp-sell-notice" role="status"><span class="ssn-label">PODER DISPENSADO</span><span class="ssn-name">${coopEscape(G.sellNotice.name)}</span><b class="ssn-value">${G.biaMode?"∞":"+$"+G.sellNotice.payout}</b></div>`:`<div class="shp-msg${G.msgBad?" bad":""}" role="status">${G.msg||""}</div>`;
-  const relicCards=(G.relicOffers||[]).map(id=>{
-    const a=ARTIFACTS.find(v=>v.id===id);if(!a||hasArtifact(a.id))return "";
-    const low=!hasMoney(a.c),rarity=ARTIFACT_RARITY[a.r]||"RARO";
-    return `<button type="button" class="shp-artifact r${a.r}${low?" off":""}" data-artifact="${a.id}" aria-label="${a.n}. ${a.d} Custa $${a.c}."${low?' aria-disabled="true"':''}><span class="shp-art-mark" aria-hidden="true">${a.mark}</span><span class="shp-art-copy"><span class="shp-art-title"><b>${a.n}</b><em>${rarity}</em></span><small>${a.d}</small></span><strong class="shp-art-cost">$${a.c}</strong></button>`;
-  }).join("");
-  const relicOwned=(G.relics||[]).map(id=>ARTIFACTS.find(a=>a.id===id)).filter(Boolean);
-  const relicShelf=relicCards?`<div class="shp-letters shp-find"><div class="shp-head"><div class="shp-t"><b>Achado raro</b></div></div><div class="shp-relic-list">${relicCards}</div></div>`:"";
-  const relicChips=relicOwned.length?`<div class="shp-relic-chips" style="margin-top:8px">${relicOwned.map(a=>`<span>${a.n}</span>`).join("")}</div>`:"";
+  const note=POSTITS.find(item=>item.id===G.postitOffer&&!hasPostIt(item.id));
+  const postitShelf=note?`<div class="shp-postit-wrap"><small class="shp-postit-label">POST-IT · OFERTA DA VEZ</small><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="shp-postit-copy"><b>${note.n}</b><small>${note.d}</small></span><strong class="shp-postit-cost">$${note.c}</strong></button></div>`:"";
+  const ownedNotes=(G.postits||[]).map(id=>POSTITS.find(item=>item.id===id)).filter(Boolean);
+  const postitChips=ownedNotes.length?`<div class="shp-note-tags">${ownedNotes.map(item=>`<span title="${item.d}">${item.n}</span>`).join("")}</div>`:"";
   return `<div class="ov shop">
   <div class="hdr2"><h2>Loja</h2><div class="st g">${moneyLabel()}${gain&&!G.biaMode?`<i class="gain">+$${gain}</i>`:""}</div></div>
   <div class="shp-line"><span>Fase <b>${worldOf(G.n)+1}</b> · Partida <b>${G.n%8+1}</b></span><span>Meta <b>${fmt(metaOf(G.n))}</b></span></div>
   ${nb?`<div class="shp-boss"><span class="shp-boss-label">Próxima fase:</span><b class="shp-boss-name">${nb.n}</b></div>`:''}
   ${statusMarkup}
   <section class="shp-panel shp-owned">
-    <div class="shp-head"><div class="shp-t"><b>Seus poderes</b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell">Vender <b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
+    <div class="shp-head"><div class="shp-t"><b></b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
     ${relRow(true,pop)}
-    ${relicChips}
+    ${postitChips}
   </section>
   <section class="shp-panel shp-market">
-    <div class="shp-head"><div class="shp-t"><b>Poderes</b></div></div>
+    <div class="shp-head"><div class="shp-t"><b></b></div></div>
     <div class="shp-grid">
       <div class="shp-actions">
         <button class="shp-go" data-a="next"><span>COMEÇAR<br>PARTIDA&nbsp;${G.n%8+1}</span></button>
@@ -2704,7 +2736,7 @@ function vShop(){
       <div class="shp-head"><div class="shp-t"><b>Melhorias de letras</b></div></div>
       <div class="shp-ups">${upg}</div>
     </div>
-    ${relicShelf}
+    ${postitShelf}
   </section>
   ${devRow()}
   </div>`;
@@ -2720,8 +2752,8 @@ function vOver(){
 const dkAng=i=>0;
 const dkUp=t=>{if(!t)return "";if(t.skin&&UPS[t.skin]){const classic={g:" ug",r:" ur",k:" uk"};return classic[t.skin]||(" skin-"+t.skin)}return (t.g?" ug":"")+(t.r?" ur":"")+(t.k?" uk":"")+(t.up&&t.up.s?" skin-s":"")+(t.up&&t.up.c?" skin-c":"")+(t.up&&t.up.p?" skin-p":"")+(t.up&&t.up.n?" skin-n":"")+(t.up&&t.up.o?" skin-o":"")+(t.up&&t.up.h?" skin-h":"")+(t.up&&t.up.u?" skin-u":"")+(t.up&&t.up.a?" skin-a":"")+(t.up&&t.up.e?" skin-e":"")+(t.up&&t.up.z?" skin-z":"")+(t.up&&t.up.m?" skin-m":"")};
 function dkDots(o,tile){const up=tile?(o.up||{}):{s:o.s,c:o.c,p:o.p,n:o.nx,o:o.o,h:o.h,u:o.u,a:o.a,e:o.e,z:o.z,m:o.m},d=(v,c)=>v?`<em style="background:${c}"></em>`:"";return `<span class="u">${d(o.g,"var(--ti)")}${d(o.r,"var(--ca)")}${d(o.k,"var(--mx)")}${d(up.s,"#aaa594")}${d(up.c,"#7bdcf5")}${d(up.p,"#d6a3ff")}${d(up.n,"#39e1cf")}${d(up.o,"#b794f6")}${d(up.h,"#cdbfff")}${d(up.u,"#62c98a")}${d(up.a,"#c9d2dc")}${d(up.e,"#62c98a")}${d(up.z,"#a98af0")}${d(up.m,"#91d8c3")}</span>`}
-function dkStack(l,i,o){const st=o.n>1?Math.min(3,Math.ceil(o.n/2)):0;return `<div class="cdk s${st}${o.n?"":" z"}${RARAS.includes(l)?" ra":""}${o.n===1?dkUp(dkTiles(l)[0]):""}" data-k="s${l}"${o.n?` data-l="${l}"`:""} data-tip aria-label="Pilha da letra ${l}, ${o.n} cópias" style="--i:${i};--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i>${o.n>1?`<span class="n">×${o.n}</span>`:""}${dkDots(o)}</div>`}
-function dkTiles(l){return R.deck.filter(t=>t.l===l).sort((a,b)=>tileUpgradeCount(b)-tileUpgradeCount(a)||a.id-b.id)}
+function dkStack(l,i,o){const st=o.n>1?Math.min(3,Math.ceil(o.n/2)):0,tiles=dkTiles(l),cover=tiles[0];return `<div class="cdk s${st}${o.n?"":" z"}${RARAS.includes(l)?" ra":""}${cover?dkUp(cover):""}" data-k="s${l}"${o.n?` data-l="${l}"`:""} data-tip aria-label="Pilha da letra ${l}, ${o.n} cópias" style="--i:${i};--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i>${o.n>1?`<span class="n">×${o.n}</span>`:""}${dkDots(o)}</div>`}
+function dkTiles(l){return R.deck.filter(t=>t.l===l)}
 function dkCopies(l,i){return dkTiles(l).map(t=>`<div class="cdk cp${RARAS.includes(l)?" ra":""}${dkUp(t)}" data-k="t${t.id}" data-l="${l}" data-tip aria-label="Letra ${l}${t.g||t.r||t.k?", com melhorias":""}" style="--a:${dkAng(i)}deg"><i>${l}</i><b>${l}</b><i class="b">${l}</i>${dkDots(t,1)}</div>`).join("")}
 function dkCnt(){const c={};G.col.forEach(t=>{c[t.l]=c[t.l]||{n:0,g:0,r:0,k:0,s:0,c:0,p:0,nx:0,o:0,h:0,u:0}});R.deck.forEach(t=>{const o=c[t.l],up=t.up||{};o.n++;if(t.g)o.g++;if(t.r)o.r++;if(t.k)o.k++;if(up.s)o.s++;if(up.c)o.c++;if(up.p)o.p++;if(up.n)o.nx++;if(up.o)o.o++;if(up.h)o.h++;if(up.u)o.u++});return c}
 function dkToggle(l){
@@ -2779,8 +2811,7 @@ function vDeck(){
   const L=Object.keys(cnt).sort(),tot=R.deck.length,vg=R.deck.filter(t=>VOG.includes(t.l)).length;
   return `<div class="dvw" data-a="dvx"><div class="dvh"><div><small>SEU BARALHO</small><b>${tot}</b>letras para comprar</div><button class="mute" data-a="dvx">FECHAR</button></div>
   <div class="dvs"><span>${vg} vogais</span><span>${tot-vg} consoantes</span><span>${R.hand.length+R.st.length} na mão</span></div>
-  <div class="dvg">${L.map((l,i)=>(R.dx&&R.dx[l]?dkCopies(l,i):dkStack(l,i,cnt[l]))).join("")}</div>
-  <p class="dvf">Cada pilha mostra quantas cópias da letra ainda vão ser compradas. Letras roxas são raras e valem muito. Bolinhas marcam letras melhoradas.</p></div>`;
+  <div class="dvg">${L.map((l,i)=>(R.dx&&R.dx[l]?dkCopies(l,i):dkStack(l,i,cnt[l]))).join("")}</div></div>`;
 }
 function view(){return G.mode==="title"?vTitle():G.mode==="shop"?vShop():G.mode==="over"?vOver():vPlay()}
 function ren(){hideTip();
@@ -3035,7 +3066,7 @@ function tipHtml(el){
   const D=el.dataset;
   if(G.mode==="play"&&R&&R.dv&&el.closest(".dvw")&&D.k){
     const isStack=String(D.k).startsWith("s"),letter=isStack?String(D.k).slice(1):String(D.l||"");
-    const tile=isStack?dkTiles(letter)[0]:R.deck.find(t=>String(t.id)===String(D.k).slice(1));
+    const pile=isStack?dkTiles(letter):null,tile=isStack?pile[0]:R.deck.find(t=>String(t.id)===String(D.k).slice(1));
     if(!tile)return "";
     const stackCount=isStack?R.deck.filter(t=>t.l===letter).length:1;
     const mods=[];
@@ -3053,8 +3084,7 @@ function tipHtml(el){
     const rare=RARAS.includes(tile.l);
     return `<div class="th"><b class="tn">LETRA “${coopEscape(tile.l)}”</b>${rare?'<span class="tr q2">RARA</span>':'<span class="tr q0">COMUM</span>'}</div>
       <div class="ts"><small>${isStack?`PILHA · ${stackCount} CÓPIA(S) RESTANTE(S)`:'DESCRIÇÃO DA CARTA'}</small>
-      ${mods.length?mods.join('<div style="height:7px"></div>'):'<p>Esta carta ainda não tem melhorias aplicadas.</p>'}
-      ${isStack?'<div class="tw">Toque na pilha para abrir as cópias e segure uma carta para ver as melhorias dela.</div>':''}</div>`;
+      ${mods.length?mods.join('<div style="height:7px"></div>'):'<p>Esta carta ainda não tem melhorias aplicadas.</p>'}</div>`;
   }
   let n,k,rar=-1,ben,d,warn="";
   if(D.o!==undefined||D.r!==undefined){
@@ -3126,7 +3156,7 @@ document.addEventListener("scroll",hideTip,true);
 /* ---------- entrada ---------- */
 document.addEventListener("click",e=>{
   if(suppressHandClick&&!COOP.remoteDispatch){e.preventDefault();e.stopPropagation();suppressHandClick=false;clearTimeout(suppressHandClickTimer);return}
-  const t=e.target.closest("[data-h],[data-s],[data-l],[data-a],[data-dk],[data-o],[data-artifact],[data-r]");if(!t)return;au();
+  const t=e.target.closest("[data-h],[data-s],[data-l],[data-a],[data-dk],[data-o],[data-postit],[data-r]");if(!t)return;au();
   const D=t.dataset;
   if(D.a==="theme"){S.theme=S.theme?0:1;save();applyTheme();sTec();ren();return}
   if(D.a==="mute"){S.mute=S.mute?0:1;save();sTec();ren();return}
@@ -3148,9 +3178,7 @@ document.addEventListener("click",e=>{
     else if(D.a==="endless"){avancarFase()}return;
   }
   if(G.mode==="shop"){
-    if(D.artifact!==undefined){buyArtifact(String(D.artifact));return}
-    if(D.a==="store-tab-powers"){G.shopTab="powers";ren();return}
-    if(D.a==="store-tab-relics"){G.shopTab="relics";ren();return}
+    if(D.postit!==undefined){buyPostIt(String(D.postit));return}
     if(D.a&&Object.prototype.hasOwnProperty.call(UPS,D.a)){carimbo(D.a);return}
     if(D.o!==undefined)compra(+D.o);
     else if(D.r!==undefined){G.sel=G.sel===+D.r?-1:+D.r;sTec();ren()}
