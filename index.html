@@ -1411,6 +1411,183 @@ body.wd5{--bg:#10061c;--bc:#ff4fd0}body.wd5.boss{background:#06121f}
 @media(min-width:760px){.shop .shp-ups .shp-up .tl{--tw:clamp(32px,4.4vh,42px)}}
 @media(prefers-reduced-motion:reduce){.shop .shp-ups .shp-up .tl{transition:none}}
 
+
+
+/* ================= REFINO FINAL · LOJA CAIXA ALTA ================= */
+.shop{--shop-gap:clamp(8px,1.2vw,14px);width:100%;text-align:left;align-items:stretch;gap:var(--shop-gap);padding:0 0 16px}
+.shop>.hdr2{align-items:flex-end;padding:0 2px 5px;border-bottom:1px solid color-mix(in srgb,var(--tx) 15%,var(--ln))}
+.shop>.hdr2 h2{font-size:clamp(27px,3vw,35px);letter-spacing:-.025em}
+.shop>.hdr2 .st{font-size:clamp(18px,2vw,23px)}
+.shop>.shp-line{display:flex;justify-content:space-between;gap:10px;padding:3px 2px;color:var(--mu);font:600 9px 'Chivo Mono',monospace;letter-spacing:.07em}
+.shop>.shp-line b{color:var(--tx);font-size:11px}
+.shop>.shp-boss{justify-content:flex-start;padding:3px 2px}
+.shop>.shp-msg,.shop>.shp-sell-notice{min-height:16px;margin:0;text-align:left}
+.shop .shp-panel{min-width:0;padding:clamp(8px,1.1vw,12px);border:1px solid color-mix(in srgb,var(--tx) 12%,var(--ln));border-radius:8px;background:color-mix(in srgb,var(--tx) 2.4%,var(--bg))}
+.shop .shp-head{min-height:24px;padding:0 2px 7px;align-items:center}
+.shop .shp-t{align-items:baseline;gap:8px}
+.shop .shp-t b{font-size:9px;letter-spacing:.16em}
+.shop .shp-t em{font-size:9px;color:var(--mu)}
+.shop .shp-owned{border-left:2px solid color-mix(in srgb,var(--mo) 55%,var(--ln))}
+.shop .shp-owned .rel{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 7px;padding:5px;background:color-mix(in srgb,var(--bg) 72%,transparent);border-radius:5px}
+.shop .shp-owned .rs{--rh:clamp(64px,8vh,82px);max-width:76px;width:100%;border-radius:5px}
+.shop .shp-market{gap:clamp(8px,1vw,12px);border:1px solid color-mix(in srgb,var(--mx) 28%,var(--ln));border-radius:8px;background:color-mix(in srgb,var(--mx) 2.2%,var(--bg));padding:clamp(8px,1.1vw,12px)}
+.shop .shp-grid{grid-template-columns:clamp(76px,8vw,106px) minmax(0,1fr);gap:clamp(7px,1vw,12px);align-items:stretch}
+.shop .shp-actions{grid-column:1;gap:7px}
+.shop .shp-offers{grid-column:2}
+
+.shop .shp-go,.shop .shp-roll{min-height:clamp(52px,8vh,70px);border-radius:5px;font-size:9px;letter-spacing:.09em}
+.shop .shp-go{box-shadow:0 2px 0 color-mix(in srgb,var(--mx) 55%,#000)}
+.shop .shp-roll{box-shadow:0 2px 0 color-mix(in srgb,var(--ex) 55%,#000)}
+.shop .shp-offers{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,.8vw,10px);padding:0;background:none;align-content:start}
+.shop .shp-market-title,.shop .shp-lg-title{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:19px;padding:0 2px 5px;border-bottom:1px solid color-mix(in srgb,var(--tx) 12%,var(--ln));font:700 8px 'Chivo Mono',monospace;letter-spacing:.17em;color:var(--tx)}
+.shop .shp-market-title span,.shop .shp-lg-title span{font:500 8px 'Chivo Mono',monospace;letter-spacing:.08em;color:var(--mu)}
+.shop .shp-slot{gap:5px}
+.shop .shp-slot .ptag{font-size:10px;padding:3px 8px;min-height:17px}
+.shop .shp-slot .cd{max-width:none;width:100%;aspect-ratio:3/4;min-height:96px;border-radius:6px}
+.shop .shp-slot .cd .art{--af:clamp(30px,4vw,43px);margin:2px 0}
+.shop .shp-slot .cd .nm{font-size:clamp(8px,.8vw,10px);min-height:2.3em}
+.shop .shp-lg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;align-items:start;min-width:0;padding-top:4px}
+.shop .shp-lg .shp-lg-title{margin-bottom:1px}
+.shop .shp-lg .lg-slot{gap:5px}
+.shop .shp-letters{margin-top:0!important;padding:10px!important;border:1px solid color-mix(in srgb,var(--tx) 11%,var(--ln));border-radius:7px;background:color-mix(in srgb,var(--bg) 48%,transparent)}
+.shop .shp-letters::before{display:none}
+.shop .shp-letters .shp-head{padding:0 2px 7px;border-bottom:1px solid color-mix(in srgb,var(--tx) 12%,var(--ln))}
+.shop .shp-ups{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-auto-flow:row;gap:0!important;border-top:0;border-bottom:0}
+.shop .shp-ups>.shp-slot{padding:9px 2px 5px;gap:6px}
+.shop .shp-ups .shp-up .tl{--tw:clamp(27px,3.3vw,38px);--th:calc(var(--tw)*1.3)}
+.shop .shp-ups .ptag{font-size:8px}
+.shop .shp-postit-wrap{margin:0;padding:0}
+.shop .shp-postit{min-height:62px;padding:9px 12px;border:1px solid color-mix(in srgb,var(--mx) 36%,var(--ln));border-left:2px solid var(--mx);border-radius:5px;background:color-mix(in srgb,var(--mx) 8%,var(--bg));color:var(--tx);box-shadow:none}
+.shop .shp-postit::after{display:none}
+.shop .shp-postit-copy b{color:var(--tx);font-size:9px;letter-spacing:.08em}
+.shop .shp-postit-copy small{color:var(--mu);font-size:8px}
+.shop .shp-postit-cost{color:var(--mx)}
+.shop .shp-note-tags{border-top:1px solid color-mix(in srgb,var(--tx) 10%,var(--ln))}
+
+/* As cartas de Trinca/Quarteto deixam de ser só um número num medalhão: selo gravado + sequência de letras. */
+.shop .shp-lg .cd.lg-card{position:relative;display:flex;flex-direction:column;align-items:stretch;justify-content:center;width:100%;max-width:none;min-height:104px;aspect-ratio:3/4;padding:7px 6px 8px;overflow:hidden;border:1px solid #9c731e;border-radius:6px;color:#241806;background:linear-gradient(145deg,#fff2ad 0%,#f5d46b 22%,#dcae38 51%,#f7df8a 74%,#b98220 100%)!important;box-shadow:inset 0 0 0 2px #fff1b4, inset 0 0 0 4px #b58024,0 2px 5px #0004!important}
+.shop .shp-lg .cd.lg-card::before{content:"";position:absolute;inset:5px;z-index:0;border:1px solid #8e621a8c;border-radius:3px;background:linear-gradient(135deg,#fff8d55c,transparent 42%,#8e621a18 100%),repeating-linear-gradient(135deg,#5b39000b 0 1px,transparent 1px 5px)}
+.shop .shp-lg .cd.lg-card::after{content:"";position:absolute;z-index:3;inset:-35% -80%;pointer-events:none;background:linear-gradient(112deg,transparent 43%,#ffffff22 47%,#fffbdcbb 50%,#f6d46c55 53%,transparent 58%);transform:translateX(-110%);animation:lgGoldFoil 6s ease-in-out infinite}
+.shop .shp-lg .lg-emblem{position:relative;z-index:1;flex:1;min-height:0;width:100%;display:grid;grid-template-rows:auto 1fr auto;align-items:center;justify-items:center;margin:0}
+.shop .shp-lg .lg-emblem::before{width:66%;aspect-ratio:1;border:1px solid #8054119c;border-radius:12px;rotate:45deg;background:linear-gradient(145deg,#fff8cf7a,#d7a62d2b);box-shadow:0 0 0 3px #fff6bd6b,0 0 0 4px #80541140}
+.shop .shp-lg .lg-emblem::after{width:76%;height:76%;border:1px solid #fff7d9a8;border-radius:3px;box-shadow:inset 0 0 0 1px #8d611a40}
+.shop .shp-lg .lg-code{position:relative;z-index:2;display:block;font:700 6.5px 'Chivo Mono',monospace;letter-spacing:.19em;color:#6e4a12}
+.shop .shp-lg .lg-emblem b{position:relative;z-index:2;display:block;transform:none;font:400 clamp(35px,4.2vw,49px)/.95 'Alfa Slab One',Georgia,serif;letter-spacing:-.04em;color:#30200a;text-shadow:0 1px #fff5bd,0 -1px #7c541a55}
+.shop .shp-lg .lg-pips{position:relative;z-index:2;display:flex;justify-content:center;gap:2px;max-width:90%;min-height:4px}
+.shop .shp-lg .lg-pips i{display:block;width:clamp(3px,.35vw,5px);height:3px;background:#6d4a12;border:1px solid #fff0b8;border-radius:1px;box-shadow:0 1px 0 #6b4706}
+.shop .shp-lg .lg-lv{bottom:7%;gap:2px}
+.shop .shp-lg .lg-lv i{width:3px;height:4px;background:#6b450533}
+.shop .shp-lg .lg-lv i.on{background:#65420b;box-shadow:0 0 2px #fff0b2}
+.shop .shp-lg .lg-card[data-size="2"] .lg-emblem::before{border-radius:50%}
+.shop .shp-lg .lg-card[data-size="3"] .lg-emblem::before{border-radius:50% 50% 4px 4px;rotate:0deg}
+.shop .shp-lg .lg-card[data-size="4"] .lg-emblem::before{border-radius:10px;rotate:45deg}
+.shop .shp-lg .lg-card[data-size="5"] .lg-emblem::before{border-radius:50% 4px 50% 4px;rotate:45deg}
+.shop .shp-lg .lg-card[data-size="6"] .lg-emblem::before{border-radius:50% 50% 3px 3px;rotate:0deg}
+.shop .shp-lg .lg-card[data-size="7"] .lg-emblem::before{clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);border-radius:0;rotate:0deg}
+.shop .shp-lg .lg-card[data-size="8"] .lg-emblem::before{border-radius:3px;rotate:45deg;scale:1.06}
+.shop .shp-lg .cd.lg-card:disabled,.shop .shp-lg .cd.lg-card.off{opacity:.53;filter:saturate(.65);cursor:default}
+.shop .shp-lg .cd.lg-card:focus-visible{outline:2px solid var(--mx);outline-offset:3px}
+.shop .shp-lg .cd.lg-card:not(:disabled):not(.off):active{transform:translateY(1px) scale(.98)}
+
+/* Desafio discreto: um único cartão horizontal, sem modal nem bloqueio da loja. */
+.shp-lightning{grid-area:light;display:grid;grid-template-columns:minmax(140px,.8fr) minmax(110px,.45fr) minmax(210px,1fr) minmax(190px,1.15fr);align-items:center;gap:clamp(8px,1.1vw,15px);padding:9px 12px!important;border:1px solid color-mix(in srgb,var(--mx) 30%,var(--ln))!important;border-left:2px solid var(--mx)!important;background:linear-gradient(100deg,color-mix(in srgb,var(--mx) 5%,var(--bg)),color-mix(in srgb,var(--tx) 2%,var(--bg)))!important}
+.ll-heading{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ll-heading small{font:600 7px 'Chivo Mono',monospace;letter-spacing:.2em;color:var(--mu)}
+.ll-heading b{font:400 19px/1.05 'Alfa Slab One',Georgia,serif;letter-spacing:.02em;color:var(--mx)}
+.ll-spec{display:flex;align-items:baseline;gap:5px;white-space:nowrap}
+.ll-spec strong{font:400 28px/1 'Alfa Slab One',Georgia,serif;color:var(--tx)}
+.ll-spec span,.ll-spec i{font:600 7px 'Chivo Mono',monospace;letter-spacing:.12em;color:var(--mu);font-style:normal}
+.ll-spec em{margin-left:5px;padding-left:7px;border-left:1px solid var(--ln);font:700 10px 'Chivo Mono',monospace;color:var(--mo);font-style:normal}
+.ll-players{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ll-player{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:5px;padding:6px 7px;border:1px solid color-mix(in srgb,var(--tx) 10%,var(--ln));border-radius:3px;background:color-mix(in srgb,var(--bg) 55%,transparent);font:600 7px 'Chivo Mono',monospace;letter-spacing:.04em}
+.ll-player>span{color:var(--mu)}
+.ll-player>b{color:var(--tx);font-size:6.5px;letter-spacing:.03em;white-space:nowrap}
+.ll-player time{color:var(--mx);font-size:8px;font-variant-numeric:tabular-nums}
+.ll-player.done>b,.ll-player.done time{color:var(--mo)}
+.ll-player.ended time{color:var(--ca)}
+.ll-action{min-width:0}
+.ll-join,.ll-form button{display:flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border:1px solid color-mix(in srgb,var(--mx) 55%,var(--ln));border-radius:3px;background:color-mix(in srgb,var(--mx) 10%,var(--bg));color:var(--mx);font:700 8px 'Chivo Mono',monospace;letter-spacing:.15em;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+.ll-join:hover,.ll-form button:hover{background:color-mix(in srgb,var(--mx) 17%,var(--bg))}
+.ll-join:active,.ll-form button:active{transform:translateY(1px)}
+.ll-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px}
+.ll-form input{width:100%;min-width:0;height:34px;padding:0 9px;border:1px solid var(--ln);border-radius:3px;background:var(--bg);color:var(--tx);font:600 10px 'Chivo Mono',monospace;letter-spacing:.14em;text-transform:uppercase;outline:none;user-select:text;-webkit-user-select:text}
+.ll-form input:focus{border-color:color-mix(in srgb,var(--mx) 68%,var(--ln));box-shadow:0 0 0 2px color-mix(in srgb,var(--mx) 12%,transparent)}
+.ll-form input::placeholder{color:var(--mu);opacity:.8}
+.ll-form button:disabled{opacity:.45;cursor:wait}
+.ll-result{min-height:34px;display:flex;align-items:center;padding:0 10px;border-left:2px solid var(--mo);color:var(--mo);font:700 9px 'Chivo Mono',monospace;letter-spacing:.1em}
+.ll-result.muted{border-color:var(--mu);color:var(--mu)}
+.ll-feedback{grid-column:1/-1;min-height:11px;margin-top:-3px;color:var(--mx);font:600 7px 'Chivo Mono',monospace;letter-spacing:.1em}
+@media(max-width:759px){
+ .shop{display:flex!important;flex-direction:column;gap:9px;padding-bottom:14px}
+ .shop>.shp-market{display:flex!important;flex-direction:column;gap:10px;padding:9px}
+ .shop .shp-grid{grid-template-columns:clamp(72px,20%,90px) minmax(0,1fr);gap:7px}
+ .shop .shp-actions{gap:7px}
+ .shop .shp-go,.shop .shp-roll{min-height:58px}
+ .shop .shp-offers{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0}
+ .shop .shp-market-title{margin-bottom:1px}
+ .shop .shp-slot .cd{min-height:104px}
+ .shop .shp-owned .rel{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 6px;padding:5px}
+ .shop .shp-owned .rs{--rh:70px;max-width:76px}
+ .shop .shp-lg{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+ .shop .shp-lg .cd.lg-card{min-height:96px}
+ .shop .shp-letters{margin-top:0!important;padding:8px!important}
+ .shop .shp-ups{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+ .shop .shp-ups .shp-up .tl{--tw:clamp(27px,7vw,36px);--th:calc(var(--tw)*1.3)}
+ .shp-lightning{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:9px!important}
+ .ll-heading{grid-column:1;grid-row:1}
+ .ll-spec{grid-column:2;grid-row:1;justify-self:end}
+ .ll-players{grid-column:1/-1;grid-row:2}
+ .ll-action{grid-column:1/-1;grid-row:3}
+ .ll-feedback{grid-row:4}
+}
+@media(max-width:390px){
+ .shop>.shp-line{font-size:8px}
+ .shop .shp-grid{grid-template-columns:66px minmax(0,1fr);gap:6px}
+ .shop .shp-go,.shop .shp-roll{font-size:8px;letter-spacing:.04em;padding-inline:2px}
+ .shop .shp-slot .cd{min-height:94px;padding:5px 3px}
+ .shop .shp-slot .cd .nm{font-size:7.5px}
+ .shop .shp-owned .rs{--rh:64px}
+ .shop .shp-lg .cd.lg-card{min-height:88px}
+ .ll-player{grid-template-columns:18px minmax(0,1fr) auto;padding:5px 5px;gap:3px}
+ .ll-player>b{font-size:6px}
+}
+@media(min-width:760px) and (max-width:999px){
+ #app:has(.shop){width:min(980px,calc(100% - 28px));max-width:980px}
+ .shop{display:grid;grid-template-columns:minmax(230px,.8fr) minmax(0,1.2fr);grid-template-areas:"hdr hdr" "line boss" "msg msg" "light light" "own own" "market market";align-items:start;gap:10px 16px}
+ .shop>.hdr2{grid-area:hdr}.shop>.shp-line{grid-area:line}.shop>.shp-boss{grid-area:boss}.shop>.shp-msg,.shop>.shp-sell-notice{grid-area:msg}.shop>.shp-lightning{grid-area:light}.shop>.shp-owned{grid-area:own}
+ .shop>.shp-market{display:flex;grid-area:market;flex-direction:column}
+ .shop .shp-owned .rel{grid-template-columns:repeat(8,minmax(0,1fr))}
+ .shop .shp-owned .rs{max-width:none;--rh:74px}
+ .shop .shp-slot .cd{min-height:116px}
+ .shop .shp-letters{margin-top:0!important}
+ .shp-lightning{grid-template-columns:minmax(130px,.8fr) minmax(100px,.45fr) minmax(190px,1fr) minmax(180px,1.1fr)}
+}
+@media(min-width:1000px) and (min-height:560px){
+ #app:has(.shop){width:min(1560px,calc(100% - 36px));max-width:none;min-height:100dvh;height:auto;max-height:none;overflow:visible;padding:clamp(12px,2vh,22px) clamp(18px,2.5vw,42px);justify-content:flex-start}
+ .shop{display:grid;grid-template-columns:minmax(230px,.78fr) minmax(370px,1.15fr) minmax(310px,.94fr);grid-template-areas:"hdr hdr hdr" "line boss msg" "light light light" "own grid let" "own leg let" "post post let";align-items:start;align-content:center;gap:clamp(8px,1.2vh,14px) clamp(14px,1.7vw,25px);padding:0}
+ .shop>.hdr2{grid-area:hdr}.shop>.shp-line{grid-area:line}.shop>.shp-boss{grid-area:boss}.shop>.shp-msg,.shop>.shp-sell-notice{grid-area:msg;align-self:center}.shop>.shp-lightning{grid-area:light}
+ .shop>.shp-owned{grid-area:own;margin:0;padding:11px!important;border-bottom:1px solid var(--ln)!important}
+ .shop>.shp-market{display:contents}
+ .shop .shp-grid{grid-area:grid;grid-template-columns:clamp(78px,7vw,104px) minmax(0,1fr);gap:9px}
+ .shop .shp-go,.shop .shp-roll{min-height:clamp(56px,8vh,70px)}
+ .shop .shp-offers{gap:8px}
+ .shop .shp-slot .cd{max-width:clamp(88px,10vw,126px);min-height:clamp(104px,15vh,142px)}
+ .shop>.shp-market>.shp-lg{grid-area:leg;align-self:start}
+ .shop .shp-letters{grid-area:let;align-self:start}
+ .shop .shp-ups{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+ .shop .shp-postit-wrap{grid-area:post}
+ .shop .shp-owned .rel{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:5px}
+ .shop .shp-owned .rs{--rh:clamp(64px,8vh,82px);max-width:86px}
+ .shop .shp-lg{gap:8px}
+ .shop .shp-lg .cd.lg-card{min-height:clamp(102px,14vh,130px)}
+ .shp-lightning{grid-template-columns:minmax(150px,.8fr) minmax(115px,.45fr) minmax(230px,1.1fr) minmax(220px,1.1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+ .shop .shp-lg .cd.lg-card::after{animation:none!important}
+ .shop .shp-postit-wrap,.shop .shp-lg .cd.lg-card.up{animation:none!important}
+ .ll-join,.ll-form button{transition:none}
+}
+
 </style>
 </head>
 <body>
@@ -1613,7 +1790,13 @@ const REL=[
  {id:"ce",n:"Cinco Estrelas",d:"Palavras de exatamente 5 letras: ×1,8 bônus",c:8,r:1,k:"x",f:x=>{if(x.w.length===5){xm(x,1.8);return 1}}},
  {id:"us",n:"Último Suspiro",d:"Na última jogada: +60 pontos e +$2",c:8,r:1,k:"c",f:x=>{if(R.jog===1){ac(x,60);x.$+=2;x.lb.push({t:"+$2",k:"$"});return 1}}},
  {id:"gg",n:"Gigante Gentil",d:"Palavras com 6+ letras: +$2",c:7,r:1,k:"o",f:x=>{if(x.w.length>=6){x.$+=2;x.lb.push({t:"+$2",k:"$"});return 1}}},
- {id:"sf",n:"Sinfonia",d:"Cada vogal diferente: +3 bônus",c:6,r:0,k:"m",f:x=>{const k=new Set([...x.w].filter(l=>VOG.includes(l))).size;if(k){am(x,3*k);return k}}}
+ {id:"sf",n:"Sinfonia",d:"Cada vogal diferente: +3 bônus",c:6,r:0,k:"m",f:x=>{const k=new Set([...x.w].filter(l=>VOG.includes(l))).size;if(k){am(x,3*k);return k}}},
+ /* NOVO PACK · cinco poderes com gatilhos próprios e efeitos distintos */
+ {id:"trf",n:"Três Faixas",d:"Usa letras das três regiões do alfabeto: ×1,85 bônus",c:9,r:2,k:"x",f:x=>{const bands=new Set([...x.w].map(l=>l<="H"?0:l<="R"?1:2));if(bands.size===3){xm(x,1.85);return 1}}},
+ {id:"dsc",n:"Descida",d:"Três letras em sequência decrescente: +85 pontos",c:7,r:1,k:"c",f:x=>{const a=[...x.w].map(l=>l.charCodeAt(0));for(let i=0;i<a.length-2;i++)if(a[i+1]===a[i]-1&&a[i+2]===a[i]-2){ac(x,85);return 1}}},
+ {id:"pvr",n:"Ponto de Pivô",d:"Em palavra ímpar, a letra central rara rende +$2",c:8,r:1,k:"o",f:x=>{const m=Math.floor(x.w.length/2);if(x.w.length%2===1&&x.w.length>=5&&RARAS.includes(x.w[m])){x.$+=2;x.lb.push({t:"+$2",k:"$"});return 1}}},
+ {id:"eco2",n:"Eco Distante",d:"A mesma letra reaparece após uma letra diferente: +50 pontos",c:7,r:1,k:"c",f:x=>{for(let i=0;i<x.w.length-2;i++)if(x.w[i]===x.w[i+2]&&x.w[i]!==x.w[i+1]){ac(x,50);return 1}}},
+ {id:"hrr",n:"Harmonia Rara",d:"Uma letra rara e duas vogais diferentes: ×1,65 bônus",c:9,r:2,k:"x",f:x=>{const rare=[...x.w].filter(l=>RARAS.includes(l)).length,vowels=new Set([...x.w].filter(l=>VOG.includes(l)));if(rare===1&&vowels.size>=2){xm(x,1.65);return 1}}}
 ];
 const ini=r=>r.n.normalize("NFD")[0].toUpperCase(),dms=n=>'<span class="dms">'+'<i></i>'.repeat(n+1)+'</span>',RAR=['COMUM','RARO','ÉPICO','LENDÁRIA'];
 const KG={m:'<path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-3 2-4 2-7 1 1 2 2 3 3 0-3 0-5 0-7z"/>',o:'<ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/>',u:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/>',c:'<path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9.5 3.5L12 6l2.5-2.5M9.5 20.5L12 18l2.5 2.5"/>',x:'<path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/>'};
@@ -2308,7 +2491,7 @@ async function vence(){
   banner("PARTIDA VENCIDA",G.biaMode?"MODO BIA · MOEDAS ∞":"+$"+p.tot+" moedas","money",1450);
   await d0(1750);
   coopClearTransientVisuals();
-  G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";oferta();ofertaPostIt();ren();coopSendSnapshot(true);
+  G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";oferta();ofertaPostIt();ofertaLightning();ren();coopSendSnapshot(true);
 }
 function oferta(){
   const pool=REL.filter(r=>r.r<3&&!G.rel.includes(r)),out=[];
@@ -2441,7 +2624,7 @@ function worldIntro(){
 }
 function avancarFase(){
   G.endless=true;G.n++;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";
-  oferta();ofertaPostIt();sOk();ren();worldIntro();
+  oferta();ofertaPostIt();ofertaLightning();sOk();ren();worldIntro();
 }
 /* Modo dev: toque em C A C A C nas letras do título. Moedas infinitas e pulo de partidas/fases (só fora do Coop). */
 const devRow=()=>DEV&&!COOP.role?`<div class="devrow"><i>DEV</i><button type="button" data-dev="part">Pular partida</button><button type="button" data-dev="fase">Pular fase</button><button type="button" data-dev="off">Sair</button></div>`:"";
@@ -2453,7 +2636,7 @@ function devToggle(){
 }
 function devToShop(){
   G.win=false;G.endless=true;G.nb=bossAt(G.n);G.mode="shop";G.rr=0;G.sel=-1;G.msg="";
-  oferta();ofertaPostIt();sOk();ren();if(G.n%RPW===0)worldIntro();
+  oferta();ofertaPostIt();ofertaLightning();sOk();ren();if(G.n%RPW===0)worldIntro();
 }
 function devAct(a){
   if(!DEV||COOP.role||!G)return;
@@ -2490,7 +2673,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.10.30-megapack-powers-postits3-balance2-desktop1-swapnotice1-shopalbum1-album4-fases6-rpw6-audio2-metas2-base54-audio4";
+const BUILD="2026.10.31-pack5-lightning-shopux2-cards3";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -3103,6 +3286,11 @@ function coopHandleHostMessage(msg){
   if(msg.protocol!==COOP_PROTOCOL||msg.from!=="guest")return;
   if(msg.type==="hello"){coopSendSnapshot(true);coopSend({type:"chatHistory",messages:(COOP.chatMessages||[]).slice(-40)});return}
   if(msg.type==="chat"){const received=coopAppendChatMessage(msg.message,"guest");if(received)coopSend({type:"chatRelay",message:received});return}
+  if(msg.type==="lightningAnswer"){
+    const result=lightningSubmit("guest",msg.word);
+    coopSend({type:"lightningAck",ok:!!result.ok,notice:String(result.notice||"")});
+    return;
+  }
   if(msg.type==="action"){
     if(COOP.dragLock){coopSend({type:"actionDenied",actionId:msg.actionId,reason:"Aguarde o fim do arrasto atual."});return}
     const dispatched=coopDispatchAction(msg);
@@ -3136,6 +3324,12 @@ function coopHandleGuestMessage(msg){
   if(msg.type==="chatRelay"){coopAppendChatMessage(msg.message);return}
   if(msg.type==="chatHistory"){if(Array.isArray(msg.messages))msg.messages.slice(-40).forEach(m=>coopAppendChatMessage(m,null,true));return}
   if(msg.type==="soundBatch"){coopPlayRemoteSoundBatch(msg.events||[]);return}
+  if(msg.type==="lightningAck"){
+    COOP.lightningPending=false;
+    const feedback=document.querySelector("[data-lightning-feedback]");if(feedback&&msg.notice)feedback.textContent=String(msg.notice);
+    const submit=document.querySelector('#lightning-form button[type="submit"]');if(submit)submit.disabled=false;
+    return;
+  }
   if(msg.type==="actionAck"){
     const action=COOP.optimisticActions.find(a=>a.actionId===Number(msg.actionId));
     if(action)action.ackRev=Number.isFinite(Number(msg.rev))?Number(msg.rev):COOP.rev;
@@ -3528,6 +3722,126 @@ function vPlay(){
   <div class="handw"><div class="hand" style="--hn:${hsz}">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${hsz>8?`<span class="hchip">MÃO ${hsz}</span>`:""}</div></div>
   <div class="btns"><button class="btn go${pc==="ok"&&!a?" rdy":""}${!a&&(st.length<2||!consecutive)?" off":""}" data-a="play"${!a&&(st.length<2||!consecutive)?` aria-disabled="true"`:""}>JOGAR</button><button class="btn dc" data-a="disc">TROCAR</button><button class="btn dk2" data-a="deck">BARALHO<b class="cnt">${R.deck.length}</b></button><button class="btn" data-a="clr">LIMPAR</button></div>${R.dv?vDeck():""}${devRow()}`;
 }
+/* ---------- Desafio Relâmpago · catálogo validado pelo dicionário local ---------- */
+const LIGHTNING_THEMES=[
+ {id:"animal",name:"ANIMAL",words:"gato pato rato lobo urso tigre zebra macaco coelho abelha cobra sapo galo vaca porco peixe pomba cavalo ovelha mosca coruja camelo ema onca javali leao puma lebre touro cabra ganso cisne peru mula vespa pavao".split(" ")},
+ {id:"fruta",name:"FRUTA",words:"uva pera figo coco jaca maca manga limao goiaba mamao banana melao abacate tomate".split(" ")},
+ {id:"objeto",name:"OBJETO",words:"mesa faca prato garfo colher livro carta chave carro barco moto roda pneu mala bolsa sapato meia calca blusa camisa chapeu luva joia ouro prata ferro vidro tinta quadro caneta lapis papel cama sofa tapete parede anel copo vaso lata caixa pente jornal tela pasta tenis bota boneca boneco bola dado moeda piano violao tambor pincel giz regua cola banco motor teto piso navio aviao onibus escada".split(" ")},
+ {id:"natureza",name:"NATUREZA",words:"lua estrela noite chuva pedra folha praia ilha campo mato selva lago onda areia brisa raio neve gelo fumaca brasa sombra cheiro sol mar rio ceu flor arvore raiz galho".split(" ")},
+ {id:"comida",name:"COMIDA",words:"bolo pizza cafe leite queijo ovo sopa suco arroz feijao massa carne frango bife pao bala milho alho cebola batata farofa pipoca".split(" ")},
+ {id:"lugar",name:"LUGAR",words:"casa terra sala rua praca ponte morro serra praia ilha campo mato selva lago cidade bairro porto feira escola reino".split(" ")},
+ {id:"corpo",name:"CORPO",words:"olho boca dente lingua mao dedo braco perna corpo rosto cabelo barba pele osso sangue cabeca".split(" ")}
+];
+const LIGHTNING_SECONDS={3:12,4:20,5:25,6:35};
+function lightningChoices(){
+ const out=[];
+ for(const theme of LIGHTNING_THEMES){
+  const groups=new Map();
+  for(const raw of theme.words){const word=normalizarPalavra(raw);if(word.length<3||word.length>6||!DIC.has(word))continue;const list=groups.get(word.length)||[];if(!list.includes(word))list.push(word);groups.set(word.length,list)}
+  for(const [length,words] of groups)if(words.length)out.push({theme:theme.id,themeName:theme.name,length,words});
+ }
+ return out;
+}
+function ofertaLightning(){
+ if(!G)return;
+ G.lightning=null;
+ if(COOP.role!=="host"||!COOP.connected)return;
+ const choices=lightningChoices();if(!choices.length)return;
+ const choice=pick(choices),now=Date.now();
+ G.lightning={id:"lr-"+now.toString(36)+"-"+Math.random().toString(36).slice(2,7),theme:choice.theme,themeName:choice.themeName,length:choice.length,seconds:LIGHTNING_SECONDS[choice.length],words:choice.words,players:{host:{accepted:false,solved:false,expired:false,startedAt:0,expiresAt:0,used:[],notice:""},guest:{accepted:false,solved:false,expired:false,startedAt:0,expiresAt:0,used:[],notice:""}}};
+}
+function lightningPlayer(player){
+ const l=G&&G.lightning;if(!l)return null;
+ if(!l.players||typeof l.players!=="object")l.players={};
+ if(!l.players[player])l.players[player]={accepted:false,solved:false,expired:false,startedAt:0,expiresAt:0,used:[],notice:""};
+ const p=l.players[player];if(!Array.isArray(p.used))p.used=[];return p;
+}
+function lightningRemaining(player){
+ const p=lightningPlayer(player);if(!p||!p.accepted||p.solved||p.expired)return 0;
+ const end=Number(p.expiresAt)||((Number(p.startedAt)||0)+(Number(G.lightning.seconds)||0)*1000);
+ return Math.max(0,Math.ceil((end-Date.now())/1000));
+}
+function lightningStatus(player){
+ const p=lightningPlayer(player);if(!p||!p.accepted)return "DISPONÍVEL";
+ if(p.solved)return "CONCLUÍDO";
+ if(p.expired)return "ENCERRADO";
+ return "EM JOGO";
+}
+function lightningClockText(player){
+ const p=lightningPlayer(player);if(!p||!p.accepted)return "—";
+ if(p.solved)return "+15";
+ if(p.expired)return "00";
+ return String(lightningRemaining(player)).padStart(2,"0");
+}
+function lightningJoin(player){
+ if(!G||G.mode!=="shop"||!G.lightning||COOP.role!=="host"||!COOP.connected)return;
+ const p=lightningPlayer(player);if(!p||p.accepted||p.solved||p.expired)return;
+ const now=Date.now();p.accepted=true;p.startedAt=now;p.expiresAt=now+Number(G.lightning.seconds)*1000;p.notice="";
+ sTec();ren();coopSendSnapshot(true);
+}
+function lightningSubmit(player,raw){
+ const l=G&&G.lightning,p=lightningPlayer(player);
+ if(!G||G.mode!=="shop"||!l||!p||!p.accepted||p.solved||p.expired)return{ok:false,notice:"DESAFIO ENCERRADO"};
+ if(lightningRemaining(player)<=0){p.expired=true;p.notice="TEMPO ENCERRADO";ren();coopSendSnapshot(true);return{ok:false,notice:p.notice}}
+ const text=String(raw??"").trim();
+ if(!/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/u.test(text)){p.notice="DIGITE UMA PALAVRA";ren();coopSendSnapshot(true);return{ok:false,notice:p.notice}}
+ const word=normalizarPalavra(text);
+ if(word.length!==Number(l.length)){p.notice="USE EXATAMENTE "+l.length+" LETRAS";ren();coopSendSnapshot(true);return{ok:false,notice:p.notice}}
+ if(p.used.includes(word)){p.notice="RESPOSTA REPETIDA";ren();coopSendSnapshot(true);return{ok:false,notice:p.notice}}
+ p.used.push(word);
+ if(!DIC.has(word)){p.notice="PALAVRA INVÁLIDA";ren();coopSendSnapshot(true);return{ok:false,notice:p.notice}}
+ const theme=LIGHTNING_THEMES.find(t=>t.id===l.theme);
+ if(!theme||!theme.words.some(w=>normalizarPalavra(w)===word)){p.notice="FORA DO TEMA";ren();coopSendSnapshot(true);return{ok:false,notice:p.notice}}
+ p.solved=true;p.notice="+15 MOEDAS";G.$=(Number(G.$)||0)+15;
+ try{sCoin()}catch(_){}
+ ren();coopSendSnapshot(true);return{ok:true,notice:p.notice};
+}
+function renderLightningPanel(){
+ const l=G&&G.lightning;
+ if(!COOP.connected||!l||!Number(LIGHTNING_SECONDS[l.length]))return "";
+ const me=COOP.role==="guest"?"guest":"host",mine=lightningPlayer(me);
+ const playerRow=player=>{const status=lightningStatus(player),p=lightningPlayer(player);return `<div class="ll-player${p&&p.solved?" done":""}${p&&p.expired?" ended":""}"><span>${player==="host"?"P1":"P2"}</span><b>${status}</b><time data-lightning-clock="${player}">${lightningClockText(player)}${p&&p.accepted&&!p.solved&&!p.expired?"s":""}</time></div>`};
+ let action="";
+ if(!mine.accepted)action=`<button type="button" class="ll-join" data-a="lightning-join">PARTICIPAR</button>`;
+ else if(mine.solved)action=`<div class="ll-result">+15 MOEDAS</div>`;
+ else if(mine.expired)action=`<div class="ll-result muted">TEMPO ENCERRADO</div>`;
+ else action=`<form class="ll-form" id="lightning-form"><input id="lightning-word" name="word" type="text" maxlength="${l.length}" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" placeholder="${l.length} LETRAS" aria-label="Palavra de ${l.length} letras"><button type="submit"${COOP.lightningPending?" disabled":""}>ENVIAR</button></form>`;
+ return `<section class="shp-panel shp-lightning" aria-label="Desafio Relâmpago"><div class="ll-heading"><small>DESAFIO RELÂMPAGO</small><b>${l.themeName}</b></div><div class="ll-spec"><strong>${l.length}</strong><span>LETRAS</span><i>${l.seconds}S</i><em>+$15</em></div><div class="ll-players">${playerRow("host")}${playerRow("guest")}</div><div class="ll-action">${action}</div><div class="ll-feedback" data-lightning-feedback role="status">${mine.notice||""}</div></section>`;
+}
+let lightningClockTimer=0;
+function lightningClockTick(){
+ if(!G||G.mode!=="shop"||!COOP.connected||!G.lightning)return;
+ let expired=false;
+ if(COOP.role==="host"&&!COOP.applyingSnapshot){
+  for(const player of ["host","guest"]){const p=lightningPlayer(player);if(p&&p.accepted&&!p.solved&&!p.expired&&lightningRemaining(player)<=0){p.expired=true;p.notice="TEMPO ENCERRADO";expired=true}}
+ }
+ for(const player of ["host","guest"]){
+  const node=document.querySelector(`[data-lightning-clock="${player}"]`),p=lightningPlayer(player);
+  if(node){node.textContent=lightningClockText(player)+(p&&p.accepted&&!p.solved&&!p.expired?"s":"");node.classList.toggle("done",!!(p&&p.solved));node.classList.toggle("ended",!!(p&&p.expired))}
+ }
+ if(expired){ren();coopSendSnapshot(true)}
+}
+function syncLightningClock(){
+ const active=!!(G&&G.mode==="shop"&&COOP.connected&&G.lightning&&["host","guest"].some(player=>{const p=lightningPlayer(player);return p&&p.accepted&&!p.solved&&!p.expired}));
+ if(active&&!lightningClockTimer)lightningClockTimer=setInterval(lightningClockTick,100);
+ else if(!active&&lightningClockTimer){clearInterval(lightningClockTimer);lightningClockTimer=0}
+ lightningClockTick();
+}
+function lightningSubmitLocalForm(e){
+ const form=e.target;if(!form||form.id!=="lightning-form")return;
+ e.preventDefault();e.stopPropagation();
+ const input=form.querySelector("#lightning-word"),word=input?input.value:"";
+ if(COOP.connected&&COOP.role==="guest"){
+  if(COOP.lightningPending)return;
+  COOP.lightningPending=true;const button=form.querySelector('button[type="submit"]');if(button)button.disabled=true;
+  const feedback=form.parentElement&&form.parentElement.parentElement.querySelector("[data-lightning-feedback]");if(feedback)feedback.textContent="ENVIANDO";
+  if(!coopSend({type:"lightningAnswer",word})){COOP.lightningPending=false;if(button)button.disabled=false;if(feedback)feedback.textContent="SEM CONEXÃO"}
+  return;
+ }
+ lightningSubmit("host",word);
+}
+document.addEventListener("submit",lightningSubmitLocalForm,true);
+
 function vShop(){
   const p=G.pay,nb=G.nb,sel=G.rel[G.sel],full=G.rel.length>=powerSlotLimit(),rc=Math.min(5,1+G.rr);
   const an=G.offAnim,pop=G.popRel,nope=G.nope,pu=G.popUp;G.offAnim=0;G.popRel=-1;G.nope="";G.popUp="";
@@ -3553,28 +3867,30 @@ function vShop(){
   const lup=+G.lgPop||0;G.lgPop=0;
   if(lup&&COOP.role==="host"&&!COOP.applyingSnapshot){const f=COOP.shopFx||(COOP.shopFx={an:0,pop:-1,nope:"",pu:""});f.lp=lup}
   const legList=(Array.isArray(G.legs)?G.legs:[]).filter(n=>SHAPE[n]);
-  const legend=legList.length?`<section class="shp-lg">${legList.map((n,i)=>{const lc=shapeCost(n),lmax=lvOf(n)>=SHMAX,low=!lmax&&!hasMoney(lc),off=lmax||low;return `<div class="shp-slot lg-slot${an?" deal":""}" style="--i:${3+i}"><span class="ptag${low?" low":""}">${lmax?"MÁX.":"$"+lc}</span><button type="button" class="cd lg-card${off?" off":""}${lup===n?" up":""}${nope==="lg"+n?" nope":""}" data-lg="${n}" data-tip aria-label="${SHN[n]}, nível ${lvOf(n)}. Melhoria de palavras de ${n} letras. ${lmax?"Nível máximo":"Custa $"+lc+" para melhorar."}"${off?' aria-disabled="true"':''}><span class="lg-emblem" aria-hidden="true"><b>${n}</b></span><span class="lg-lv" aria-hidden="true">${Array.from({length:SHMAX},(_,q)=>`<i${q<lvOf(n)?' class="on"':""}></i>`).join("")}</span></button></div>`}).join("")}</section>`:"";
+  const legend=legList.length?`<section class="shp-lg"><div class="shp-lg-title"><b>PALAVRAS</b><span>2—8 LETRAS</span></div>${legList.map((n,i)=>{const lc=shapeCost(n),lmax=lvOf(n)>=SHMAX,low=!lmax&&!hasMoney(lc),off=lmax||low;return `<div class="shp-slot lg-slot${an?" deal":""}" style="--i:${3+i}"><span class="ptag${low?" low":""}">${lmax?"MÁX.":"$"+lc}</span><button type="button" class="cd lg-card${off?" off":""}${lup===n?" up":""}${nope==="lg"+n?" nope":""}" data-size="${n}" style="--lg-n:${n}"${off?" disabled":""} data-lg="${n}" data-tip aria-label="${SHN[n]}, nível ${lvOf(n)}. Melhoria de palavras de ${n} letras. ${lmax?"Nível máximo":"Custa $"+lc+" para melhorar."}"${off?' aria-disabled="true"':''}><span class="lg-emblem" aria-hidden="true"><small class="lg-code">CA · ${String(n).padStart(2,"0")}</small><b>${n}</b><span class="lg-pips">${Array.from({length:n},(_,q)=>`<i></i>`).join("")}</span></span><span class="lg-lv" aria-hidden="true">${Array.from({length:SHMAX},(_,q)=>`<i${q<lvOf(n)?' class="on"':""}></i>`).join("")}</span></button></div>`}).join("")}</section>`:"";
   const note=POSTITS.find(item=>item.id===G.postitOffer&&!hasPostIt(item.id));
-  const postitShelf=note?`<div class="shp-postit-wrap"><div class="shp-t shp-postit-label"><b>Postit</b></div><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="shp-postit-copy"><b>${note.n}</b><small>${note.d}</small></span><strong class="shp-postit-cost">$${note.c}</strong></button></div>`:"";
+  const postitShelf=note?`<div class="shp-postit-wrap"><div class="shp-t shp-postit-label"><b>MELHORIA PERMANENTE</b></div><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="shp-postit-copy"><b>${note.n}</b><small>${note.d}</small></span><strong class="shp-postit-cost">$${note.c}</strong></button></div>`:"";
   const ownedNotes=(G.postits||[]).map(id=>POSTITS.find(item=>item.id===id)).filter(Boolean);
   const postitChips=ownedNotes.length?`<div class="shp-note-tags">${ownedNotes.map(item=>`<span data-tip data-pn="${item.id}" tabindex="0" aria-label="${item.n}. ${item.d}">${item.n}</span>`).join("")}</div>`:"";
+  const lightning=renderLightningPanel();
   return `<div class="ov shop">
   <div class="hdr2"><h2>Loja</h2><div class="st g">${moneyLabel()}${gain&&!G.biaMode?`<i class="gain">+$${gain}</i>`:""}</div></div>
   <div class="shp-line"><span>Fase <b>${worldOf(G.n)+1}</b> · Partida <b>${G.n%RPW+1}</b></span><span>Meta <b>${fmt(metaOf(G.n))}</b></span></div>
   ${nb?`<div class="shp-boss"><span class="shp-boss-label">Próxima fase:</span><b class="shp-boss-name">${nb.n}</b></div>`:''}
   ${statusMarkup}
+  ${lightning}
   <section class="shp-panel shp-owned">
-    <div class="shp-head"><div class="shp-t"><b>${G.rel.length}/${powerSlotLimit()}</b></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
+    <div class="shp-head"><div class="shp-t"><b>PODERES ATIVOS</b><em>${G.rel.length}/${powerSlotLimit()}</em></div>${sel?`<button class="shp-sell" data-a="sell"><i aria-hidden="true">×</i><span>VENDER</span><b>$${Math.floor(sel.c/2)}</b></button>`:''}</div>
     ${relRow(true,pop)}
     ${postitChips}
   </section>
   <section class="shp-panel shp-market">
     <div class="shp-grid">
       <div class="shp-actions">
-        <button class="shp-go" data-a="next"><span>COMEÇAR<br>PARTIDA&nbsp;${G.n%RPW+1}</span></button>
+        <button class="shp-go" data-a="next"><span>COMEÇAR<br>PARTIDA</span></button>
         <button class="shp-roll${!hasMoney(rc)?" off":""}${nope==="rr"?" nope":""}" data-a="rr"${!hasMoney(rc)?' aria-disabled="true"':''}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v5h-5"/></svg><span>TROCAR</span><b class="rc">$${rc}</b></button>
       </div>
-      <div class="shp-offers">${[0,1,2].map(offer).join('')}</div>
+      <div class="shp-offers"><div class="shp-market-title"><b>VITRINE</b><span></span></div>${[0,1,2].map(offer).join('')}</div>
     </div>
     ${legend}
     <div class="shp-letters">
@@ -3654,7 +3970,7 @@ function vDeck(){
   const cnt={};G.col.forEach(t=>{cnt[t.l]=cnt[t.l]||{n:0,g:0,r:0,k:0,s:0,c:0,p:0,nx:0,o:0,h:0,u:0}});
   R.deck.forEach(t=>{const o=cnt[t.l],up=t.up||{};o.n++;if(t.g)o.g++;if(t.r)o.r++;if(t.k)o.k++;if(up.s)o.s++;if(up.c)o.c++;if(up.p)o.p++;if(up.n)o.nx++;if(up.o)o.o++;if(up.h)o.h++;if(up.u)o.u++});
   const L=Object.keys(cnt).sort(),tot=R.deck.length,vg=R.deck.filter(t=>VOG.includes(t.l)).length;
-  return `<div class="dvw" data-a="dvx"><div class="dvh"><div><small>SEU BARALHO</small><b>${tot}</b>Letras para comprar</div><button class="mute" data-a="dvx">FECHAR</button></div>
+  return `<div class="dvw" data-a="dvx"><div class="dvh"><div><small>SEU BARALHO</small><b>${tot}</b>Letras</div><button class="mute" data-a="dvx">FECHAR</button></div>
   <div class="dvs"><span>${vg} Vogais</span><span>${tot-vg} Consoantes</span><span>${R.hand.length+R.st.length} Na mão</span></div>
   <div class="dvg">${L.map((l,i)=>(R.dx&&R.dx[l]?dkCopies(l,i):dkStack(l,i,cnt[l]))).join("")}</div></div>`;
 }
@@ -3671,6 +3987,8 @@ function albumBody(){
 function ren(){hideTip();albumSync();
   const landId=R&&R.landId!=null?String(R.landId):null;
   const A=$("#app"),old={};
+  const priorLightningInput=A.querySelector("#lightning-word"),lightningDraft=priorLightningInput?priorLightningInput.value:null,lightningFocused=priorLightningInput===document.activeElement;
+  const lightningSelection=priorLightningInput&&typeof priorLightningInput.selectionStart==="number"?[priorLightningInput.selectionStart,priorLightningInput.selectionEnd]:null;
   const oldDeck=(G.mode==="play"&&R&&R.dv)?A.querySelector(".dvw"):null;
   const keepDeck=!!(oldDeck&&oldDeck.dataset.deckSignature===coopDeckSignature());
   A.querySelectorAll("[data-id]").forEach(e=>{const r=e.getBoundingClientRect();if(r.width>0&&r.height>0)old[e.dataset.id]=r});
@@ -3678,6 +3996,8 @@ function ren(){hideTip();albumSync();
   const gl=COOP.ghostLand;COOP.ghostLand=null;
   if(gl&&performance.now()-gl.at<700)old[gl.id]=gl.rect;
   A.innerHTML=view();
+  const nextLightningInput=A.querySelector("#lightning-word");
+  if(nextLightningInput&&lightningDraft!==null){nextLightningInput.value=lightningDraft;if(lightningFocused){nextLightningInput.focus({preventScroll:true});if(lightningSelection)try{nextLightningInput.setSelectionRange(...lightningSelection)}catch(_){}}}
   /* Preserve o painel e suas animações durante snapshots que só movem letras entre mão e mesa. */
   const renderedDeck=A.querySelector(".dvw");
   if(keepDeck&&renderedDeck)renderedDeck.replaceWith(oldDeck);
@@ -3698,6 +4018,7 @@ function ren(){hideTip();albumSync();
     if(COOP.role==="host"&&!COOP.applyingSnapshot&&R.fresh.size){if(!COOP.freshAcc)COOP.freshAcc=new Set();R.fresh.forEach(id=>COOP.freshAcc.add(id))}
     R.fresh.clear();
   }
+  if(typeof syncLightningClock==="function")syncLightningClock();
   if(typeof COOP!=="undefined"&&COOP.role==="host"&&!COOP.applyingSnapshot)coopSendSnapshot();
 }
 
@@ -4047,6 +4368,7 @@ document.addEventListener("click",e=>{
     else if(D.a==="endless"){avancarFase()}return;
   }
   if(G.mode==="shop"){
+    if(D.a==="lightning-join"){lightningJoin(COOP.remoteDispatch?"guest":"host");return}
     if(D.postit!==undefined){buyPostIt(String(D.postit));return}
     if(D.a&&Object.prototype.hasOwnProperty.call(UPS,D.a)){carimbo(D.a);return}
     if(D.lg!==undefined)compraLenda(D.lg);
