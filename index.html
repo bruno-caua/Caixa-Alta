@@ -1328,6 +1328,8 @@ body.wd5{--bg:#10061c;--bc:#ff4fd0}body.wd5.boss{background:#06121f}
 .menu-screen .rec{width:min(100%,320px);margin-top:clamp(18px,4.5vh,34px);display:flex;flex-direction:column;align-items:center;gap:12px;animation:mnIn .6s .18s cubic-bezier(.2,.85,.25,1.1) both}
 .rec-t{display:flex;align-items:center;gap:12px;width:100%;font:600 8px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.42em;text-indent:.42em;color:var(--mu)}
 .rec-t i{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--ln))}.rec-t i:last-child{background:linear-gradient(270deg,transparent,var(--ln))}
+.menu-screen .rec.rec-mp{margin-top:clamp(14px,3vh,24px);animation-delay:.3s}
+.rec-mp .rec-n{grid-template-columns:repeat(3,1fr)}
 .rec-n{display:grid;grid-template-columns:1fr 1fr;width:100%}
 .rec-n>div{display:flex;flex-direction:column;align-items:center;gap:5px}
 .rec-n>div+div{border-left:1px solid var(--ln)}
@@ -1800,6 +1802,138 @@ body.rs-flip .hand .tl{rotate:180deg}
 .shop .shp-note-tags span:nth-child(even)::before{rotate:3deg}
 .shop .shp-note-tags span::after{content:"";position:absolute;right:0;bottom:0;width:11px;height:11px;background:linear-gradient(315deg,var(--bg) 0 50%,rgba(0,0,0,.22) 50% 100%);border-radius:0 0 0 0}
 .shop .shp-note-tags span i{display:grid;place-items:center;min-width:25px;height:25px;padding:0 3px;border:1.6px solid var(--st);border-radius:50%;color:var(--st);font:400 10px/1 'Alfa Slab One',Georgia,serif;font-style:normal;rotate:-9deg;opacity:.9;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--st) 18%,transparent)}
+/* ===== v9: raridade que se vê (fita, holograma, folha de ouro), caixas alinhadas na loja, botão do álbum ===== */
+/* Raro: fita adesiva colada no topo */
+#app .rs.on.q1::after,#app .shp-offers .cd.q1::after{content:"";translate:none;animation:none;position:absolute;z-index:4;top:-6px;right:14%;width:28%;min-width:24px;max-width:56px;height:12px;rotate:4deg;pointer-events:none;border:0;opacity:.92;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 0 3px,rgba(255,255,255,.14) 3px 6px),linear-gradient(180deg,rgba(120,185,245,.78),rgba(60,135,215,.78));clip-path:polygon(0 0,100% 0,96% 25%,100% 50%,96% 75%,100% 100%,0 100%,4% 75%,0 50%,4% 25%)}
+#app .rs.on.q1,#app .shp-offers .cd.q1{--pin:#1f6fc4}
+/* Épico: folha holográfica que corre pelo papel + brilho de estrelinhas */
+#app .rs.on.q2::after,#app .shp-offers .cd.q2::after{content:"";position:absolute;inset:0;translate:none;z-index:1;pointer-events:none;border:0;clip-path:var(--tear);mix-blend-mode:screen;opacity:.8;background:linear-gradient(112deg,transparent 18%,rgba(255,120,220,.55) 32%,rgba(110,225,255,.6) 45%,rgba(255,244,150,.55) 57%,rgba(190,150,255,.45) 68%,transparent 82%) 0 0/260% 100% no-repeat,radial-gradient(circle at 18% 28%,#fff 0 1px,transparent 2px),radial-gradient(circle at 78% 22%,#fff 0 1.2px,transparent 2.4px),radial-gradient(circle at 64% 76%,#fff 0 1px,transparent 2px),radial-gradient(circle at 30% 80%,#fff 0 1.2px,transparent 2.4px);animation:v9Holo 3.8s linear infinite}
+#app .rs.on.q2,#app .shp-offers .cd.q2{--pin:#e0b8ff}
+#app .rs.on.q2 .art::before,#app .shp-offers .cd.q2 .art::before{width:14px;height:14px;left:-7px;top:-6px;box-shadow:0 0 7px #c79bffcc,1.5px 3px 3px rgba(0,0,0,.4),inset -1px -1.5px 2px rgba(0,0,0,.35)}
+@keyframes v9Holo{0%{background-position:130% 0,0 0,0 0,0 0,0 0}100%{background-position:-30% 0,0 0,0 0,0 0,0 0}}
+/* Lendário: folha de ouro com reflexo passando */
+#app .rs.on.q3::after,#app .shp-offers .cd.q3::after{content:"";position:absolute;inset:0;translate:none;z-index:1;pointer-events:none;border:0;clip-path:var(--tear);mix-blend-mode:soft-light;opacity:.95;background:linear-gradient(108deg,transparent 30%,rgba(255,255,255,.95) 46%,rgba(255,226,120,.8) 52%,transparent 66%) 0 0/240% 100% no-repeat,linear-gradient(160deg,rgba(255,236,150,.75),rgba(214,140,20,.5) 55%,rgba(255,226,120,.7));animation:v9Gold 2.8s ease-in-out infinite}
+#app .rs.on.q3 .art::before,#app .shp-offers .cd.q3 .art::before{width:15px;height:15px;left:-7.5px;top:-7px;box-shadow:0 0 9px #ffc22ecc,1.5px 3px 3px rgba(0,0,0,.4),inset -1px -1.5px 2px rgba(0,0,0,.35)}
+@keyframes v9Gold{0%{background-position:140% 0,0 0}60%,100%{background-position:-40% 0,0 0}}
+@media(prefers-reduced-motion:reduce){#app .rs.on.q2::after,#app .shp-offers .cd.q2::after,#app .rs.on.q3::after,#app .shp-offers .cd.q3::after{animation:none}}
+/* Cartas da partida: nome maior (Caveat é estreita) e fora do alfinete */
+#app>.rel .rs.on small{font-size:15.5px;line-height:.82;padding:0 2px 0 21px}
+#app .rel .rs.on:not(.shp-owned .rs){min-height:0}
+
+/* Loja: Palavras, Melhorias de letras e Melhoria permanente na mesma caixa */
+#app .shop .shp-lg,#app .shop .shp-letters,#app .shop .shp-postit-wrap{box-sizing:border-box;width:100%;margin:0!important;padding:10px!important;border:1px solid color-mix(in srgb,var(--tx) 14%,var(--ln))!important;border-radius:7px!important;background:color-mix(in srgb,var(--bg) 48%,transparent)!important;align-self:start}
+#app .shop .shp-lg{gap:8px 7px}
+#app .shop .shp-lg-title,#app .shop .shp-postit-wrap .shp-market-title,#app .shop .shp-letters .shp-head{min-height:0;padding:0 2px 6px!important;border:0!important;margin:0!important}
+#app .shop .shp-postit-wrap{gap:8px}
+#app .shop .shp-letters .shp-ups{margin:0}
+
+/* Botão do álbum */
+.alb-tb{gap:8px;padding:9px 14px 9px 12px;border:1px solid color-mix(in srgb,var(--tx) 26%,var(--ln));border-radius:8px;background:linear-gradient(180deg,color-mix(in srgb,var(--tx) 9%,transparent),color-mix(in srgb,var(--tx) 3%,transparent));color:var(--tx);font:600 10px 'Chivo Mono',ui-monospace,monospace;letter-spacing:.18em;box-shadow:0 1px 0 color-mix(in srgb,var(--tx) 10%,transparent) inset,0 2px 0 rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .1s,box-shadow .15s}
+.alb-tb svg{width:15px;height:15px;stroke-width:1.6}
+.alb-tb:hover{border-color:color-mix(in srgb,var(--tx) 48%,var(--ln));background:linear-gradient(180deg,color-mix(in srgb,var(--tx) 14%,transparent),color-mix(in srgb,var(--tx) 6%,transparent))}
+.alb-tb:active{transform:translateY(1px);box-shadow:0 1px 0 color-mix(in srgb,var(--tx) 8%,transparent) inset}
+.alb-tb:focus-visible{outline:2px solid color-mix(in srgb,var(--tx) 70%,transparent);outline-offset:2px}
+.alb-l{padding-top:12px}
+/* ===== v10: chat em preto e branco, emojis pixelados e ícone novo do botão ===== */
+.cc-panel{--bg:#0a0a0a;--tx:#f5f5f5;--mu:#8d8d8d;--ln:#2a2a2a;--mx:#f5f5f5;--ca:#d0d0d0;--pp:#1a1a1a;--pk:#f5f5f5;--ps:#000;border-radius:14px;border:1px solid #2e2e2e!important;background:#0a0a0a!important;box-shadow:0 18px 52px #000c,0 0 0 1px #000;color:#f5f5f5;-webkit-backdrop-filter:none;backdrop-filter:none}
+.cc-top{border-bottom:1px solid #222}
+.cc-top b{font-weight:600;letter-spacing:-.01em;color:#fafafa}
+.cc-code{border:1px solid #2e2e2e;background:#141414;color:#a8a8a8}
+.cc-ic{color:#8d8d8d}.cc-ic:hover,.cc-ic:focus-visible{color:#fff;background:#1c1c1c}
+.cc-ic.arm{background:#fff;color:#000}
+.cc-warn{border-bottom:1px solid #222;color:#d0d0d0}.cc-warn.v{color:#fff}
+.cc-warn button{border-color:#555;color:#fff}
+.cc-log{background:#0a0a0a}
+.cc-empty,.cc-meta{color:#7d7d7d}
+.cc-m{background:#171717;border:1px solid #262626;color:#ededed}
+.cc-m.own{background:#f5f5f5;border:1px solid #f5f5f5;color:#0a0a0a}
+.cc-form{background:#0a0a0a;border-top:1px solid #222}
+.cc-in{background:#141414;border:1px solid #2e2e2e;color:#fafafa}
+.cc-in::placeholder{color:#7a7a7a}
+.cc-in:focus{border-color:#f5f5f5;box-shadow:0 0 0 3px #ffffff1c}
+.cc-send{background:#f5f5f5;color:#0a0a0a;box-shadow:0 2px 0 #7a7a7a}
+.cc-send:active{box-shadow:0 1px 0 #7a7a7a}
+.cc-send:disabled{opacity:.35;filter:none}
+.cc-emo{flex:none;width:44px;height:44px;display:grid;place-items:center;padding:0;border:1px solid #2e2e2e;border-radius:12px;background:#141414;cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
+.cc-emo:hover,.cc-emo:focus-visible,.cc-emo.on{background:#1f1f1f;border-color:#f5f5f5;outline:none}
+.cc-emo:active{transform:translateY(1px)}
+.cc-emo:disabled{opacity:.35;cursor:default}
+.cc-emo .cc-px{width:22px;height:22px}
+.cc-tray{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:8px 10px;border-top:1px solid #222;background:#0f0f0f}
+.cc-tray[hidden]{display:none}
+.cc-e{display:grid;place-items:center;height:38px;padding:0;border:1px solid transparent;border-radius:9px;background:none;cursor:pointer;transition:background .12s,border-color .12s,transform .08s}
+.cc-e:hover,.cc-e:focus-visible{background:#1c1c1c;border-color:#333;outline:none}
+.cc-e:active{transform:scale(.92)}
+.cc-e .cc-px{width:24px;height:24px}
+.cc-px{image-rendering:pixelated;image-rendering:crisp-edges;image-rendering:pixelated;display:inline-block;width:1.3em;height:1.3em;vertical-align:-.3em;margin:0 1px;-webkit-user-drag:none;user-select:none}
+.cc-m.big{font-size:0;line-height:1;padding:7px 10px}
+.cc-m.big .cc-px{width:32px;height:32px;margin:0 2px;vertical-align:middle}
+.cc-m.own.big{background:#f5f5f5}
+.cc-launch svg.px{width:24px;height:24px;stroke:none;fill:none;stroke-width:0;image-rendering:pixelated}
+
+/* ===== v6: Multiplayer e Opções com cor própria animada + escolha de mão em palco ===== */
+:root{--cy:#7fd6ff;--pk2:#ff7ab8;--or:#ff9e5e;--te:#5fd9c8;--gl:#ffe45c}
+:root[data-theme=l]{--cy:#0f8fb8;--pk2:#c4307e;--or:#c25a12;--te:#0e8f80;--gl:#a87a00}
+#app .menu-screen .big.alt.mn-c{--c1:var(--mo);background:var(--c1)!important;border:0!important;color:var(--bg);font-size:12px;box-shadow:none}
+#app .menu-screen .big.alt.mn-op{--c1:var(--ex)}
+@media(hover:hover){#app .menu-screen .big.alt.mn-c:hover{background:var(--c1)!important;border:0!important;color:var(--bg);box-shadow:0 5px 0 color-mix(in srgb,var(--c1) 45%,var(--bg))}}
+#app .menu-screen .big.alt.mn-c:active{box-shadow:none}
+
+/* escolha de mão */
+.hs{--hc:var(--ti);align-self:center;width:min(100%,340px);display:flex;flex-direction:column;align-items:center;gap:12px;touch-action:pan-y}
+.hs-pips{display:flex;justify-content:center;align-items:center;gap:3px}
+.hs-pip{position:relative;flex:none;width:15px;height:24px;padding:0;border:0;background:none;cursor:pointer;transition:width .32s cubic-bezier(.2,.9,.3,1.2)}
+.hs-pip::before{content:"";position:absolute;left:1px;right:1px;top:10px;height:4px;border-radius:2px;background:var(--pc);opacity:.34;transition:opacity .2s,box-shadow .2s}
+.hs-pip:hover::before{opacity:.75}
+.hs-pip.on{width:34px}
+.hs-pip.on::before{opacity:1;box-shadow:0 0 10px -1px var(--pc)}
+.hs-pip:focus-visible{outline:2px solid var(--hc);outline-offset:-2px;border-radius:4px}
+.hs-body{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px}
+.hs-card{width:100%;display:grid;grid-template-columns:48px 1fr 48px;align-items:center}
+.hs-ar{height:64px;border:0;border-radius:8px;background:none;color:color-mix(in srgb,var(--hc) 70%,var(--mu));font:700 40px/1 'Chivo Mono',ui-monospace,monospace;cursor:pointer;transition:color .15s,transform .15s,background .15s}
+.hs-ar:hover,.hs-ar:focus-visible{color:var(--hc);background:color-mix(in srgb,var(--hc) 9%,transparent);outline:none}
+.hs-ar:active{transform:scale(.84)}
+.hs-nmw,.hs-pw,.hs-chips{--x:0px;--y:8px;animation:hsIn .38s cubic-bezier(.2,.85,.25,1.05) backwards}
+.hs-nmw.hs-r,.hs-pw.hs-r,.hs-chips.hs-r{--x:26px;--y:0px}
+.hs-nmw.hs-l,.hs-pw.hs-l,.hs-chips.hs-l{--x:-26px;--y:0px}
+@keyframes hsIn{from{opacity:0;translate:var(--x) var(--y)}to{opacity:1;translate:0 0}}
+.hs-nmw{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
+.hs-n{font:600 8px/1 'Chivo Mono',ui-monospace,monospace;letter-spacing:.3em;color:var(--mu)}
+.hs-n b{color:var(--hc);font-weight:700}
+.hs-nm{font:400 clamp(26px,8.4vw,34px)/1 'Alfa Slab One',Georgia,serif;color:var(--hc);text-align:center;text-shadow:0 0 22px color-mix(in srgb,var(--hc) 38%,transparent)}
+.hs-tiles{--tw:clamp(40px,12.2vw,52px);--th:calc(var(--tw)*1.3);position:relative;width:100%;display:flex;justify-content:center;align-items:center;gap:6px;padding:12px 4px 9px;cursor:pointer}
+.hs-tiles::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 62% 70% at 50% 62%,color-mix(in srgb,var(--hc) 20%,transparent),transparent 72%)}
+.hs-tiles .tl{rotate:var(--r,0deg);animation:hsDeal .5s cubic-bezier(.2,.9,.25,1.2) backwards;animation-delay:calc(var(--i)*55ms)}
+.hs-tiles:active .tl{translate:0 -5px}
+@keyframes hsDeal{from{opacity:0;translate:0 -28px;rotate:calc(var(--r)*4);scale:.7}to{opacity:1;translate:0 0;rotate:var(--r);scale:1}}
+.hs-rd{position:absolute;right:-4px;top:50%;translate:0 -50%;font:700 20px/1 'Chivo Mono',ui-monospace,monospace;font-style:normal;color:var(--mu);transition:rotate .45s cubic-bezier(.2,.9,.3,1.2),color .2s}
+.hs-tiles:hover .hs-rd,.hs-tiles:active .hs-rd{color:var(--hc);rotate:180deg}
+.hs-pw{min-height:44px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.hs-pw b{font:700 11px/1.2 'Chivo Mono',ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--hc)}
+.hs-pw span{max-width:290px;font:500 11px/1.4 'Chivo Mono',ui-monospace,monospace;color:var(--mu)}
+.hs-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:26px}
+.hs-c{font:700 10px/1 'Chivo Mono',ui-monospace,monospace;font-style:normal;letter-spacing:.06em;padding:7px 10px;border-radius:99px;border:1px solid var(--ln);color:var(--tx);background:color-mix(in srgb,var(--tx) 4%,var(--bg))}
+.hs-c.g{color:var(--gl);border-color:color-mix(in srgb,var(--gl) 45%,var(--ln))}
+.hs-c.p{color:var(--mo);border-color:color-mix(in srgb,var(--mo) 45%,var(--ln))}
+.hs-c.n{color:var(--ca);border-color:color-mix(in srgb,var(--ca) 45%,var(--ln))}
+.hs-act{display:flex;gap:8px;width:100%;margin-top:4px}
+.menu-screen .hs-act .big{margin:0;min-height:56px}
+.menu-screen .hs-act .mn-back{flex:0 0 31%;width:auto;letter-spacing:.18em;text-indent:.18em}
+.menu-screen .hs-act .hs-go{flex:1;width:auto;background:var(--hc);color:var(--bg);box-shadow:0 3px 0 color-mix(in srgb,var(--hc) 45%,var(--bg))}
+.hs.picked .hs-tiles .tl{animation:hsGo .3s cubic-bezier(.5,0,.9,.4) both;animation-delay:calc(var(--i)*30ms)}
+@keyframes hsGo{to{opacity:0;translate:0 -44px;scale:.8}}
+.hs.picked .hs-go{transform:scale(.97);filter:brightness(1.15)}
+.hs.picked .hs-ar,.hs.picked .hs-pip{pointer-events:none}
+.hs.mp{width:100%;gap:6px;padding:8px 6px 10px;border:1px solid var(--ln);border-radius:8px;background:color-mix(in srgb,var(--hc) 4%,var(--bg))}
+.hs.mp .hs-body{gap:6px}
+.hs.mp .hs-nm{font-size:22px}
+.hs.mp .hs-nmw{gap:5px}
+.hs.mp .hs-ar{height:44px}
+.hs.mp .hs-tiles{--tw:clamp(30px,9.6vw,38px);padding:8px 4px 6px}
+.hs.mp .hs-pw{min-height:38px}
+.hs.mp .hs-pip{width:11px}.hs.mp .hs-pip.on{width:26px}
+@media(max-height:640px){.hs{gap:6px}.hs-body{gap:6px}.hs-ar{height:52px}.hs-pw{min-height:36px}}
+@media(prefers-reduced-motion:reduce){.hs-nmw,.hs-pw,.hs-chips,.hs-tiles .tl,.hs.picked .hs-tiles .tl{animation:none}.hs-pip,.hs-rd{transition:none}}
 </style>
 </head>
 <body>
@@ -1823,6 +1957,12 @@ const AR="cant pul jog fal and cort pint mostr brinc danc chor pens olh cham lav
 const ER="com beb vend corr escond aprend respond perd receb prend entend mov tem cresc ofend".split(" ");
 const IR="part abr cobr divid decid permit assist insist discut exist admit repart imprim resum".split(" ");
 const normalizarPalavra=w=>String(w??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z]/g,"");
+/* Acentuação só para EXIBIR (chave, carimbo, recorde). Pontuação, dicionário e Coop seguem usando letras sem acento. */
+const ACENTOS=new Map();
+`mãe mães irmão irmã irmãos irmãs avô avós vovó pé pés mão mãos pão pães limão limões melão melões feijão feijões fogão fogões leão leões coração corações ação ações então dragão dragões campeão campeões mamão botão botões avião aviões ônibus bênção bênçãos órgão órgãos sótão porão balão balões verão grão grãos chão chãos cidadão cidadãos vilão vilões já lá só até após além também porém você vocês três não são estão será serão fé café cafés sofá sofás chá chás taça taças faça faças calça calças praça praças fumaça fumaças maçã maçãs açúcar braço braços abraço abraços laço laços traço traços espaço espaços caça caças raça raças graça graças ameaça ameaças cabeça cabeças peça peças começo começa conheço confeço manhã manhãs amanhã lãs pássaro pássaros árvore árvores águia água águas álcool âncora ânimo ânsia número números música músicas dança danças máscara máscaras prêmio prêmios família famílias vitória vitórias história histórias memória memórias glória glórias mistério mistérios herói heróis dói nível níveis fácil fáceis difícil difíceis útil úteis possível possíveis último última últimos últimas rápido rápida rápidos rápidas lápis cálice cálculo chapéu chapéus céu céus véu véus troféu troféus língua línguas trégua légua régua réguas ímã ímãs feitiço feitiços cérebro cérebros sétimo sétima décimo décima sábado sábados trânsito países dólar dólares açaí açaís mágica mágico mágicos mágicas tática tático técnica técnico técnicos prática prático clássico clássica básico básica público pública lógica lógico rótulo rótulos pétala pétalas lâmpada lâmpadas lágrima lágrimas nômade ônix gênero gêneros gênio gênios pêssego pêssegos pêlos pêras vênus vôos sênior fêmea fêmeas mês fã fãs rãs órfão órfãos cristã cristãos pagão anão anões ladrão ladrões leitão tubarão tubarões camarão camarões colchão colchões cartão cartões caminhão caminhões sabão sabões razão razões união uniões opinião opiniões paixão paixões prisão prisões televisão decisão decisões missão missões visão visões lição lições nação nações estação estações canção canções emoção emoções atenção direção direções sensação condição condições situação situações informação informações relação relações solução soluções educação criação criações produção tradição tradições posição posições reação reações função funções junção seção seções lotação coleção coleções eleição eleições infração mansão mansões pensão pensões tensão extensão dimensão expressão expressões impressão impressões sessão sessões profissão profissões discussão discussões ocasião conclusão conclusões confusão ilusão ilusões explosão explosões invasão invasões fusão conversão versão versões aversão diversão diversões saúde ciúme ciúmes cálido gêmeo gêmeos pródigo côncavo ósseo rústico ágil fértil frágil míssil réptil fóssil imóvel móvel móveis amável notável razoável saída saídas caída sério séria império critério hemisfério cemitério ministério laboratório território sanatório trajetória ícone ícones índio índia índios ímpar ínfimo bebê bebês vovô vovôs nó nós pó dó cipó jiló paletó robô robôs judô caratê nenê jacaré jacarés chalé pontapé maracujá português inglês francês japonês chinês holandês país pôster vôlei tênis médico médica médicos médicas químico química física físico álbum álbuns átomo átomos ótimo ótima péssimo péssima máximo máxima mínimo mínima único única únicos únicas ídolo ídolos vírus lótus fênix tórax córrego sábio sábia tímido tímida cômodo cômoda pântano lâmina lâminas ângulo ângulos círculo círculos triângulo triângulos retângulo retângulos pólo pólos pólen pâncreas estômago tônico elétrico elétrica elétron sílaba sílabas hífen hífens espécie espécies série séries fábrica fábricas pátio pátios cárie tábua tábuas pálido pálida fúria cúpula cúpulas músculo músculos órbita órbitas ópera óperas pérola pérolas pêndulo bússola bússolas âmbar âmago íntimo íntima íris ônus órbita órbitas ótimo ótima ótimos ótimas óculos óleo óleos ópera óperas óvulo pântano pântanos pária párpado pêndulo pétreo pílula pílulas pólvora pônei pôster pôsteres prédio prédios próprio própria próximo próxima púlpito quê químico química rádio rádios réu síndico sílaba sílabas símbolo símbolos sólido sólida sólo tênis têxtil tímido tímida tônica tórax trágico trágica túnel túneis úmido úmida único única únicos únicas útero vácuo vândalo vértice vírgula vírgulas vírus vítima vítimas zíper`.split(" ").forEach(w=>{const n=normalizarPalavra(w);if(n&&!ACENTOS.has(n))ACENTOS.set(n,w)});
+/* Tecla com acento (ã, é, ç…) vale como a letra base. */
+const keyLetter=k=>{if(typeof k!=="string"||k.length>2)return "";const n=k.normalize("NFD").replace(/[\u0300-\u036f]/g,"");return /^[a-zA-Z]$/.test(n)?n.toUpperCase():""};
+const acentuar=w=>{const s=String(w??"");if(!s)return s;const n=normalizarPalavra(s),a=ACENTOS.get(n);if(!a||n!==s.toLowerCase())return s;return s===s.toUpperCase()?a.toUpperCase():s[0]===s[0].toUpperCase()?a[0].toUpperCase()+a.slice(1):a};
 const DIC=new Set(),add=w=>{const n=normalizarPalavra(w);if(n.length>=3&&n.length<=8&&/^[a-z]+$/.test(n))DIC.add(n)};
 BASE.forEach(w=>{add(w);add(w+"s")});"lado cada todo toda outro outra dois tres seis sete oito nove dez cem mil primo irmao irma pai mae filho filha tio tia avo neto marido esposa ritmo verbo sinal marca traco curva reta angulo circulo cubo esfera peso carga forca poder valor custo lucro perda ganho coragem honra gloria fama nobre rico pobre justo falso certo erro culpa pena dever direito regra norma ordem caos calma pausa fim inicio meio topo fundo borda canto beira frente costas joelho ombro peito barriga unha pelo asa bico pata rabo chifre garra concha casca trigo aveia sal pimenta azeite vinagre mostarda molho tempero fermento farinha acucar torta pudim geleia bombom pipoca lanche jantar almoco ceia refeicao tigela jarra bule chaleira colher garfo tabua balde vassoura cesta caixa saco pacote lata tampa rolha corda fio laco fita botao agulha pano tecido seda algodao couro madeira tronco lenha carvao cinzas barro argila tijolo cimento metal bronze cobre aco diamante rubi safira esmeralda perola cristal marfim carta tinta prensa tipo molde gravura jornal revista poema rima prosa autor leitor leitura escrita pagina capa folheto cartaz selo carimbo livraria biblioteca ofício caderno regua compasso tesoura cola clipe gaveta armario estante prateleira janela cortina lareira fogueira tocha vela lampada lanterna sino tambor violao viola flauta piano gaita trompete harpa cancao melodia refrao poesia ator atriz palco plateia circo mágico palhaco bandeira hino pais nacao estado cidadao rei duque conde barao cavaleiro soldado general capitao marinheiro pirata ladrao juiz medico padeiro pedreiro ferreiro pintor poeta cantor dancarino professor aluno mestre aprendiz".split(" ").forEach(w=>{add(w);add(w+"s")});INV.forEach(add);
 "salto cuba bala bando banho barro base bico bobo bomba borda bota brinco bruxo cabo cacho cais calor canal capa capim caro casco causa cerca cinco circo clima clube coco cola coroa corte couve cova cravo cruz cubo cume curso dado dama dedo dieta disco dose drama duelo duna eixo elite enredo epoca erva escala escada espaco espiga estilo etapa exame faixa falha fardo farol farra fato favor feixe feria fiel figo fila fita folga fonte forno fosso fraco freio fuga fumo funil furo fusao galho ganso garra gema gesto giro globo golpe gordo grama grao grito grupo guia gula haste hotel ideal idolo igreja imagem jaca jaula jeito juiz junto juro labuta lacre ladeira laje lama lanca lapso largo laser latao lazer legado lenco lenda lente leque liga limbo limite liso lixo lombo longe lote lousa luar lupa luta luxo macio magro maior malha manto marco mares marmore mastro medo mestre metro milho minuto mira missao mito moda modelo molho monte motor mula mural museu nave nervo ninho noite nuvem obra oceano opcao orgao oval paca pacto padre palco palha palma panela papo par parque parte pasta pasto pausa pavao peca pedal pente perto peso piano pilha pinga pinho pino pipa piso pista placa plano planta poco polo ponta poste pouso prado praga prazo prego pulso punho quadra quarto queda quilo raca rada raiz rampa rancho realce recibo recife recuo reino relva remo renda resto ritmo roda rolo romance roupa rumo sabao sabor safra salao salmao salsa saude senha sitio sobra socio solo soma sopro sotao tabu taco tala talao tampa tanque tarefa tatu taxa teia teto tigre tijolo titulo toalha toca tomada tonel torre tosse trama trapo trilha trio troca trono truque tubo tumulo tutor unha vaga vala vapor varal vara vaso vela veneno verao verba viga vila viola virus visao visita vizinho volta voo vulto zelo zona zumbi bambu bebe bote bruma cacau cabra calca camelo canoa carne cavalo cegueira ceu chave chuva cobre cofre colar copa corda costa couro crime cura delta dente deserto dono doce ema exito faca fada falcao farinha feira feno fera festa fiapo flecha flora folha foto fraude fresta frota furia gaiola gasto gaveta gelo gente geral gigante giz gola gole goma gota grade gravata grota harpa hera hino hora humor ilha irmao isca jarro jogo junta kit lacuna lagoa lampada lanche lapis latir lavar leao lebre leite leme leste lirio livre lixa logica lona louro lume maca madeira malho mamao manada mancha mango manual mapa marca maresia marfim massa mata mecha meio melao mentor mesa mexilhao micro mina moinho molde monge monstro morcego mundo musgo nariz nata navio neblina nicho nobre norte nota novo nulo ocaso ombro onca oleo ordem orla osso ouro ouvido pagina pais palito panos papel parafuso pardal passo patio pedido peixe pelo pena pepino pera perdao perfume peru pesca pescoco pilar pimenta pincel pirata plateia pluma polvo ponte porco potro praia prensa prima prisma pudim pulga puma quadro quente quilha rabano raia rajada rapaz rasto rede refem regiao remedio reta retrato revista rima rio rocha rodovia rolha rosto rota roxo ruido ruina sabia sacola sala salva sangue sapo seda segredo selva senso serpente sesta sexta sigla silencio sino sirene soldado sombra sono sopa sorriso subida suco sujo tabua tacho talento tapa tecla tela tema tenda tenis terno tesoura testa tiro toldo tomate tora touro trapezio trigo trovao truta tuba tunel turbina vacina vale vazio veia veloz vento verde vespa vidro vigor vinte vitral vivo vogal voz".split(" ").forEach(w=>{add(w);add(w+"s")});AR.push(..."salt brilh calcul carreg cheir col cozinh desenh derrub ench ensin estud fot gast grit lembr lig march marc plant prepar quebr rabisc rod roub saud sopr tent tir tom troc vot viaj lutr cub mostr junt ocup organiz pesc pision revis sec".split(" "));ER.push(..."viv escrev mex sofr prefer ger conhec vend esquec mord".split(" "));IR.push(..."dorm serv sent ment fug sub segu ped vest ouv fer sorr".split(" "));
@@ -2125,6 +2265,10 @@ let S={best:0,runs:0,wins:0,bw:"",bs:0,mute:0,theme:0,spd:1,mus:1,crt:1};
 const spd=()=>{const v=Number(S.spd);return v===.5||v===2?v:1};
 try{Object.assign(S,JSON.parse(localStorage.getItem("pc2")||"{}"))}catch(e){}
 const save=()=>{try{localStorage.setItem("pc2",JSON.stringify(S))}catch(e){}};
+/* Recorde do multiplayer (Coop e Duelo) fica separado do recorde solo. */
+S.mp={best:0,wins:0,duel:0,runs:0,bs:0,bw:"",...(S.mp&&typeof S.mp==="object"?S.mp:{})};
+const mpOn=()=>!!(COOP.role&&COOP.connected)||!!DUEL.live;
+const recS=()=>mpOn()?S.mp:S;
 if(typeof S.crtv!=="number")S.crtv=S.crt===0?0:100;applyCrt();
 function ink(){return S.theme?"#16140f":"#ffffff"}
 function applyTheme(){document.documentElement.style.setProperty("--sp",String(spd()));document.documentElement.dataset.theme=S.theme?"l":"d";const m=document.querySelector('meta[name=theme-color]');if(m)m.content=S.theme?"#efebe2":"#111113"}
@@ -2154,7 +2298,7 @@ function coopDrawStampOverlay(t,ratio,w,kind="score"){
   const swap=kind==="swap",tier=ratio>=1?3:ratio>.4?2:1,e=document.createElement("div");
   e.className="sc "+(swap?"swap ":"")+"t"+tier;
   const number=document.createElement("span");number.className="sn";number.textContent=swap?"LETRAS":fmt(t);
-  const word=document.createElement("span");word.className="sl";word.textContent=swap?"TROCADAS":String(w||"");
+  const word=document.createElement("span");word.className="sl";word.textContent=swap?"TROCADAS":acentuar(String(w||"")).toUpperCase();
   e.append(number,word);document.body.appendChild(e);setTimeout(()=>e.remove(),1900);
 }
 function swapStamp(){
@@ -2672,7 +2816,7 @@ function novo(){
   if(dk.gd){const ix=col.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,dk.gd);ix.forEach(i=>{col[i].g=1})}
   const coopRun=COOP.role==="host"&&COOP.connected,biaMode=coopRun&&!!COOP.biaMode;
   G={mode:"play",dk:G.dk||0,$:coopRun?(biaMode?dk.$:0):dk.$,biaMode,n:0,rel:dk.rel.map(id=>REL.find(r=>r.id===id)),postits:[],postitOffer:null,col,jogB:dk.jog,descB:dk.desc,endless:false,rr:0,nb:null,sel:-1,msg:"",sellNotice:null,pendingRecord:null,lastRecordNotice:null,stat:{words:0,neo:0,bw:"",bs:0}};
-  S.runs++;save();rodada();
+  recS().runs++;save();rodada();
 }
 function rodada(){
   const n=G.n,bo=n>0&&G.nb?{...G.nb}:null;
@@ -2781,8 +2925,9 @@ async function jogar(){
   await dz(1150);
   R.sc+=t;G.stat.words++;G.stat.neo+=ts.length;try{rsPlayed(x.w,x.real)}catch(_){}
   if(t>G.stat.bs){G.stat.bs=t;G.stat.bw=x.w}
-  if(t>S.bs){
-    if(S.bs>0){
+  const rs=recS();
+  if(t>rs.bs){
+    if(rs.bs>0){
       const aviso={word:x.w,score:t,at:Date.now()};
       if(R.sc>=R.meta)G.pendingRecord=aviso;
       else{
@@ -2791,7 +2936,7 @@ async function jogar(){
         setTimeout(()=>{if(G.lastRecordNotice===aviso)G.lastRecordNotice=null},1550);
       }
     }
-    S.bs=t;S.bw=x.w;save()
+    rs.bs=t;rs.bw=x.w;save()
   }
   G.$+=x.$;R.jog+=x.jog;if(x.gild)ts.forEach(q=>q.g++);
   R.st=[];R.stPos=[];puxa();R.an=null;R.lock=false;R.msg="";
@@ -2811,7 +2956,7 @@ async function vence(){
   // Atualiza a tela da fase atual e mostra as mensagens em sequência, ainda fora da loja.
   ren();coopSendSnapshot(true);burst(W/2,H*.3,"#ffb21f",60,8);
   if(recordNotice){
-    banner("NOVO RECORDE",recordNotice.word.toUpperCase()+" · "+fmt(recordNotice.score)+" pontos","record",1450);
+    banner("NOVO RECORDE",acentuar(recordNotice.word).toUpperCase()+" · "+fmt(recordNotice.score)+" pontos","record",1450);
     await d0(1330);
     coopClearTransientVisuals();
   }
@@ -2991,7 +3136,7 @@ document.addEventListener("click",e=>{
   if(devBuf==="CACAC"){devBuf="";devToggle()}
 });
 function fim(v){
-  G.mode="over";G.win=v;const ed=G.n+(v?1:0);if(ed>S.best)S.best=ed;if(v)S.wins++;save();
+  G.mode="over";G.win=v;const ed=G.n+(v?1:0),rs=recS();if(ed>rs.best)rs.best=ed;if(v)rs.wins++;save();
   document.body.classList.remove("boss");if(v){sWin();burst(W/2,H*.35,"#ffb21f",90,9)}else sErr();ren();coopSendSnapshot(true);
 }
 
@@ -3000,7 +3145,7 @@ function fim(v){
    Pré-visualizações de arrasto são efêmeras e nunca alteram o modelo do jogo.
 */
 const COOP_PROTOCOL=2;
-const BUILD="2026.11.01-mp-modes-fix";
+const BUILD="2026.11.01-menu-mao";
 let coopPeerScriptPromise=null;
 function coopLoadPeerJS(){
   if(window.Peer)return Promise.resolve();
@@ -3100,7 +3245,42 @@ function coopNormalizeChatMessage(raw,forcedSender=null){
   const at=Number(raw.at);
   return {id:String(raw.id||coopChatId()).slice(0,100),sender,text,at:Number.isFinite(at)&&at>0?at:Date.now()};
 }
-const CC_ICON={chat:'<svg viewBox="0 0 24 24"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-8l-4 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/></svg>',x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',out:'<svg viewBox="0 0 24 24"><path d="M10 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19H10M14 8l4 4-4 4M18 12H9.5"/></svg>',send:'<svg viewBox="0 0 24 24"><path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/></svg>'};
+const CC_ICON={chat:'<svg class="px" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path d="M1 1h10v1H1zM0 2h1v6H0zM11 2h1v6h-1zM1 8h3v1H1zM5 8h6v1H5zM4 9h1v1H4zM3 10h1v1H3zM2 11h1v1H2zM3 4h1v2H3zM5 4h1v2H5zM7 4h1v2H7z" fill="currentColor"/></svg>',x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',out:'<svg viewBox="0 0 24 24"><path d="M10 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19H10M14 8l4 4-4 4M18 12H9.5"/></svg>',send:'<svg viewBox="0 0 24 24"><path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/></svg>'};
+/* Emojis pixelados do chat: a mensagem segue como emoji comum no texto; só a exibição vira pixel art. */
+const PXE=(()=>{
+  const PAL={y:"#ffd23f",o:"#c98a00",k:"#1b1b1b",w:"#ffffff",r:"#e5383b",b:"#4cc9f0",a:"#f77f00",e:"#f4623a",s:"#ffcf9e",q:"#c98f5a",d:"#9b1c24"};
+  const base=["...oooooo...","..oyyyyyyo..",".oyyyyyyyyo.","oyyyyyyyyyyo","oyyyyyyyyyyo","oyyyyyyyyyyo","oyyyyyyyyyyo","oyyyyyyyyyyo","oyyyyyyyyyyo",".oyyyyyyyyo.","..oyyyyyyo..","...oooooo..."];
+  const face=(over,body)=>{const g=base.map(r=>(body?r.replace(/y/g,body):r).split(""));over.forEach(([x,y,c])=>{g[y][x]=c});return g.map(r=>r.join(""))};
+  const eyes=[[3,4,"k"],[3,5,"k"],[8,4,"k"],[8,5,"k"]];
+  const smile=[[3,7,"k"],[8,7,"k"],[4,8,"k"],[5,8,"k"],[6,8,"k"],[7,8,"k"]];
+  const heartEye=(x)=>[[x,4,"r"],[x+2,4,"r"],[x,5,"r"],[x+1,5,"r"],[x+2,5,"r"],[x+1,6,"r"]];
+  const S={
+    "😀":face([...eyes,...smile]),
+    "😂":face([[2,5,"k"],[3,4,"k"],[4,5,"k"],[7,5,"k"],[8,4,"k"],[9,5,"k"],[1,6,"b"],[1,7,"b"],[10,6,"b"],[10,7,"b"],[3,7,"k"],[4,7,"k"],[5,7,"k"],[6,7,"k"],[7,7,"k"],[8,7,"k"],[4,8,"r"],[5,8,"r"],[6,8,"r"],[7,8,"r"]]),
+    "😍":face([...heartEye(2),...heartEye(7),...smile]),
+    "😎":face([[2,4,"k"],[3,4,"k"],[4,4,"k"],[5,4,"k"],[6,4,"k"],[7,4,"k"],[8,4,"k"],[9,4,"k"],[2,5,"k"],[3,5,"k"],[4,5,"k"],[7,5,"k"],[8,5,"k"],[9,5,"k"],[3,6,"k"],[8,6,"k"],...smile]),
+    "😢":face([...eyes,[3,6,"b"],[3,7,"b"],[8,6,"b"],[8,7,"b"],[5,7,"k"],[6,7,"k"],[4,8,"k"],[7,8,"k"]]),
+    "😡":face([[2,3,"k"],[3,4,"k"],[4,4,"k"],[9,3,"k"],[8,4,"k"],[7,4,"k"],[3,5,"k"],[8,5,"k"],[5,7,"k"],[6,7,"k"],[4,8,"k"],[7,8,"k"]],"e"),
+    "😮":face([...eyes,[5,7,"k"],[6,7,"k"],[5,8,"k"],[6,8,"k"]]),
+    "❤️":["............","..rrr..rrr..",".rrrrrrrrrr.",".rrwrrrrrrr.",".rrrrrrrrrr.",".rrrrrrrrrr.","..rrrrrrrr..","...rrrrrr...","....rrrr....",".....rr.....","............","............"].map((r,i)=>i>=5&&i<=8?r.replace(/r(?=[^r]*$)/,"d"):r),
+    "⭐":[".....yy.....",".....yy.....","....yyyy....","yyyyyyyyyyyy",".yyyyyyyyyy.","..yyyyyyyy..","...yyyyyy...","..yyyyyyyy..","..yyy..yyy..",".yyy....yyy.",".yy......yy.","............"],
+    "🔥":[".....r......",".....rr.....","....rrr..r..","...rrrr.rr..","...rrarrrr..","..rrraarrrr.","..rraaaaarr.",".rraayyaaarr",".rraayyyaarr",".rraayyyaarr","..rraayyarr.","...rrrrrrr.."],
+    "👍":[".......oo...","......osso..","......osso..",".....osssso.",".ooooossssoo","osssssssssso","osssssssssso","osssssssssso","osssssssssso",".osssssssso.","..oooooooo..","............"]
+  };
+  const uri={};
+  const make=ch=>{
+    const rows=S[ch];let r="";
+    rows.forEach((row,y)=>{let x=0;while(x<12){const c=row[x];if(c==="."||!PAL[c]){x++;continue}let n=1;while(x+n<12&&row[x+n]===c)n++;r+=`<rect x="${x}" y="${y}" width="${n}" height="1" fill="${PAL[c]}"/>`;x+=n}});
+    return "data:image/svg+xml,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" shape-rendering="crispEdges">${r}</svg>`);
+  };
+  const list=Object.keys(S);
+  list.forEach(ch=>{uri[ch]=make(ch)});uri["❤"]=uri["❤️"];
+  const re=new RegExp(list.map(c=>c.replace(/️/g,"")).map(c=>c+"\\uFE0F?").join("|"),"g");
+  const html=esc=>String(esc).replace(re,m=>{const k=uri[m]?m:m.replace(/️/g,"")==="❤"?"❤️":m;return `<img class="cc-px" src="${uri[k]||uri[m]}" alt="${m}" draggable="false">`});
+  const only=t=>{const s=String(t).replace(re,"").trim();return !s&&(String(t).match(re)||[]).length<=3};
+  return {list,uri,html,only};
+})();
+
 /* Aviso de recebimento: reproduz no aparelho que recebeu a mensagem, inclusive no P2.
    Se o AudioContext estiver suspenso pelo navegador, aguarda a retomada antes de tocar. */
 function coopChatPing(){
@@ -3171,7 +3351,7 @@ function coopRenderChatPanel(focus=false){
   if(!COOP.chatOpen||!COOP.role){if(p)p.remove();return}
   if(!p){
     p=document.createElement("section");p.className="cc-panel";p.setAttribute("role","dialog");p.setAttribute("aria-label","Chat da sala");
-    p.innerHTML=`<div class="cc-top"><b>Chat</b><button type="button" class="cc-code" data-coop-ui="chat-copy" title="Copiar código da sala"></button><button type="button" class="cc-ic" data-coop-ui="chat-leave" aria-label="Sair da sala" title="Sair da sala">${CC_ICON.out}</button><button type="button" class="cc-ic" data-coop-ui="chat-close" aria-label="Fechar chat">${CC_ICON.x}</button></div><div class="cc-warn" hidden></div><div class="cc-log" aria-live="polite"></div><form class="cc-form" id="coop-chat-form"><input class="cc-in" id="coop-chat-input" maxlength="240" autocomplete="off" enterkeyhint="send" placeholder="Escreva aqui" aria-label="Mensagem"><button class="cc-send" type="submit" data-coop-ui="chat-send" aria-label="Enviar">${CC_ICON.send}</button></form>`;
+    p.innerHTML=`<div class="cc-top"><b>Chat</b><button type="button" class="cc-code" data-coop-ui="chat-copy" title="Copiar código da sala"></button><button type="button" class="cc-ic" data-coop-ui="chat-leave" aria-label="Sair da sala" title="Sair da sala">${CC_ICON.out}</button><button type="button" class="cc-ic" data-coop-ui="chat-close" aria-label="Fechar chat">${CC_ICON.x}</button></div><div class="cc-warn" hidden></div><div class="cc-log" aria-live="polite"></div><div class="cc-tray" hidden>${PXE.list.map(e=>`<button type="button" class="cc-e" data-coop-ui="chat-emo" data-e="${e}" aria-label="Emoji ${e}"><img class="cc-px" src="${PXE.uri[e]}" alt="${e}" draggable="false"></button>`).join("")}</div><form class="cc-form" id="coop-chat-form"><input class="cc-in" id="coop-chat-input" maxlength="240" autocomplete="off" enterkeyhint="send" placeholder="Escreva aqui" aria-label="Mensagem"><button class="cc-emo" type="button" data-coop-ui="chat-emoji" aria-label="Emojis" aria-expanded="false"><img class="cc-px" src="${PXE.uri["😀"]}" alt="" draggable="false"></button><button class="cc-send" type="submit" data-coop-ui="chat-send" aria-label="Enviar">${CC_ICON.send}</button></form>`;
     document.body.appendChild(p);
   }
   const log=p.querySelector(".cc-log"),msgs=COOP.chatMessages||[],near=!log.childElementCount||log.scrollHeight-log.scrollTop-log.clientHeight<60,from=p._n==null?Infinity:p._n;
@@ -3182,7 +3362,7 @@ function coopRenderChatPanel(focus=false){
       const hm=new Date(m.at).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
       h+=`<div class="cc-meta${own?" own":""}">${own?"VOCÊ":m.sender==="host"?"P1":"P2"} · ${hm}</div>`;
     }
-    h+=`<div class="cc-m${own?" own":""}${k>=from?" nw":""}">${coopEscape(m.text)}</div>`;last=m;
+    h+=`<div class="cc-m${own?" own":""}${k>=from?" nw":""}${PXE.only(m.text)?" big":""}">${PXE.html(coopEscape(m.text))}</div>`;last=m;
   });
   log.innerHTML=h||'<div class="cc-empty">Sem mensagens ainda.</div>';p._n=msgs.length;
   if(near||focus)log.scrollTop=log.scrollHeight;
@@ -3229,7 +3409,7 @@ function mpModeHtml(){
   return `<div class="mp-seg s3" role="radiogroup" aria-label="Modo">${top}</div>${sub}`;
 }
 function mpMenuHtml(close){
-  return `<div class="coop-panel-top"><span>MULTIPLAYER</span>${close}</div>${mpModeHtml()}<div class="coop-hand"><button type="button" data-coop-ui="hand-prev" aria-label="Mão anterior">‹</button><span><small>MÃO INICIAL</small><b>${DECKS[G.dk||0].n}</b></span><button type="button" data-coop-ui="hand-next" aria-label="Próxima mão">›</button></div>${(COOP.mpMode||"coop")==="coop"&&coopLastRoom()?`<div class="mp-rejoin"><button class="mp-mode" type="button" data-coop-ui="rejoin"><small>VOCÊ SAIU DA PARTIDA</small><b>Voltar à sala ${coopLastRoom()}</b></button><button class="mp-rejoin-x" type="button" data-coop-ui="forget-room" aria-label="Esquecer sala">×</button></div>`:""}<div class="mp-modes"><button class="mp-mode pri" type="button" data-coop-ui="create"><b>Criar sala</b></button><button class="mp-mode" type="button" data-coop-ui="join-view"><b>Entrar</b></button></div><button class="mp-net" type="button" data-coop-ui="turn">TURN</button><p class="coop-note">${coopEscape(COOP.modalNote||"")}</p>`;
+  return `<div class="coop-panel-top"><span>MULTIPLAYER</span>${close}</div>${mpModeHtml()}${hsHtml("mp")}${(COOP.mpMode||"coop")==="coop"&&coopLastRoom()?`<div class="mp-rejoin"><button class="mp-mode" type="button" data-coop-ui="rejoin"><small>VOCÊ SAIU DA PARTIDA</small><b>Voltar à sala ${coopLastRoom()}</b></button><button class="mp-rejoin-x" type="button" data-coop-ui="forget-room" aria-label="Esquecer sala">×</button></div>`:""}<div class="mp-modes"><button class="mp-mode pri" type="button" data-coop-ui="create"><b>Criar sala</b></button><button class="mp-mode" type="button" data-coop-ui="join-view"><b>Entrar</b></button></div><button class="mp-net" type="button" data-coop-ui="turn">TURN</button><p class="coop-note">${coopEscape(COOP.modalNote||"")}</p>`;
 }
 function coopRenderModal(){
   let modal=document.querySelector(".coop-modal");
@@ -3628,6 +3808,15 @@ function coopSendSnapshot(force=false){
   if(!force){COOP.syncTimer=setTimeout(()=>coopSendSnapshot(true),16);return}
   const snap=coopMakeSnapshot();try{COOP.conn.send(snap)}catch(_){COOP.status="lost";COOP.connected=false;coopUpdateStatus()}
 }
+function mpGuestTrack(){
+  if(COOP.role!=="guest"||!G)return;
+  const m=S.mp;let ch=false;
+  if(G.mode==="play"&&G.n===0&&!COOP._mpRun){COOP._mpRun=true;COOP._mpOver=false;m.runs++;ch=true}
+  if(G.stat&&G.stat.bs>m.bs){m.bs=G.stat.bs;m.bw=G.stat.bw||"";ch=true}
+  if(G.mode==="over"&&!COOP._mpOver){COOP._mpOver=true;COOP._mpRun=false;const ed=G.n+(G.win?1:0);if(ed>m.best)m.best=ed;if(G.win)m.wins++;ch=true}
+  if(G.mode==="title"){COOP._mpRun=false;COOP._mpOver=false}
+  if(ch)save();
+}
 function coopApplySnapshot(msg){
   if(!msg||!msg.g||msg.rev<=COOP.lastRev)return;
   // Preserve apenas a visualização local do baralho durante snapshots do estado comum.
@@ -3637,7 +3826,7 @@ function coopApplySnapshot(msg){
   try{
     const g={...msg.g};if(Array.isArray(g.col))g.col.forEach(t=>{if(t&&!t.up)t.up={};if(t&&!t.skin)t.skin=""});g.rel=(msg.g.rel||[]).map(id=>REL.find(r=>r.id===id)).filter(Boolean);
     if(Array.isArray(msg.g.off))g.off=msg.g.off.map(id=>REL.find(r=>r.id===id)).filter(Boolean);
-    G=g;
+    G=g;mpGuestTrack();
     if(msg.fx&&typeof msg.fx==="object"){G.offAnim=msg.fx.an?1:0;G.popRel=Number.isInteger(msg.fx.pop)?msg.fx.pop:-1;G.nope=String(msg.fx.nope||"");G.popUp=String(msg.fx.pu||"");G.lgPop=Number(msg.fx.lp)||0}
     if(msg.r){const r={...msg.r};for(const a of [r.hand,r.st,r.deck])if(Array.isArray(a))a.forEach(t=>{if(t&&!t.up)t.up={};if(t&&!t.skin)t.skin=""});r.pw=POW.find(p=>p.n===msg.r.pw)||POW[0];r.fresh=new Set(msg.r.fresh||[]);
       const incomingLand=Array.isArray(msg.r.landIds)?msg.r.landIds.map(String):[];
@@ -3921,10 +4110,12 @@ function coopHandleUi(e){
   if(act==="chat"){e.preventDefault();coopToggleChat();return}
   if(act==="chat-close"){e.preventDefault();coopCloseChat();return}
   if(act==="chat-send"){e.preventDefault();coopSendChat();return}
+  if(act==="chat-emoji"){e.preventDefault();const pn=t.closest(".cc-panel"),tr=pn&&pn.querySelector(".cc-tray");if(tr){tr.hidden=!tr.hidden;t.setAttribute("aria-expanded",String(!tr.hidden));t.classList.toggle("on",!tr.hidden)}return}
+  if(act==="chat-emo"){e.preventDefault();const inp=document.querySelector("#coop-chat-input");if(inp&&!inp.disabled){const em=t.dataset.e||"",a=inp.selectionStart??inp.value.length,z=inp.selectionEnd??a;if(inp.value.length-(z-a)+em.length<=240){inp.value=inp.value.slice(0,a)+em+inp.value.slice(z);const c=a+em.length;try{inp.setSelectionRange(c,c)}catch(_){}inp.dispatchEvent(new Event("input",{bubbles:true}))}inp.focus({preventScroll:true})}return}
   if(act==="chat-copy"){e.preventDefault();try{navigator.clipboard.writeText(COOP.roomCode).then(()=>{t.dataset.f=1;t.textContent="COPIADO";setTimeout(()=>{delete t.dataset.f;t.textContent=COOP.roomCode},1200)},()=>{})}catch(_){}return}
   if(act==="chat-leave"){e.preventDefault();if(t.classList.contains("arm")){coopLeave();return}t.classList.add("arm");t.textContent="SAIR?";clearTimeout(t._t);t._t=setTimeout(()=>{t.classList.remove("arm");t.innerHTML=CC_ICON.out},3000);return}
   if(act==="reload"){e.preventDefault();coopHardReload();return}
-  if(!document.querySelector(".coop-modal")&&!["show","leave","retry","chat","chat-close","chat-send"].includes(act))return;
+  if(!document.querySelector(".coop-modal")&&!["show","leave","retry","chat","chat-close","chat-send","chat-emoji","chat-emo"].includes(act))return;
   e.preventDefault();
   if(act==="close"){coopCloseModal();return}
   if(duelUi(act))return;
@@ -4001,9 +4192,9 @@ function duelTick(){
 }
 function duelVerdict(){
   if(DUEL.verdict)return;const me=DUEL.final,o=DUEL.opp;if(!o)return;
-  if(o.gone&&!o.over){DUEL.verdict="vitoria";caosStop();return}
+  if(o.gone&&!o.over){DUEL.verdict="vitoria";S.mp.duel++;save();caosStop();return}
   if(!me||!o.over)return;
-  const d=(me.ed-o.ed)||(me.bs-o.bs);DUEL.verdict=d>0?"vitoria":d<0?"derrota":"empate";caosStop();
+  const d=(me.ed-o.ed)||(me.bs-o.bs);DUEL.verdict=d>0?"vitoria":d<0?"derrota":"empate";caosStop();if(DUEL.verdict==="vitoria"){S.mp.duel++;save()}
 }
 function duelChip(){
   let c=document.getElementById("duel-chip");
@@ -4146,6 +4337,74 @@ const handInfo=d=>{
   if(d.desc)m.push((d.desc<0?"−":"+")+Math.abs(d.desc)+" troca");
   return {p:r?r.n:"Sem poder",m:m.join(" · ")};
 };
+/* ---------- escolha de mão: palco com amostra de letras (solo e multiplayer) ---------- */
+const HC=["var(--ti)","var(--ex)","var(--mx)","var(--mo)","var(--or)","var(--pk2)","var(--cy)","var(--gl)","var(--te)","var(--ca)"];
+const HS={s:{},dir:0,sw:false};
+function hsSample(k){
+  if(HS.s[k])return HS.s[k];
+  const d=DECKS[k],bag=[];
+  d.mk.split(" ").forEach(t=>{for(let i=0;i<+t.slice(1);i++)bag.push(t[0])});
+  const l=[];while(l.length<5&&bag.length)l.push(bag.splice(Math.random()*bag.length|0,1)[0]);
+  const g=new Set();if(d.gd){while(g.size<2)g.add(Math.random()*5|0)}
+  return HS.s[k]={l,g,r:l.map(()=>(Math.random()*7-3.5).toFixed(1))};
+}
+function hsTiles(k){
+  const s=hsSample(k);
+  return s.l.map((c,i)=>`<span class="tl${s.g.has(i)?" gd":""}" style="--i:${i};--r:${s.r[i]}deg">${c}</span>`).join("")+'<i class="hs-rd" aria-hidden="true">↻</i>';
+}
+function hsBody(){
+  const k=G.dk||0,d=DECKS[k],rel=d.rel&&d.rel.length?REL.find(x=>x.id===d.rel[0]):null;
+  const dc=HS.dir>0?" hs-r":HS.dir<0?" hs-l":"";HS.dir=0;
+  const ch=[`<i class="hs-c">$${d.$}</i>`];
+  if(d.gd)ch.push(`<i class="hs-c g">${d.gd} douradas</i>`);
+  if(d.jog)ch.push(`<i class="hs-c ${d.jog<0?"n":"p"}">${d.jog<0?"−":"+"}${Math.abs(d.jog)} jogada</i>`);
+  if(d.desc)ch.push(`<i class="hs-c ${d.desc<0?"n":"p"}">${d.desc<0?"−":"+"}${Math.abs(d.desc)} troca</i>`);
+  return `<div class="hs-card"><button type="button" class="hs-ar" data-hs="step" data-d="-1" aria-label="Mão anterior">‹</button><div class="hs-nmw${dc}"><small class="hs-n">MÃO <b>${String(k+1).padStart(2,"0")}</b>/${DECKS.length}</small><span class="hs-nm">${d.n}</span></div><button type="button" class="hs-ar" data-hs="step" data-d="1" aria-label="Próxima mão">›</button></div>
+<div class="hs-tiles" data-hs="redraw" aria-label="Amostra de letras. Toque para sortear outra">${hsTiles(k)}</div>
+<div class="hs-pw${dc}"><b>${rel?rel.n:"Sem poder"}</b><span>${rel?rel.d:d.d.split(".")[0]}</span></div>
+<div class="hs-chips${dc}">${ch.join("")}</div>`;
+}
+function hsHtml(ctx){
+  const k=G.dk||0,mp=ctx==="mp";
+  const pips=DECKS.map((d,i)=>`<button type="button" class="hs-pip${i===k?" on":""}" data-hs="jump" data-i="${i}" style="--pc:${HC[i]}" aria-label="${d.n}"></button>`).join("");
+  return `<div class="hs${mp?" mp":""}" data-ctx="${ctx}" style="--hc:${HC[k]}"><div class="hs-pips" role="group" aria-label="Mãos iniciais">${pips}</div><div class="hs-body">${hsBody()}</div>${mp?"":`<div class="hs-act"><button type="button" class="big alt mn-back" data-a="menu">VOLTAR</button><button type="button" class="big hs-go" data-dk="${k}">JOGAR</button></div>`}</div>`;
+}
+function hsSet(i,dir,h){
+  if(TPICK)return;
+  h=h||document.querySelector(".hs");if(!h)return;
+  const n=DECKS.length;G.dk=((i%n)+n)%n;
+  if(h.dataset.ctx==="mp")COOP.deck=G.dk;
+  HS.dir=dir||0;sTec();
+  h.style.setProperty("--hc",HC[G.dk]);
+  h.querySelector(".hs-body").innerHTML=hsBody();
+  h.querySelectorAll(".hs-pip").forEach((p,j)=>p.classList.toggle("on",j===G.dk));
+  const go=h.querySelector(".hs-go");if(go)go.dataset.dk=G.dk;
+}
+function hsRedraw(h){
+  if(TPICK)return;
+  const k=G.dk||0,t=h&&h.querySelector(".hs-tiles");if(!t)return;
+  HS.s[k]=null;try{sDeal()}catch(_){}
+  t.innerHTML=hsTiles(k);
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest&&e.target.closest("[data-hs]");if(!t)return;
+  if(HS.sw){HS.sw=false;e.stopPropagation();return}
+  try{au()}catch(_){}
+  const h=t.closest(".hs"),a=t.dataset.hs,k=G.dk||0;
+  if(a==="step")hsSet(k+(+t.dataset.d),+t.dataset.d,h);
+  else if(a==="jump"){const i=+t.dataset.i;if(i!==k)hsSet(i,i>k?1:-1,h)}
+  else if(a==="redraw")hsRedraw(h);
+},true);
+(function(){
+  let x0=0,y0=0,on=null;
+  document.addEventListener("pointerdown",e=>{on=e.target.closest&&e.target.closest(".hs");x0=e.clientX;y0=e.clientY},true);
+  document.addEventListener("pointerup",e=>{
+    const h=on;on=null;if(!h||!document.contains(h))return;
+    const dx=e.clientX-x0,dy=e.clientY-y0;
+    if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)*1.6){HS.sw=true;setTimeout(()=>{HS.sw=false},120);const st=dx<0?1:-1;hsSet((G.dk||0)+st,st,h)}
+  },true);
+  document.addEventListener("pointercancel",()=>{on=null},true);
+})();
 function tvHands(){
   if(G.mode!=="title"||TPICK)return;
   if(COOP.role==="host"&&!COOP.connected){COOP.modalNote="A sala ainda está aguardando P2. Cancele a sala para voltar ao modo solo.";coopShowModal("waiting");return}
@@ -4162,14 +4421,15 @@ function tvMenu(){if(G.mode!=="title"||TPICK)return;TV="menu";sTec();ren()}
 function tvPick(i,el){
   if(G.mode!=="title"||TPICK||!DECKS[i])return;
   G.dk=i;TPICK=true;sTec();
-  const grid=document.querySelector(".hands");if(grid&&el){grid.classList.add("picked");el.classList.add("pick")}
+  const grid=document.querySelector(".hs");if(grid)grid.classList.add("picked");
   const calm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
   setTimeout(()=>{TPICK=false;TV="menu";if(G.mode==="title")novo()},calm?0:360);
 }
-function recBlock(){
-  const w=String(S.bw||"").toUpperCase().slice(0,12);
-  const tiles=w?`<div class="rec-w" aria-label="Melhor palavra: ${w}">${[...w].map((c,i)=>`<span class="tl" style="--i:${i}">${c}</span>`).join("")}</div><div class="rec-s"><b>${fmt(S.bs)}</b> pontos</div>`:"";
-  return `<section class="rec" aria-label="Recordes"><div class="rec-t"><i></i><span>RECORDE</span><i></i></div><div class="rec-n"><div><b>${S.best}</b><small>PARTIDAS</small></div><div><b>${S.wins}</b><small>FASES</small></div></div>${tiles}</section>`;
+function recBlock(mp){
+  const r=mp?S.mp:S,w=acentuar(String(r.bw||"")).toUpperCase().slice(0,12);
+  const tiles=w?`<div class="rec-w" aria-label="Melhor palavra: ${w}">${[...w].map((c,i)=>`<span class="tl" style="--i:${i}">${c}</span>`).join("")}</div><div class="rec-s"><b>${fmt(r.bs)}</b> pontos</div>`:"";
+  const cols=mp?`<div><b>${r.best}</b><small>PARTIDAS</small></div><div><b>${r.wins}</b><small>FASES</small></div><div><b>${r.duel}</b><small>DUELOS</small></div>`:`<div><b>${r.best}</b><small>PARTIDAS</small></div><div><b>${r.wins}</b><small>FASES</small></div>`;
+  return `<section class="rec${mp?" rec-mp":""}" aria-label="${mp?"Recordes do multiplayer":"Recordes"}"><div class="rec-t"><i></i><span>${mp?"RECORDE MULTIPLAYER":"RECORDE"}</span><i></i></div><div class="rec-n">${cols}</div>${tiles}</section>`;
 }
 function vTitle(){
   const row=(s,o)=>`<div class="lrow">${[...s].map((ch,i)=>`<span class="tl${(o+i)%4===1?" gd":(o+i)%7===3?" rb":""}" style="--i:${o+i}">${ch}</span>`).join("")}</div>`;
@@ -4177,9 +4437,7 @@ function vTitle(){
   const logo=`<div class="logo" style="--ph:${((performance.now()-TT0)/1000).toFixed(3)}s">${row("CAIXA",0)}${row("ALTA",5)}</div>`;
   let body;
   if(hands){
-    body=`<div class="mn-lbl"><span>MÃO INICIAL</span><b>${DECKS[G.dk||0].n.toUpperCase()}</b></div>
-  <div class="hands">${DECKS.map((d,i)=>{const h=handInfo(d);return `<button type="button" class="hc${G.dk===i?" cur":""}" data-dk="${i}" style="--i:${i}" title="${d.d.replace(/"/g,"&quot;")}"><b>${d.n}</b><span class="hp">${h.p}</span><span class="hm">${h.m}</span></button>`}).join("")}</div>
-  <button type="button" class="big alt mn-back" data-a="menu">VOLTAR</button>`;
+    body=hsHtml("solo");
   }else if(alb){
     body=albumBody();
   }else if(opts){
@@ -4193,8 +4451,8 @@ function vTitle(){
     </div>
   <button type="button" class="big alt mn-back" data-a="menu">VOLTAR</button>`;
   }else{
-    body=`<div class="mn-actions"><button class="big" data-a="${COOP.connected?"start":"hands"}">INICIAR</button><button class="big alt" type="button" data-coop-ui="open">MULTIPLAYER</button><button class="big alt" type="button" data-a="opts">OPÇÕES</button></div>
-  ${S.runs?recBlock():""}`;
+    body=`<div class="mn-actions"><button class="big" data-a="${COOP.connected?"start":"hands"}">INICIAR</button><button class="big alt mn-c mn-mp" type="button" data-coop-ui="open">MULTIPLAYER</button><button class="big alt mn-c mn-op" type="button" data-a="opts">OPÇÕES</button></div>
+  ${S.runs?recBlock():""}${S.mp.runs||S.mp.duel?recBlock(true):""}`;
   }
   return `<div class="hdr title-head" style="justify-content:space-between">${TV==="menu"?`<button type="button" class="mute alb-tb" data-a="album" aria-label="Álbum de poderes"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="11" height="14" rx="2"/><path d="M8 3h10a2 2 0 0 1 2 2v12"/></svg><span>COLEÇÃO</span></button>`:"<span></span>"}${muteB()}</div><div class="ov menu-screen${hands||opts||alb?" mh":""}">${logo}${DEV?'<div class="devtag">MODO DEV ATIVO</div>':""}
   ${body}</div>`;
@@ -4249,7 +4507,7 @@ function vPlay(){
   else if(st.length<2){const mm=R.msg==="Mínimo de 2 letras";pill=mm?R.msg:"";pc=mm?"er":""}
   else if(!consecutive){const mc=R.msg==="Mantenha as letras em casas consecutivas";pill=mc?R.msg:"";pc=mc?"er":""}
   else{const er=legal(st);if(er){pill=er;pc="er"}else if(!realWord&&onlineState===false){
-    pill=`"${wd(st)}" não é uma palavra válida`;
+    pill=`"${acentuar(wd(st))}" não é uma palavra válida`;
     pc="nv"
 }else if(!realWord){
     pill="";
@@ -4272,11 +4530,11 @@ function vPlay(){
   const hsz=Math.max(8,Number(R.hs)||8);
   return `<div class="hdr"><div class="ed"><small>PARTIDA</small>${G.n%RPW+1}<i>/${RPW}</i></div><div class="goal"><div class="gt"><span>${pct>=80&&sc<R.meta?"FALTA POUCO":"META"}</span><b>${fmt(sc)} / ${fmt(R.meta)}</b></div><div class="bar${b?" bs":""}${pct>=80&&sc<R.meta?" hot":""}"><i style="width:${pct}%"></i></div></div>${muteB()}</div>
   <div class="stats"><div class="st sj${R.jog<=1?" low":""}"><small>JOGADAS</small><span class="sv"><b class="n${fxJ.c}"${fxJ.s}>${R.jog}</b>${chipB(bonJ)}</span></div><div class="st sd${R.desc<=0?" zero":""}"><small>TROCAS</small><span class="sv"><b class="n${fxD.c}"${fxD.s}>${R.desc}</b>${chipB(bonD)}</span></div><div class="st g"><small>MOEDAS</small><span class="sv"><b class="n${fxM.c}"${fxM.s}>${moneyLabel()}</b></span></div></div>
-  <div class="key${hit?" hit":""}"><small class="key-prize" title="Recompensa da palavra-chave"><span class="kp-label">Recompensa:</span> ${cap(R.pw.d)}</small><b><span class="key-word">${[...R.sw.toUpperCase()].map(ch=>`<span>${ch}</span>`).join("")}</span></b></div>
+  <div class="key${hit?" hit":""}"><small class="key-prize" title="Recompensa da palavra-chave"><span class="kp-label">Recompensa:</span> ${cap(R.pw.d)}</small><b><span class="key-word">${[...acentuar(R.sw).toUpperCase()].map(ch=>`<span>${ch}</span>`).join("")}</span></b></div>
   ${b?`<div class="bossb" data-b="${b.id}"><span class="bb-g" aria-hidden="true">${b.id==="ce"||b.id==="in"?(b.ban||"?"):b.g}</span><div class="bb-body"><div class="bb-top"><b>${b.n}</b></div><div class="bb-rule">${cap(bossTxt(b))}</div></div></div>`:""}
   ${relRow(false)}
   <div class="board"><div class="pill ${pc}"${tierTip}>${pill}</div>
-   <div class="tray">${Array.from({length:8},(_,slot)=>{const i=R.stPos.indexOf(slot),t=i>=0?st[i]:null;return t?`<div class="slot f" data-slot="${slot}">${tH(t,"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(t.l)?" rr":""):"")+(R.landId!=null&&String(R.landId)===String(t.id)?" lnd":""))}</div>`:`<div class="slot" data-slot="${slot}"></div>`}).join("")}</div>
+   <div class="tray">${(()=>{const acW=consecutive&&st.length>=2?[...acentuar(w.toLowerCase()).toUpperCase().normalize("NFC")]:[];const acOk=acW.length===st.length;return Array.from({length:8},(_,slot)=>{const i=R.stPos.indexOf(slot),t=i>=0?st[i]:null;return t?`<div class="slot f" data-slot="${slot}">${(acOk?(h=>h.replace(`>${t.l}<small>`,`>${acW[i]}<small>`)):(h=>h))(tH(t,"data-s",i," sg"+(a&&a.tile===i?" hl"+(RARAS.includes(t.l)?" rr":""):"")+(R.landId!=null&&String(R.landId)===String(t.id)?" lnd":"")))}</div>`:`<div class="slot" data-slot="${slot}"></div>`}).join("")})()}</div>
    <div class="eq"><div class="pt"><small>PONTOS</small><b class="${pop.includes("c")?"pop":""}">${fmt(c)}</b></div><span class="xx">×</span><div class="pt m" style="--hot:${Math.min(1,(m-1)/30)}"><small>BÔNUS</small><b class="${pop.includes("m")?"pop":""}">${fm(m)}</b></div></div>
    ${tot}<div class="msg">${a||R.msg==="Mínimo de 2 letras"||R.msg==="Mantenha as letras em casas consecutivas"?"":R.msg}</div></div>
   <div class="handw"><div class="hand" style="--hn:${hsz}">${R.hand.map((t,i)=>tH(t,"data-h",i,"",i)).join("")}</div><div class="deckn">${hsz>8?`<span class="hchip">MÃO ${hsz}</span>`:""}</div></div>
@@ -4479,9 +4737,9 @@ function vShop(){
   const lup=+G.lgPop||0;G.lgPop=0;
   if(lup&&COOP.role==="host"&&!COOP.applyingSnapshot){const f=COOP.shopFx||(COOP.shopFx={an:0,pop:-1,nope:"",pu:""});f.lp=lup}
   const legList=(Array.isArray(G.legs)?G.legs:[]).filter(n=>SHAPE[n]);
-  const legend=legList.length?`<section class="shp-lg"><div class="shp-lg-title"><b>Palavras</b><span>2–8 letras</span></div>${legList.map((n,i)=>{const lc=shapeCost(n),lmax=lvOf(n)>=SHMAX,low=!lmax&&!hasMoney(lc),off=lmax||low;return `<div class="shp-slot lg-slot${an?" deal":""}" style="--i:${3+i}"><span class="ptag${low?" low":""}">${lmax?"MÁX.":"$"+lc}</span><button type="button" class="cd lg-card${off?" off":""}${lup===n?" up":""}${nope==="lg"+n?" nope":""}" data-size="${n}" style="--lg-n:${n}"${off?" disabled":""} data-lg="${n}" data-tip aria-label="${SHN[n]}, nível ${lvOf(n)}. Melhoria de palavras de ${n} letras. ${lmax?"Nível máximo":"Custa $"+lc+" para melhorar."}"${off?' aria-disabled="true"':''}><span class="lg-emblem" aria-hidden="true"><b>${n}</b></span></button></div>`}).join("")}</section>`:"";
+  const legend=legList.length?`<section class="shp-lg"><div class="shp-lg-title"><b>Melhorias de palavras</b><span>2–8 letras</span></div>${legList.map((n,i)=>{const lc=shapeCost(n),lmax=lvOf(n)>=SHMAX,low=!lmax&&!hasMoney(lc),off=lmax||low;return `<div class="shp-slot lg-slot${an?" deal":""}" style="--i:${3+i}"><span class="ptag${low?" low":""}">${lmax?"MÁX.":"$"+lc}</span><button type="button" class="cd lg-card${off?" off":""}${lup===n?" up":""}${nope==="lg"+n?" nope":""}" data-size="${n}" style="--lg-n:${n}"${off?" disabled":""} data-lg="${n}" data-tip aria-label="${SHN[n]}, nível ${lvOf(n)}. Melhoria de palavras de ${n} letras. ${lmax?"Nível máximo":"Custa $"+lc+" para melhorar."}"${off?' aria-disabled="true"':''}><span class="lg-emblem" aria-hidden="true"><b>${n}</b></span></button></div>`}).join("")}</section>`:"";
   const note=POSTITS.find(item=>item.id===G.postitOffer&&!hasPostIt(item.id));
-  const postitShelf=note?`<div class="shp-postit-wrap"><div class="shp-market-title"><b>Melhoria permanente</b><span></span></div><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-k="${postitLook(note.id).k}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="pst-ico" aria-hidden="true">${postitLook(note.id).g}</span><span class="shp-postit-copy"><b>${note.n}</b><small>${postitDesc(note.d)}</small><em class="pst-tag">${postitLook(note.id).kn} · ATÉ O FIM</em></span><strong class="shp-postit-cost">${hasMoney(note.c)?"":"<i>faltam $"+Math.max(1,note.c-(Number(G.$)||0))+"</i>"}$${note.c}</strong></button></div>`:"";
+  const postitShelf=note?`<div class="shp-postit-wrap"><div class="shp-market-title"><b>Melhoria permanente</b><span></span></div><button type="button" class="shp-postit${hasMoney(note.c)?"":" off"}" data-k="${postitLook(note.id).k}" data-postit="${note.id}" aria-label="${note.n}. ${note.d}. Custa $${note.c}."><span class="pst-ico" aria-hidden="true">${postitLook(note.id).g}</span><span class="shp-postit-copy"><b>${note.n}</b><small>${postitDesc(note.d)}</small></span><strong class="shp-postit-cost">${hasMoney(note.c)?"":"<i>faltam $"+Math.max(1,note.c-(Number(G.$)||0))+"</i>"}$${note.c}</strong></button></div>`:"";
   const ownedNotes=(G.postits||[]).map(id=>POSTITS.find(item=>item.id===id)).filter(Boolean);
   const postitChips=ownedNotes.length?`<div class="shp-note-tags">${ownedNotes.map(item=>`<span data-tip data-pn="${item.id}" data-k="${postitLook(item.id).k}" tabindex="0" aria-label="${item.n}. ${item.d}"><i aria-hidden="true">${postitLook(item.id).g}</i>${item.n}</span>`).join("")}</div>`:"";
   const lightning=renderLightningPanel();
@@ -4517,7 +4775,7 @@ function vShop(){
 function vOver(){
   const s=G.stat,ed=G.n+(G.win?1:0),w=worldOf(G.n);
   return `<div class="ov">${G.win?`<h1>Fase ${w+1} vencida!</h1>`:`<h1 class="lose">Fim de jogo</h1><p>Você caiu na fase ${w+1}, partida ${G.n%RPW+1} (${fmt(R.sc)} / ${fmt(R.meta)})${R.boss?" diante de "+R.boss.n:""}.</p>`}
-  <div class="sum"><div>Partidas vencidas<b>${ed}</b></div><div>Palavras jogadas<b>${s.words}</b></div><div>Letras usadas<b>${s.neo}</b></div><div>Melhor palavra<b>${s.bw||"—"} ${s.bs?fmt(s.bs):""}</b></div></div>
+  <div class="sum"><div>Partidas vencidas<b>${ed}</b></div><div>Palavras jogadas<b>${s.words}</b></div><div>Letras usadas<b>${s.neo}</b></div><div>Melhor palavra<b>${acentuar(s.bw)||"—"} ${s.bs?fmt(s.bs):""}</b></div></div>
   ${relRow(false).replace(/data-r/g,"data-x")}
   ${G.win?`<button class="big" data-a="endless">AVANÇAR PARA A FASE ${w+2}</button>`:""}
   <button class="big${G.win?" alt":""}" data-a="again">JOGAR DE NOVO</button>${devRow()}</div>`;
@@ -5014,18 +5272,17 @@ document.addEventListener("keydown",e=>{
     if(G.mode!=="play"||!R)return;
     if(R.dv){if(e.key==="Escape"||e.key==="Enter")coopSend({type:"action",kind:"a",value:"dvx"});return}
     if(R.lock)return;
-    if(/^[a-zA-Z]$/.test(e.key)){const tile=R.hand.find(t=>t.l===e.key.toUpperCase());if(tile)coopSend({type:"action",kind:"hand",id:String(tile.id)});else sErr()}
+    if(keyLetter(e.key)){const tile=R.hand.find(t=>t.l===keyLetter(e.key));if(tile)coopSend({type:"action",kind:"hand",id:String(tile.id)});else sErr()}
     else if(e.key==="Enter"){e.preventDefault();coopSend({type:"action",kind:"a",value:"play"})}
     else if(e.key==="Backspace"){e.preventDefault();if(R.st.length)coopSend({type:"action",kind:"tray",id:String(R.st[R.st.length-1].id)})}
     return;
   }
   if(e.metaKey||e.ctrlKey||e.altKey)return;
   if(G.mode==="title"){
-    if(e.key==="Enter"){if(COOP.connected)novo();else if(TV==="menu")tvHands();else if(TV==="opts")tvMenu();else{const el=document.querySelector(`.hc[data-dk="${G.dk||0}"]`);tvPick(G.dk||0,el)}}
+    if(e.key==="Enter"){if(COOP.connected)novo();else if(TV==="menu")tvHands();else if(TV==="opts")tvMenu();else if(!(e.target.closest&&e.target.closest(".hs-pip,.hs-ar")))tvPick(G.dk||0)}
     else if(e.key==="Escape"&&(TV==="hands"||TV==="opts"))tvMenu();
     else if(TV==="hands"&&(e.key==="ArrowRight"||e.key==="ArrowLeft"||e.key==="ArrowDown"||e.key==="ArrowUp")){
-      e.preventDefault();const n=DECKS.length,st=(e.key==="ArrowRight"||e.key==="ArrowDown")?1:-1,step=(e.key==="ArrowUp"||e.key==="ArrowDown")?2:1;
-      G.dk=((G.dk||0)+st*step+n)%n;document.querySelectorAll(".hc").forEach(c=>c.classList.toggle("cur",+c.dataset.dk===G.dk));const c=document.querySelector(`.hc[data-dk="${G.dk}"]`);if(c)c.focus({preventScroll:false});
+      e.preventDefault();const st=(e.key==="ArrowRight"||e.key==="ArrowDown")?1:-1;hsSet((G.dk||0)+st,st);
     }
     return}
   if(G.mode==="over"){if(e.key==="Enter")novo();return}
@@ -5033,7 +5290,7 @@ document.addEventListener("keydown",e=>{
   if(R.dv){if(e.key==="Escape"||e.key==="Enter"){R.dv=0;sDkClose();ren()}return}
   if(R.lock)return
   const k=e.key;
-  if(/^[a-zA-Z]$/.test(k)){const i=R.hand.findIndex(t=>t.l===k.toUpperCase());if(i>=0)stage(i);else sErr()}
+  if(keyLetter(k)){const i=R.hand.findIndex(t=>t.l===keyLetter(k));if(i>=0)stage(i);else sErr()}
   else if(k==="Enter"){e.preventDefault();jogar()}
   else if(k==="Backspace"){e.preventDefault();if(R.st.length)unstage(R.st.length-1)}
 });
